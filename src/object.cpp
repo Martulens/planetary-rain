@@ -17,6 +17,19 @@ void Object::updateModelMatrix() {
     modelMatrix = glm::scale(modelMatrix, glm::vec3(size));
 }
 
+void Object::createEnvMap(int resolution) {
+    if (!envMap) {
+        envMap = new EnvMap(resolution);
+    }
+}
+
+void Object::deleteEnvMap() {
+    if (envMap) {
+        delete envMap;
+        envMap = nullptr;
+    }
+}
+
 void Object::draw() const{
     if (geometry != nullptr){
         glUseProgram(shader->getProgram());

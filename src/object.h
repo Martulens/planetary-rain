@@ -2,6 +2,8 @@
 #define OBJECT_H
 
 #include <string>
+
+#include "envMap.h"
 #include "meshGeometry.h"
 #include "modelTexture.h"
 #include "shaderProgram.h"
@@ -25,6 +27,8 @@ protected:
     ShaderProgram* shader = nullptr;   ///< Pointer to shader used for this object.
     MeshGeometry* geometry = nullptr;  ///< Pointer to mesh geometry.
     ModelTexture* texture = nullptr;   ///< Pointer to object's texture(s).
+    EnvMap* envMap = nullptr;
+    bool needsEnvMap = false;
 
 public:
     Object() = default;
@@ -33,16 +37,21 @@ public:
 
     virtual void draw() const;
     void updateModelMatrix();
+    void createEnvMap(int resolution = 128);
+    void deleteEnvMap();
 
     // === Setters
     void setPosition(const glm::vec3& pos) { position = pos; updateModelMatrix(); }
     void setRotationY(float rot) { rotationY = rot; updateModelMatrix(); }
     void setSize(float s) { size = s; updateModelMatrix(); }
+    void setNeedsEnvMap(bool needs) { needsEnvMap = needs; }
 
     // === Getters
     ShaderProgram* getShader() const { return shader; }
     MeshGeometry* getGeometry() const { return geometry; }
     ModelTexture* getTexture() const { return texture; }
+    EnvMap* getEnvMap() const { return envMap; }
+    bool getNeedsEnvMap() const { return needsEnvMap; }
     const glm::mat4& getModelMatrix() const { return modelMatrix; }
 
     glm::vec3 getPosition() const { return position; }

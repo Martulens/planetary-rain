@@ -1,8 +1,8 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-const int WINDOW_WIDTH = 1024;
-const int WINDOW_HEIGHT = 900;
+const int WINDOW_WIDTH = 1500;
+const int WINDOW_HEIGHT = 1024;
 const int refreshTimeMs = 16;
 
 const glm::vec3 skyColorConst = glm::vec3(0.5f, 0.4f, 0.8f);

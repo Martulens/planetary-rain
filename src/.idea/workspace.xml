@@ -36,9 +36,14 @@
   <component name="ChangeListManager">
     <list default="true" id="7e67c233-aa83-4b0c-8b19-93b0c02930ad" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.h" beforeDir="false" afterPath="$PROJECT_DIR$/config.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/draw.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/draw.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shaders/skybox.frag" beforeDir="false" afterPath="$PROJECT_DIR$/shaders/skybox.frag" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shaders/skybox.vert" beforeDir="false" afterPath="$PROJECT_DIR$/shaders/skybox.vert" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamestate.h" beforeDir="false" afterPath="$PROJECT_DIR$/gamestate.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/object.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/object.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/object.h" beforeDir="false" afterPath="$PROJECT_DIR$/object.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scene.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/scene.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scene.h" beforeDir="false" afterPath="$PROJECT_DIR$/scene.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shaders/template.frag" beforeDir="false" afterPath="$PROJECT_DIR$/shaders/template.frag" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/skybox.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/skybox.cpp" afterDir="false" />
     </list>
@@ -168,7 +173,7 @@
       <option name="presentableId" value="Default" />
       <updated>1768872097575</updated>
       <workItem from="1768872100228" duration="2563000" />
-      <workItem from="1768926663534" duration="11978000" />
+      <workItem from="1768926663534" duration="14184000" />
     </task>
     <servers />
   </component>

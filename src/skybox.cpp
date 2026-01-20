@@ -151,24 +151,25 @@ bool Skybox::loadCubemap(const std::vector<std::string>& facesPaths){
     return true;
 }
 
-void Skybox::draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix){
-    if (!shader || vao == 0 || cubemapTexture == 0){
+void Skybox::draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
+    if (!shader || vao == 0 || cubemapTexture == 0) {
         return;
     }
+
+    // Save current depth state
+    GLboolean depthMaskPrev;
+    glGetBooleanv(GL_DEPTH_WRITEMASK, &depthMaskPrev);
 
     glDepthMask(GL_FALSE);
     glDepthFunc(GL_LEQUAL);
 
     glUseProgram(shader->getProgram());
 
-    // Remove translation from view matrix -> skybox should always be centered on camera
     glm::mat4 viewNoTranslation = glm::mat4(glm::mat3(viewMatrix));
 
-    // Set uniforms
     glUniformMatrix4fv(viewMatrixLocation, 1, GL_FALSE, glm::value_ptr(viewNoTranslation));
     glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
-    // Bind cubemap texture
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
     glUniform1i(skyboxSamplerLocation, 0);
@@ -178,7 +179,7 @@ void Skybox::draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix
     glBindVertexArray(0);
 
     glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
-    glDepthMask(GL_TRUE);
+    glDepthMask(depthMaskPrev);
     glDepthFunc(GL_LESS);
     glUseProgram(0);
 }

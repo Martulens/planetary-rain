@@ -77,24 +77,34 @@ void setupUniforms(const Object* obj, const std::vector<Light*>& lights, const C
 
 void setupTextures(const Object* obj) {
     ShaderProgram* shader = obj->getShader();
+    GLuint programLocation = shader->getProgram();
     GLuint texID = obj->getTexture()->getTextureID();
 
-    glUniform1i(glGetUniformLocation(shader->getProgram(), "textureSampler"), 0);
+    // Diffuse texture on unit 0
+    glUniform1i(glGetUniformLocation(programLocation, "textureSampler"), 0);
     glActiveTexture(GL_TEXTURE0);
-    if (texID != 0) {
-        glBindTexture(GL_TEXTURE_2D, texID);
-    } else {
-        glBindTexture(GL_TEXTURE_2D, 0);
-    }
+    glBindTexture(GL_TEXTURE_2D, texID != 0 ? texID : 0);
 
+    // Skybox cubemap on unit 1
     Skybox* skybox = con::scene->getSkybox();
     if (skybox && skybox->getCubemapTexture() != 0) {
-        glUniform1i(glGetUniformLocation(shader->getProgram(), "skyboxSampler"), 1);
+        glUniform1i(glGetUniformLocation(programLocation, "skyboxSampler"), 1);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->getCubemapTexture());
-        glUniform1i(glGetUniformLocation(shader->getProgram(), "useEnvironmentLighting"), 1);
+        glUniform1i(glGetUniformLocation(programLocation, "useEnvironmentLighting"), 1);
     } else {
-        glUniform1i(glGetUniformLocation(shader->getProgram(), "useEnvironmentLighting"), 0);
+        glUniform1i(glGetUniformLocation(programLocation, "useEnvironmentLighting"), 0);
+    }
+
+    // Dynamic environment map on unit 2
+    EnvMap* envMap = obj->getEnvMap();
+    if (envMap && envMap->getCubemap() != 0) {
+        glUniform1i(glGetUniformLocation(programLocation, "envMapSampler"), 2);
+        glActiveTexture(GL_TEXTURE2);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, envMap->getCubemap());
+        glUniform1i(glGetUniformLocation(programLocation, "useDynamicReflections"), 1);
+    } else {
+        glUniform1i(glGetUniformLocation(programLocation, "useDynamicReflections"), 0);
     }
 
     CHECK_GL_ERROR();
@@ -144,20 +154,32 @@ void drawScene() {
 }
 
 void drawWindow() {
+    static float lastTime = 0.0f;
+    float currentTime = glutGet(GLUT_ELAPSED_TIME) * 0.001f;
+    float deltaTime = currentTime - lastTime;
+    lastTime = currentTime;
+    if (deltaTime > 0.1f) deltaTime = 0.016f;
+
+    // Update scene
+    if (con::scene) {
+        con::scene->update(deltaTime);
+        con::scene->renderEnvironmentMaps(con::camera);
+    }
+
     int w = glutGet(GLUT_WINDOW_WIDTH);
     int h = glutGet(GLUT_WINDOW_HEIGHT);
     if (h == 0) h = 1;
 
     glViewport(0, 0, w, h);
+    glClearColor(skyColorConst.r, skyColorConst.g, skyColorConst.b, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // For the debug grid
     glMatrixMode(GL_PROJECTION);
     glLoadMatrixf(glm::value_ptr(con::camera->getProjectionMatrix()));
 
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(glm::value_ptr(con::camera->getViewMatrix()));
 
-    // Enable depth testing
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
@@ -169,5 +191,7 @@ void drawWindow() {
     }
 
     // Draw the scene
+    if (con::scene)
+        con::scene->update(deltaTime);
     drawScene();
 }

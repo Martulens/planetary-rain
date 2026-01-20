@@ -2,6 +2,8 @@
 #define SCENE_H
 
 #include <vector>
+
+#include "camera.h"
 #include "object.h"
 #include "sphere.h"
 #include "light.h"
@@ -25,8 +27,13 @@ public:
     void init();
     void cleanup();
 
+    void renderEnvironmentMaps(Camera* camera);
+    void renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& projection, Object* excludeObject);
+
     void constructLights();
+    void constructDebugLights();
     void constructObjects();
+    void constructDebugObjects();
 
     void addObject(Object* obj);
     void addLight(Light* light);

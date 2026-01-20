@@ -125,6 +125,7 @@ set(SOURCES
         light.cpp
         scene.cpp
         skybox.cpp
+        envMap.cpp
 )
 
 set(HEADERS
@@ -145,6 +146,7 @@ set(HEADERS
         context.h
         utilities.h
         skybox.h
+        envMap.h
 )
 
 set(SHADERS

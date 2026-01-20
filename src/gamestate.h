@@ -11,6 +11,9 @@ struct GameState {
     bool gameOver = false;
     float elapsedTime = 0;
 
+    float deltaTime = 0.0f;
+    float totalTime = 0.0f;
+
     bool keyW = false;
     bool keyA = false;
     bool keyS = false;
