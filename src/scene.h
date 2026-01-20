@@ -23,6 +23,9 @@ public:
     void init();
     void cleanup();
 
+    void constructLights();
+    void constructObjects();
+
     void addObject(Object* obj);
     void addLight(Light* light);
 

@@ -18,6 +18,9 @@ struct GameState {
     bool keySpace = false;
     bool keyShift = false;
 
+    // Rendering options
+    bool wireframeMode = false;
+
     GameState(int w, int h) {
         windowHeight = h;
         windowWidth = w;

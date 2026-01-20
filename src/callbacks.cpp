@@ -41,6 +41,12 @@ void keyboardCallback(unsigned char keyPressed, int mouseX, int mouseY){
     case ' ':
         con::gameState->keySpace = true;
         break;
+    // Toggle wireframe mode with F key
+    case 'f':
+    case 'F':
+        con::gameState->wireframeMode = !con::gameState->wireframeMode;
+        std::cout << "Wireframe mode: " << (con::gameState->wireframeMode ? "ON" : "OFF") << std::endl;
+        break;
     }
 }
 

@@ -85,7 +85,6 @@ void setupTextures(const Object* obj) {
     if (texID != 0) {
         glBindTexture(GL_TEXTURE_2D, texID);
     } else {
-        // Bind no texture - shader will use baseColor instead
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
@@ -113,10 +112,8 @@ void drawTemplate(const Object* obj, const Camera* cam, const std::vector<Light*
 }
 
 void drawScene() {
-    // Draw debug grid
     drawGrid();
 
-    // Render all scene objects using drawTemplate
     if (con::scene && con::camera && con::gameState) {
         const std::vector<Object*>& objects = con::scene->getObjects();
         const std::vector<Light*>& lights = con::scene->getLights();
@@ -147,7 +144,14 @@ void drawWindow() {
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+    // Toggle between wireframe and solid
+    if (con::gameState->wireframeMode) {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    } else {
+        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+
 
     // Draw the scene
     drawScene();
