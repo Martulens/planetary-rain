@@ -23,6 +23,7 @@ struct GameState {
 
     // Rendering options
     bool wireframeMode = false;
+    bool uiMode = false;
 
     GameState(int w, int h) {
         windowHeight = h;

@@ -6,16 +6,49 @@
 #include <iostream>
 
 
-Scene::~Scene() {
+Scene::~Scene(){
     cleanup();
 }
 
-void Scene::renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& projection, Object* excludeObject) {
+void Scene::updatePlanet(const PlanetParams& params){
+    if (!planet) return;
+
+    Sphere* sphere = planet;
+    if (sphere){
+        glm::vec3 pos = planet->getPosition();
+        bool needsEnv = planet->getNeedsEnvMap();
+
+        if (planet->getGeometry()) delete planet->getGeometry();
+        if (planet->getTexture()) delete planet->getTexture();
+        delete planet;
+
+        ModelTexture* newMaterial = new ModelTexture(
+            params.color,
+            params.pd,
+            params.ps,
+            params.ns,
+            params.reflectivity,
+            params.ior,
+            params.transparency
+        );
+
+        ShaderProgram* shader = defaultShader;
+        if (params.ior <= 0.0f)
+            shader = refractiveShader;
+
+        planet = new Sphere(pos, params.radius, params.detail, newMaterial, shader);
+        planet->setNeedsEnvMap(needsEnv);
+        objects.push_back(planet);
+    }
+}
+
+void Scene::renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& projection, Object* excludeObject){
     if (skybox)
         skybox->draw(view, projection);
 
     // Render all objects except the excluded one
-    for (Object* obj : objects) {
+    for (Object* obj : objects)
+    {
         if (obj == excludeObject) continue;
         if (!obj || !obj->getGeometry() || !obj->getShader()) continue;
 
@@ -36,13 +69,16 @@ void Scene::renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& project
 
         // Set up lights
         glUniform1i(glGetUniformLocation(shader->getProgram(), "numLights"), static_cast<int>(lights.size()));
-        for (size_t i = 0; i < lights.size() && i < LIGHTS_MAX; ++i) {
+        for (size_t i = 0; i < lights.size() && i < LIGHTS_MAX; ++i)
+        {
             Light* light = lights[i];
             std::string base = "lightPositions[" + std::to_string(i) + "]";
-            glUniform3fv(glGetUniformLocation(shader->getProgram(), base.c_str()), 1, glm::value_ptr(light->getPosition()));
+            glUniform3fv(glGetUniformLocation(shader->getProgram(), base.c_str()), 1,
+                         glm::value_ptr(light->getPosition()));
 
             base = "lightColors[" + std::to_string(i) + "]";
-            glUniform3fv(glGetUniformLocation(shader->getProgram(), base.c_str()), 1, glm::value_ptr(light->getColor()));
+            glUniform3fv(glGetUniformLocation(shader->getProgram(), base.c_str()), 1,
+                         glm::value_ptr(light->getColor()));
 
             base = "lightBrightness[" + std::to_string(i) + "]";
             glUniform1f(glGetUniformLocation(shader->getProgram(), base.c_str()), light->getBrightness());
@@ -59,16 +95,19 @@ void Scene::renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& project
     }
 }
 
-void Scene::renderEnvironmentMaps(Camera* camera) {
+void Scene::renderEnvironmentMaps(Camera* camera)
+{
     // Store original viewport
     GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
 
-    for (Object* obj : objects) {
+    for (Object* obj : objects)
+    {
         if (!obj->getNeedsEnvMap()) continue;
 
         EnvMap* envMap = obj->getEnvMap();
-        if (!envMap) {
+        if (!envMap)
+        {
             obj->createEnvMap(128);
             envMap = obj->getEnvMap();
         }
@@ -77,7 +116,8 @@ void Scene::renderEnvironmentMaps(Camera* camera) {
         envMap->updateViewMatrices(obj->getPosition());
 
         // Render all 6 faces
-        for (int face = 0; face < 6; ++face) {
+        for (int face = 0; face < 6; ++face)
+        {
             envMap->beginCapture(face);
 
             glClearColor(skyColorConst.r, skyColorConst.g, skyColorConst.b, 1.0f);
@@ -92,7 +132,8 @@ void Scene::renderEnvironmentMaps(Camera* camera) {
     glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 }
 
-void Scene::constructDebugObjects() {
+void Scene::constructDebugObjects()
+{
     std::cout << "[Scene] Initializing objects..." << std::endl;
 
     // Red sphere - matte, no reflections needed
@@ -127,20 +168,22 @@ void Scene::constructObjects(){
         0.3f,
         0.9f,
         128.0f,
-        0.5f
+        0.5f,
+        1.0f,
+        1.0f
     );
 
-    Sphere* sphere3 = new Sphere(
+    planet = new Sphere(
         glm::vec3(4.0f, 1.5f, 0.0f),
         3.0f,
         3,
         shinyBlueMaterial,
-        defaultShader
+        refractiveShader
     );
-    addObject(sphere3);
 }
 
-void Scene::constructDebugLights(){
+void Scene::constructDebugLights()
+{
     std::cout << "[Scene] Initializing lights..." << std::endl;
 
     Light* sunLight = new Light(
@@ -168,39 +211,45 @@ void Scene::constructDebugLights(){
     addLight(fillLight);
 }
 
-void Scene::init() {
+void Scene::init(){
     std::cout << "[Scene] Initializing scene..." << std::endl;
 
     // Create the default shader
     defaultShader = new ShaderProgram("shaders/template.vert", "shaders/template.frag");
     refractiveShader = new ShaderProgram("shaders/template.vert", "shaders/refractive.frag");
 
-    if (!defaultShader || defaultShader->getProgram() == 0) {
+    if (!defaultShader || defaultShader->getProgram() == 0)
+    {
         std::cerr << "[Scene] ERROR: Failed to create default shader!" << std::endl;
         return;
     }
 
     std::cout << "[Scene] Initializing skybox..." << std::endl;
     int numSkybox = rand() % 5;
-    skybox = new Skybox("shaders/skybox.vert", "shaders/skybox.frag", "textures/skybox/" + std::to_string(numSkybox) + "/");
+    skybox = new Skybox("shaders/skybox.vert", "shaders/skybox.frag",
+                        "textures/skybox/" + std::to_string(numSkybox) + "/");
     CHECK_GL_ERROR();
 
-    constructDebugObjects();
+    constructObjects();
     CHECK_GL_ERROR();
 
     constructDebugLights();
     CHECK_GL_ERROR();
 
     std::cout << "[Scene] Created " << objects.size() << " objects and "
-              << lights.size() << " lights" << std::endl;
+        << lights.size() << " lights" << std::endl;
 }
 
-void Scene::cleanup() {
+void Scene::cleanup()
+{
     // Clean up objects and their associated geometry
-    for (Object* obj : objects) {
-        if (obj) {
+    for (Object* obj : objects)
+    {
+        if (obj)
+        {
             // Delete the geometry
-            if (obj->getGeometry()) {
+            if (obj->getGeometry())
+            {
                 delete obj->getGeometry();
             }
             // Delete the texture
@@ -210,35 +259,43 @@ void Scene::cleanup() {
     }
     objects.clear();
 
-    for (Light* light : lights) {
+    for (Light* light : lights)
+    {
         delete light;
     }
     lights.clear();
 
-    if (defaultShader) {
+    if (defaultShader)
+    {
         delete defaultShader;
         defaultShader = nullptr;
     }
 
-    if (skybox) {
+    if (skybox)
+    {
         delete skybox;
         skybox = nullptr;
     }
 }
 
-void Scene::addObject(Object* obj) {
-    if (obj) {
+void Scene::addObject(Object* obj)
+{
+    if (obj)
+    {
         objects.push_back(obj);
     }
 }
 
-void Scene::addLight(Light* light) {
-    if (light) {
+void Scene::addLight(Light* light)
+{
+    if (light)
+    {
         lights.push_back(light);
     }
 }
 
-void Scene::update(float deltaTime) {
+void Scene::update(float deltaTime)
+{
     static float angle = 0.0f;
     angle += deltaTime * 0.5f;
 

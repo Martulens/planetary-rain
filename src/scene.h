@@ -10,6 +10,7 @@
 #include "shaderProgram.h"
 #include "modelTexture.h"
 #include "skybox.h"
+#include "ui.h"
 
 class Scene {
 private:
@@ -20,6 +21,7 @@ private:
     ShaderProgram* defaultShader = nullptr;
     ShaderProgram* refractiveShader = nullptr;
     Skybox* skybox = nullptr;
+    Sphere* planet = nullptr;
 
 public:
     Scene() = default;
@@ -40,6 +42,7 @@ public:
     void addLight(Light* light);
 
     void update(float deltaTime);
+    void updatePlanet(const PlanetParams& params);
 
     // === GETTERS
     const std::vector<Object*>& getObjects() const { return objects; }

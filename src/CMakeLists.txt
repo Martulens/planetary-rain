@@ -106,6 +106,31 @@ if (NOT stb_POPULATED)
 endif ()
 message(STATUS "stb_image fetched")
 
+# --- imgui ---
+FetchContent_Declare(
+        imgui
+        GIT_REPOSITORY https://github.com/ocornut/imgui.git
+        GIT_TAG v1.90.1
+        GIT_SHALLOW TRUE
+)
+FetchContent_MakeAvailable(imgui)
+
+# Create ImGui library with GLUT backend
+add_library(imgui STATIC
+        ${imgui_SOURCE_DIR}/imgui.cpp
+        ${imgui_SOURCE_DIR}/imgui_draw.cpp
+        ${imgui_SOURCE_DIR}/imgui_tables.cpp
+        ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+        ${imgui_SOURCE_DIR}/imgui_demo.cpp
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_glut.cpp
+        ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp
+)
+target_include_directories(imgui PUBLIC
+        ${imgui_SOURCE_DIR}
+        ${imgui_SOURCE_DIR}/backends
+)
+target_link_libraries(imgui PUBLIC ${OPENGL_LIBRARIES} glew)
+
 # Source Files
 set(SOURCES
         main.cpp
@@ -126,6 +151,7 @@ set(SOURCES
         scene.cpp
         skybox.cpp
         envMap.cpp
+        ui.cpp
 )
 
 set(HEADERS
@@ -147,6 +173,7 @@ set(HEADERS
         utilities.h
         skybox.h
         envMap.h
+        ui.h
 )
 
 set(SHADERS
@@ -179,6 +206,7 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
         glew
         glm::glm
         assimp
+        imgui
 )
 
 if (USE_SYSTEM_GLUT)
@@ -266,4 +294,6 @@ else ()
 endif ()
 message(STATUS "  Assimp:   ${assimp_SOURCE_DIR}")
 message(STATUS "  stb:      ${stb_SOURCE_DIR}")
+message(STATUS "  imgui:      ${imgui_SOURCE_DIR}")
+
 message(STATUS "")

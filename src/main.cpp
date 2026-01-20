@@ -10,6 +10,7 @@
 #include "game.h"
 #include "camera.h"
 #include "context.h"
+#include "ui.h"
 
 int lastMouseX = 0;
 int lastMouseY = 0;
@@ -17,15 +18,15 @@ int lastMouseY = 0;
 // === APP SETUP
 void initApp() {
     srand((unsigned int)time(NULL));
-
-    //background
     glClearColor(0.5f, 0.4f, 0.8f, 1.0f);
     glEnable(GL_DEPTH_TEST);
 
+    initUI();  // Add this
     restartGame();
 }
 
 void finalizeApp() {
+    shutdownUI();
     cleanUpObjects();
 }
 

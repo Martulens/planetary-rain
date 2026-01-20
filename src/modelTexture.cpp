@@ -24,7 +24,7 @@ ModelTexture::ModelTexture(const glm::vec3& color, float pd, float ps, float k, 
     this->ns = k;
     this->reflectivity = reflectivity;
 
-    if(ior == -1)
+    if(ior <= 0.0f)
         refractive = false;
     else{
         refractive = true;

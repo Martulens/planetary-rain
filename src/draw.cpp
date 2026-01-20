@@ -28,7 +28,7 @@ void setupUniforms(const Object* obj, const std::vector<Light*>& lights, const C
 
     CHECK_GL_ERROR();
 
-    // === MATERIAL SETUP
+    // === MATERIAL SETUPz
     ModelTexture* texture = obj->getTexture();
 
     glUniform1f(shader->getPdLocation(), texture->getPd());

@@ -1,6 +1,9 @@
 #include "framework.h"
 #include "callbacks.h"
 
+#include <imgui_impl_glut.h>
+#include <scene.h>
+
 #include "config.h"
 #include "draw.h"
 #include "game.h"
@@ -12,40 +15,59 @@
 #include "camera.h"
 #include "context.h"
 #include "gamestate.h"
+#include "ui.h"
 
-void keyboardCallback(unsigned char keyPressed, int mouseX, int mouseY){
-    switch (keyPressed)
-    {
-    case 27:
+static PlanetParams g_planetParams;
+static bool g_paramsChanged = false;
+
+void keyboardCallback(unsigned char keyPressed, int mouseX, int mouseY) {
+    // Forward to ImGui first if in UI mode
+    if (con::gameState->uiMode) {
+        uiKeyboardCallback(keyPressed, mouseX, mouseY);
+    }
+
+    switch (keyPressed) {
+    case 27: // ESC
         glutLeaveMainLoop();
         break;
     case 'r':
         restartGame();
         break;
+    case '\t':
+        con::gameState->uiMode = !con::gameState->uiMode;
+        if (con::gameState->uiMode) {
+            glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
+        } else {
+            glutSetCursor(GLUT_CURSOR_NONE);
+            // Re-center mouse when returning to FPS mode
+            int centerX = con::gameState->windowWidth / 2;
+            int centerY = con::gameState->windowHeight / 2;
+            glutWarpPointer(centerX, centerY);
+        }
+        break;
+
     case 'w':
     case 'W':
-        con::gameState->keyW = true;
+        if (!con::gameState->uiMode) con::gameState->keyW = true;
         break;
     case 's':
     case 'S':
-        con::gameState->keyS = true;
+        if (!con::gameState->uiMode) con::gameState->keyS = true;
         break;
     case 'a':
     case 'A':
-        con::gameState->keyA = true;
+        if (!con::gameState->uiMode) con::gameState->keyA = true;
         break;
     case 'd':
     case 'D':
-        con::gameState->keyD = true;
+        if (!con::gameState->uiMode) con::gameState->keyD = true;
         break;
     case ' ':
-        con::gameState->keySpace = true;
+        if (!con::gameState->uiMode) con::gameState->keySpace = true;
         break;
-    // Toggle wireframe mode with F key
     case 'f':
     case 'F':
         con::gameState->wireframeMode = !con::gameState->wireframeMode;
-        std::cout << "Wireframe mode: " << (con::gameState->wireframeMode ? "ON" : "OFF") << std::endl;
         break;
     }
 }
@@ -75,11 +97,20 @@ void keyboardUpCallback(unsigned char keyReleased, int mouseX, int mouseY){
     }
 }
 
-void onMouseClick(int button, int state, int x, int y){
-    return;
+void onMouseClick(int button, int state, int x, int y) {
+    if (con::gameState->uiMode) {
+        uiMouseCallback(button, state, x, y);
+    }
 }
 
-void onMouseMove(int x, int y){
+void onMouseMove(int x, int y) {
+    // UI mode: forward to ImGui, no camera movement
+    if (con::gameState->uiMode) {
+        uiMotionCallback(x, y);
+        return;
+    }
+
+    // FPS mode: your existing camera code
     static bool warping = false;
     if (warping) {
         warping = false;
@@ -104,6 +135,14 @@ void onMouseMove(int x, int y){
     glutWarpPointer(centerX, centerY);
 }
 
+void onReshape(int w, int h) {
+    glViewport(0, 0, (GLsizei)w, (GLsizei)h);
+    con::gameState->windowWidth = w;
+    con::gameState->windowHeight = h;
+    con::camera->update(w, h);
+    uiReshapeCallback(w, h);
+}
+
 void onMouseScroll(int button, int dir, int x, int y) {
     con::camera->zoom(dir * 2.0f);
 }
@@ -121,27 +160,6 @@ void updateMovement() {
         con::camera->moveUp(MOVE_SPEED);
 
     con::camera->update(-1, -1);
-}
-
-void onDisplay(){
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    updateMovement();
-
-    CHECK_GL_ERROR();
-    drawWindow();
-
-    CHECK_GL_ERROR();
-    glutSwapBuffers();
-
-    FPS();
-}
-
-void onReshape(int w, int h){
-    glViewport(0, 0, (GLsizei)w, (GLsizei)h);
-    con::gameState->windowWidth = w;
-    con::gameState->windowHeight = h;
-    con::camera->update(w, h);
 }
 
 void onSpecialKeyPress(int key, int x, int y){
@@ -165,4 +183,26 @@ void onSpecialKeyRelease(int key, int x, int y){
 void timer(int){
     glutPostRedisplay();
     glutTimerFunc(refreshTimeMs, timer, 0);
+}
+
+void onDisplay(){
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    updateMovement();
+
+    CHECK_GL_ERROR();
+    drawWindow();
+
+    renderUI(g_planetParams, g_paramsChanged);
+
+    if (g_paramsChanged && con::scene) {
+        if (g_planetParams.changed) {
+            con::scene->updatePlanet(g_planetParams);
+        }
+    }
+
+    CHECK_GL_ERROR();
+    glutSwapBuffers();
+
+    FPS();
 }
