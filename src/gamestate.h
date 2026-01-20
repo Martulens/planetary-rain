@@ -11,10 +11,17 @@ struct GameState {
     bool gameOver = false;
     float elapsedTime = 0;
 
-    GameState(int w, int h){
+    bool keyW = false;
+    bool keyA = false;
+    bool keyS = false;
+    bool keyD = false;
+    bool keySpace = false;
+    bool keyShift = false;
+
+    GameState(int w, int h) {
         windowHeight = h;
         windowWidth = w;
     }
 };
 
-#endif //GAMESTATE_H
+#endif // GAMESTATE_H

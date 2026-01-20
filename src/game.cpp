@@ -10,20 +10,18 @@
 
 
 void restartGame() {
-    // Show loading screen
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);  // black background
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     cleanUpObjects();
     int w = glutGet(GLUT_WINDOW_WIDTH);
     int h = glutGet(GLUT_WINDOW_HEIGHT);
 
-    if (h == 0)
-        h = 1;
+    if (h == 0) h = 1;
 
-    glm::vec3 camPosition = glm::vec3(0, 0, 0);
-    glm::vec3 direction = glm::vec3(1, 0, -1);
-    float angle = 0;
+    glm::vec3 camPosition = glm::vec3(0.0f, 2.0f, 10.0f);  // Start above ground, back from origin
+    glm::vec3 direction = glm::vec3(0.0f, 0.0f, -1.0f);    // Look toward -Z
+    float angle = 0.0f;
 
     Camera* camera = new Camera(w, h, camPosition, direction, angle);
     GameState* gs = new GameState(w, h);

@@ -41,6 +41,8 @@ int main(int argc, char** argv){
     glutReshapeFunc(onReshape);
 
     glutKeyboardFunc(keyboardCallback);
+    glutKeyboardUpFunc(keyboardUpCallback);
+
     glutSpecialFunc(onSpecialKeyPress);
     glutSpecialUpFunc(onSpecialKeyRelease);
 

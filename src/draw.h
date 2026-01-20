@@ -12,6 +12,8 @@
 void drawWindow();
 
 void drawSphere(glm::vec3 position, float radius);
-void drawCube(glm::vec3 position, float radius);
+void drawCube(glm::vec3 position, float size);
+void drawGrid();
+
 
 #endif //DRAW_H

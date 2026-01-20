@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(planetary_rain LANGUAGES CXX C)
+project(main.cpp LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -117,6 +117,11 @@ set(SOURCES
         draw.cpp
         debug.cpp
         context.cpp
+        object.cpp
+        shaderProgram.cpp
+        meshGeometry.cpp
+        modelTexture.cpp
+        sphere.cpp
 )
 
 set(HEADERS
@@ -129,6 +134,11 @@ set(HEADERS
         camera.h
         debug.h
         gameObjects.h
+        object.h
+        shaderProgram.h
+        light.h
+        meshGeometry.h
+        modelTexture.h
 )
 
 set(SHADERS
