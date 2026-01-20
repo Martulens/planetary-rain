@@ -31,5 +31,8 @@ void restartGame() {
 }
 
 void cleanUpObjects() {
-    // delete all bitches :p
+    if(con::camera)
+        delete con::camera;
+    if(con::gameState)
+        delete con::gameState;
 }

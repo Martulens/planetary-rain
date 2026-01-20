@@ -23,6 +23,7 @@ void keyboardCallback(unsigned char keyPressed, int mouseX, int mouseY)
         break;
     case 'p':
         con::camera->distance = 20.0f;
+        break;
     case 'r':
         restartGame();
         break;
