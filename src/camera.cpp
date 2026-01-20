@@ -55,7 +55,7 @@ void Camera::setPosition(glm::vec3 pos) {
 }
 
 void Camera::moveForward(float amount) {
-    glm::vec3 forward = glm::normalize(glm::vec3(direction.x, 0.0f, direction.z));
+    glm::vec3 forward = glm::normalize(glm::vec3(direction.x, direction.y, direction.z));
     position += forward * amount;
 }
 

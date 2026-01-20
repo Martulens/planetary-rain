@@ -29,7 +29,7 @@ protected:
 public:
     Object() = default;
     Object(glm::vec3 position, MeshGeometry* mesh, ShaderProgram* shader, ModelTexture* texture);
-    virtual ~Object() = default;
+    virtual ~Object() = default;  // Note: Cleanup handled by Scene to avoid double-free
 
     virtual void draw() const;
     void updateModelMatrix();

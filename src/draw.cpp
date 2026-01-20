@@ -27,7 +27,7 @@ void setupUniforms(const Object* obj, const std::vector<Light*>& lights, const C
 
     CHECK_GL_ERROR();
 
-    // === TEXTURE -- ONLY COLOR -- SETUP
+    // === MATERIAL SETUP
     ModelTexture* texture = obj->getTexture();
 
     glUniform1f(shader->getPdLocation(), texture->getPd());
@@ -76,10 +76,18 @@ void setupUniforms(const Object* obj, const std::vector<Light*>& lights, const C
 
 void setupTextures(const Object* obj) {
     ShaderProgram* shader = obj->getShader();
+    GLuint texID = obj->getTexture()->getTextureID();
 
     glUniform1i(glGetUniformLocation(shader->getProgram(), "textureSampler"), 0);
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_2D, obj->getTexture()->getTextureID());
+
+    // For color-only materials (textureID == 0), bind nothing or use a default
+    if (texID != 0) {
+        glBindTexture(GL_TEXTURE_2D, texID);
+    } else {
+        // Bind no texture - shader will use baseColor instead
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
 
     CHECK_GL_ERROR();
 }

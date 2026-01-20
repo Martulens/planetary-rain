@@ -40,52 +40,34 @@ uniform bool isPointLight[LIGHTS_MAX];      // true = point light, false = direc
 // --- Output ---
 out vec4 outColor;
 
-// === ATT
+// === ATTENUATION
 float calculateAttenuation(float distance) {
-    // Quadratic attenuation: 1 / (constant + linear*d + quadratic*d^2)
     float constant = 1.0;
     float linear = 0.09;
     float quadratic = 0.032;
     return 1.0 / (constant + linear * distance + quadratic * distance * distance);
 }
 
-// === DIFF
-float calculateDiffuse(vec3 normal, vec3 lightDir) {
-    float diff = max(dot(normal, lightDir), 0.0);
-    return min(0.0, pd * diff);
-}
-
-// === SPEC
-float calculateSpecular(vec3 normal, vec3 lightDir, vec3 viewDir) {
-    vec3 halfwayDir = normalize(lightDir + viewDir);
-    float spec = pow(max(dot(normal, halfwayDir), 0.0), ns);
-
-    return min(0.0, ps * spec);
-}
-
-
 void main() {
     vec3 normal = normalize(fragNormal);
     vec3 viewDir = normalize(cameraPosition - fragPosition);
 
+    // Determine surface color: use baseColor directly
+    // baseColor is set from ModelTexture, which has the color we want
+    vec3 surfaceColor = baseColor;
+
+    // If we have a valid texture, blend or replace
     vec4 texColor = texture(textureSampler, fragTexCoord);
-
-    vec3 surfaceColor;
-    float alpha;
-
-    if (texColor.a > 0.01) {
-        // Use texture color
+    // Check if texture has meaningful data (not default black with full alpha)
+    if (texColor.r > 0.01 || texColor.g > 0.01 || texColor.b > 0.01) {
         surfaceColor = texColor.rgb;
-        alpha = texColor.a;
-    } else {
-        // Use base color -> fallback when no texture
-        surfaceColor = baseColor;
-        alpha = 1.0;
     }
 
-    vec3 ambient = 0.1 * surfaceColor;
+    // Ambient component
+    vec3 ambient = 0.2 * surfaceColor;
 
-    vec3 totalCol = vec3(0.0f);
+    vec3 totalDiffuse = vec3(0.0);
+    vec3 totalSpecular = vec3(0.0);
 
     for (int i = 0; i < numLights && i < LIGHTS_MAX; ++i) {
         vec3 lightDir;
@@ -93,27 +75,31 @@ void main() {
         float intensity = lightBrightness[i];
 
         if (isPointLight[i]) {
-            // === POINT
+            // === POINT LIGHT
             vec3 lightVec = lightPositions[i] - fragPosition;
             float distance = length(lightVec);
             lightDir = normalize(lightVec);
             attenuation = calculateAttenuation(distance);
         } else {
-            // === DIRECTIONAL
+            // === DIRECTIONAL LIGHT
             lightDir = normalize(-lightPositions[i]);
         }
 
-        // Accumulate diffuse and specular
-        float diffuse = calculateDiffuse(normal, lightDir);
-        float specular = calculateSpecular(normal, lightDir, viewDir);
+        // Diffuse
+        float diff = max(dot(normal, lightDir), 0.0);
+        totalDiffuse += lightColors[i] * (pd * diff) * attenuation * intensity;
 
-        totalCol += lightColors[i] * (diffuse + specular) * attenuation * intensity;
+        // Specular (Blinn-Phong)
+        vec3 halfwayDir = normalize(lightDir + viewDir);
+        float spec = pow(max(dot(normal, halfwayDir), 0.0), ns);
+        totalSpecular += lightColors[i] * (ps * spec) * attenuation * intensity;
     }
 
-    vec3 lighting = ambient + totalCol;
+    // Combine lighting
+    vec3 lighting = ambient + (totalDiffuse * surfaceColor) + totalSpecular;
 
-    // Apply fog -> blend towards sky color based on visibility
+    // Apply fog
     vec3 finalColor = mix(skyColor, lighting, visibility);
 
-    outColor = vec4(finalColor, alpha);
+    outColor = vec4(finalColor, 1.0);
 }

@@ -16,7 +16,8 @@ ModelTexture::ModelTexture(const std::string& fileName) {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-ModelTexture::ModelTexture(glm::vec3& color, float pd, float ps, float k, float reflectivity){
+ModelTexture::ModelTexture(const glm::vec3& color, float pd, float ps, float k, float reflectivity){
+    this->textureID = 0;
     this->color = color;
     this->pd = pd;
     this->ps = ps;

@@ -5,6 +5,16 @@ Object::Object(glm::vec3 pos, MeshGeometry* mesh, ShaderProgram* s, ModelTexture
     geometry = mesh;
     shader = s;
     texture = t;
+
+    // Initialize the model matrix based on position
+    updateModelMatrix();
+}
+
+void Object::updateModelMatrix() {
+    modelMatrix = glm::mat4(1.0f);
+    modelMatrix = glm::translate(modelMatrix, position);
+    modelMatrix = glm::rotate(modelMatrix, glm::radians(rotationY), glm::vec3(0.0f, 1.0f, 0.0f));
+    modelMatrix = glm::scale(modelMatrix, glm::vec3(size));
 }
 
 void Object::draw() const{

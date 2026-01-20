@@ -2,6 +2,7 @@
 
 Sphere::Sphere(glm::vec3 position, float r, int det, ModelTexture* texture, ShaderProgram* shader)
     : Object(position, generateGeometry(r, det), shader, texture), radius(r), detail(det) {
+    updateModelMatrix();
 }
 
 MeshGeometry* Sphere::generateGeometry(float radius, int detail) {

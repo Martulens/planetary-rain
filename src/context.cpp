@@ -1,13 +1,12 @@
 #include "context.h"
+#include "scene.h"  // FIXED: Use quotes for local headers
 
-#include <algorithm>
-#include <scene.h>
-
-namespace con{
+namespace con {
     Camera* camera = nullptr;
     GameState* gameState = nullptr;
+    Scene* scene = nullptr;
 
-    void init(Camera* cam, GameState* gs){
+    void init(Camera* cam, GameState* gs) {
         camera = cam;
         gameState = gs;
         scene = new Scene();

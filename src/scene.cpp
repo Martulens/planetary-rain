@@ -5,9 +5,8 @@
 #include "framework.h"
 #include <iostream>
 
-namespace con {
-    Scene* scene = nullptr;
-}
+// FIXED: Removed duplicate "namespace con { Scene* scene = nullptr; }"
+// The scene pointer is now defined in context.cpp
 
 Scene::~Scene() {
     cleanup();
@@ -15,11 +14,11 @@ Scene::~Scene() {
 
 void Scene::init() {
     std::cout << "[Scene] Initializing scene..." << std::endl;
-    
+
     // Create the default shader
     defaultShader = new ShaderProgram("shaders/template.vert", "shaders/template.frag");
 
-    if (!defaultShader) {
+    if (!defaultShader || defaultShader->getProgram() == 0) {
         std::cerr << "[Scene] ERROR: Failed to create default shader!" << std::endl;
         return;
     }
@@ -113,8 +112,14 @@ void Scene::init() {
 }
 
 void Scene::cleanup() {
+    // Clean up objects and their associated geometry
     for (Object* obj : objects) {
         if (obj) {
+            // Delete the geometry (prevents memory leak)
+            if (obj->getGeometry()) {
+                delete obj->getGeometry();
+            }
+            // Delete the texture
             delete obj->getTexture();
             delete obj;
         }
