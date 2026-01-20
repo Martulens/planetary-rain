@@ -4,7 +4,10 @@
 #include "glm/vec3.hpp"
 
 struct PlanetParams {
-    glm::vec3 position = glm::vec3(4.0f, 1.5f, 0.0f);
+    float x = 4.0f;
+    float y = 1.5f;
+    float z = 0.0f;
+
     float radius = 1.5f;
     int detail = 3;              // 1-4
 

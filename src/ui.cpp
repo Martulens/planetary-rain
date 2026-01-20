@@ -34,7 +34,9 @@ void renderUI(PlanetParams& params, bool& paramsChanged) {
     if (ImGui::CollapsingHeader("Geometry", ImGuiTreeNodeFlags_DefaultOpen)) {
         paramsChanged |= ImGui::SliderFloat("Radius", &params.radius, 0.5f, 5.0f);
         paramsChanged |= ImGui::SliderInt("Detail", &params.detail, 1, 4);
-        paramsChanged |= ImGui::ColorEdit3("Position", &params.position.x);
+        paramsChanged |= ImGui::SliderFloat("x", &params.x, -15.0f, 15.0f);
+        paramsChanged |= ImGui::SliderFloat("y", &params.y, -15.0f, 15.0f);
+        paramsChanged |= ImGui::SliderFloat("z", &params.z, -15.0f, 15.0f);
     }
     
     // Appearance
