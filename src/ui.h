@@ -12,8 +12,8 @@ struct PlanetParams {
     int detail = 3;              // 1-4
 
     // Colour
-    glm::vec3 color;
-    
+    glm::vec3 color = glm::vec3(0.2f, 0.4f, 1.0f);
+
     // Material
     float pd = 0.6f;             // diffuse
     float ps = 0.5f;             // specular  

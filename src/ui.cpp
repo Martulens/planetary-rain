@@ -46,8 +46,8 @@ void renderUI(PlanetParams& params, bool& paramsChanged) {
         paramsChanged |= ImGui::SliderFloat("Specular", &params.ps, 0.0f, 1.0f);
         paramsChanged |= ImGui::SliderFloat("Shininess", &params.ns, 1.0f, 256.0f);
         paramsChanged |= ImGui::SliderFloat("Reflectivity", &params.reflectivity, 0.0f, 1.0f);
-        paramsChanged |= ImGui::SliderFloat("IOR", &params.ns, -1.0f, 5.0f);
-        paramsChanged |= ImGui::SliderFloat("Transparency", &params.ns, 0.0f, 1.0f);
+        paramsChanged |= ImGui::SliderFloat("IOR", &params.ior, -1.0f, 5.0f);
+        paramsChanged |= ImGui::SliderFloat("Transparency", &params.transparency, 0.0f, 1.0f);
     }
     
     // Animation

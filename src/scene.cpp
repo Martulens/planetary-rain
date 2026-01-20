@@ -4,7 +4,7 @@
 #include "config.h"
 #include "framework.h"
 #include <iostream>
-
+#include <algorithm>
 
 Scene::~Scene(){
     cleanup();
@@ -13,33 +13,38 @@ Scene::~Scene(){
 void Scene::updatePlanet(const PlanetParams& params){
     if (!planet) return;
 
-    Sphere* sphere = planet;
-    if (sphere){
-        glm::vec3 pos = planet->getPosition();
-        bool needsEnv = planet->getNeedsEnvMap();
-
-        if (planet->getGeometry()) delete planet->getGeometry();
-        if (planet->getTexture()) delete planet->getTexture();
-        delete planet;
-
-        ModelTexture* newMaterial = new ModelTexture(
-            params.color,
-            params.pd,
-            params.ps,
-            params.ns,
-            params.reflectivity,
-            params.ior,
-            params.transparency
-        );
-
-        ShaderProgram* shader = defaultShader;
-        if (params.ior <= 0.0f)
-            shader = refractiveShader;
-
-        planet = new Sphere(pos, params.radius, params.detail, newMaterial, shader);
-        planet->setNeedsEnvMap(needsEnv);
-        objects.push_back(planet);
+    auto it = std::find(objects.begin(), objects.end(), planet);
+    if (it != objects.end()) {
+        objects.erase(it);
     }
+
+    bool needsEnv = planet->getNeedsEnvMap();
+
+    if (planet->getGeometry()) delete planet->getGeometry();
+    if (planet->getTexture()) delete planet->getTexture();
+    delete planet;
+    planet = nullptr;
+
+    ModelTexture* newMaterial = new ModelTexture(
+        params.color,
+        params.pd,
+        params.ps,
+        params.ns,
+        params.reflectivity,
+        params.ior,
+        params.transparency
+    );
+
+    ShaderProgram* shader = defaultShader;
+    if (params.ior > 1.0f) {
+        shader = refractiveShader;
+    }
+
+    glm::vec3 newPos(params.x, params.y, params.z);
+    planet = new Sphere(newPos, params.radius, params.detail, newMaterial, shader);
+    planet->setNeedsEnvMap(needsEnv);
+
+    addObject(planet);
 }
 
 void Scene::renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& projection, Object* excludeObject){
@@ -180,6 +185,9 @@ void Scene::constructObjects(){
         shinyBlueMaterial,
         refractiveShader
     );
+
+    planet->setNeedsEnvMap(true);
+    addObject(planet);
 }
 
 void Scene::constructDebugLights()

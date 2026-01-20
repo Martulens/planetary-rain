@@ -195,11 +195,8 @@ void onDisplay(){
 
     renderUI(g_planetParams, g_paramsChanged);
 
-    if (g_paramsChanged && con::scene) {
-        if (g_planetParams.changed) {
-            con::scene->updatePlanet(g_planetParams);
-        }
-    }
+    if (g_paramsChanged && con::scene)
+        con::scene->updatePlanet(g_planetParams);
 
     CHECK_GL_ERROR();
     glutSwapBuffers();
