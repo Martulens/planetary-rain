@@ -81,13 +81,20 @@ void setupTextures(const Object* obj) {
 
     glUniform1i(glGetUniformLocation(shader->getProgram(), "textureSampler"), 0);
     glActiveTexture(GL_TEXTURE0);
-
-    // For color-only materials (textureID == 0), bind nothing or use a default
     if (texID != 0) {
         glBindTexture(GL_TEXTURE_2D, texID);
     } else {
-        // Bind no texture - shader will use baseColor instead
         glBindTexture(GL_TEXTURE_2D, 0);
+    }
+
+    Skybox* skybox = con::scene->getSkybox();
+    if (skybox && skybox->getCubemapTexture() != 0) {
+        glUniform1i(glGetUniformLocation(shader->getProgram(), "skyboxSampler"), 1);
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->getCubemapTexture());
+        glUniform1i(glGetUniformLocation(shader->getProgram(), "useEnvironmentLighting"), 1);
+    } else {
+        glUniform1i(glGetUniformLocation(shader->getProgram(), "useEnvironmentLighting"), 0);
     }
 
     CHECK_GL_ERROR();
@@ -114,7 +121,7 @@ void drawTemplate(const Object* obj, const Camera* cam, const std::vector<Light*
 
 void drawScene() {
     // Draw debug grid
-    drawGrid();
+    // drawGrid();
 
     // Render all scene objects using drawTemplate
     if (con::scene && con::camera && con::gameState) {

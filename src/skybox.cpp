@@ -6,86 +6,7 @@
 #endif
 
 Skybox::Skybox(const std::string& vertShader, const std::string& fragShader,
-               const std::vector<std::string>& facesPaths){
-    shader = new ShaderProgram(vertShader, fragShader);
-
-    if (!shader || shader->getProgram() == 0){
-        std::cerr << "[Skybox] Failed to create shader program!" << std::endl;
-        return;
-    }
-
-    viewMatrixLocation = glGetUniformLocation(shader->getProgram(), "viewMatrix");
-    projectionMatrixLocation = glGetUniformLocation(shader->getProgram(), "projectionMatrix");
-    skyboxSamplerLocation = glGetUniformLocation(shader->getProgram(), "skyboxSampler");
-
-    static const float skyboxVertices[] = {
-        // positions
-        -1.0f, 1.0f, -1.0f,
-        -1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, 1.0f, -1.0f,
-        -1.0f, 1.0f, -1.0f,
-
-        -1.0f, -1.0f, 1.0f,
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, 1.0f, -1.0f,
-        -1.0f, 1.0f, -1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f,
-
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-
-        -1.0f, -1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, -1.0f, 1.0f,
-        -1.0f, -1.0f, 1.0f,
-
-        -1.0f, 1.0f, -1.0f,
-        1.0f, 1.0f, -1.0f,
-        1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, 1.0f,
-        -1.0f, 1.0f, -1.0f,
-
-        -1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f, 1.0f,
-        1.0f, -1.0f, -1.0f,
-        1.0f, -1.0f, -1.0f,
-        -1.0f, -1.0f, 1.0f,
-        1.0f, -1.0f, 1.0f
-    };
-
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
-
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
-
-    // Position attribute (location 0)
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-
-    glBindVertexArray(0);
-
-    if (!loadCubemap(facesPaths))
-    {
-        std::cerr << "[Skybox] Failed to load cubemap textures!" << std::endl;
-    }
-
-    std::cout << "[Skybox] Initialized successfully" << std::endl;
-}
-
-Skybox::Skybox(const std::string& vertShader, const std::string& fragShader,
-               const std::string& texturePrefix){
+               const std::string& texturePrefix) {
 
     std::vector<std::string> faces = {
         texturePrefix + "right.png",
@@ -96,7 +17,78 @@ Skybox::Skybox(const std::string& vertShader, const std::string& fragShader,
         texturePrefix + "back.png"
     };
 
-    *this = Skybox(vertShader, fragShader, faces);
+    shader = new ShaderProgram(vertShader, fragShader);
+
+    if (!shader || shader->getProgram() == 0) {
+        std::cerr << "[Skybox] Failed to create shader program!" << std::endl;
+        return;
+    }
+
+    viewMatrixLocation = glGetUniformLocation(shader->getProgram(), "viewMatrix");
+    projectionMatrixLocation = glGetUniformLocation(shader->getProgram(), "projectionMatrix");
+    skyboxSamplerLocation = glGetUniformLocation(shader->getProgram(), "skyboxSampler");
+
+    static const float skyboxVertices[] = {
+        -1.0f,  1.0f, -1.0f,
+        -1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f, -1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+
+        -1.0f, -1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f,
+        -1.0f, -1.0f,  1.0f,
+
+        -1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f, -1.0f,
+         1.0f,  1.0f,  1.0f,
+         1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f,  1.0f,
+        -1.0f,  1.0f, -1.0f,
+
+        -1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f, -1.0f,
+         1.0f, -1.0f, -1.0f,
+        -1.0f, -1.0f,  1.0f,
+         1.0f, -1.0f,  1.0f
+    };
+
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &vbo);
+
+    glBindVertexArray(vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+
+    glBindVertexArray(0);
+
+    if (!loadCubemap(faces)) {
+        std::cerr << "[Skybox] Failed to load cubemap textures!" << std::endl;
+    }
+
+    std::cout << "[Skybox] Initialized successfully" << std::endl;
 }
 
 Skybox::~Skybox(){
