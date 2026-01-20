@@ -122,6 +122,8 @@ set(SOURCES
         meshGeometry.cpp
         modelTexture.cpp
         sphere.cpp
+        light.cpp
+        scene.cpp
 )
 
 set(HEADERS
@@ -133,16 +135,19 @@ set(HEADERS
         draw.h
         camera.h
         debug.h
-        gameObjects.h
         object.h
         shaderProgram.h
         light.h
         meshGeometry.h
         modelTexture.h
+        sphere.h
+        context.h
+        utilities.h
 )
 
 set(SHADERS
-
+        shaders/template.vert
+        shaders/template.frag
 )
 
 # Create Executable
@@ -150,7 +155,7 @@ add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${SHADERS})
 
 # Include Directories
 target_include_directories(${PROJECT_NAME} PRIVATE
-        ${CMAKE_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}
         ${OPENGL_INCLUDE_DIR}
         ${glew_SOURCE_DIR}/include
         ${assimp_SOURCE_DIR}/include
@@ -165,7 +170,6 @@ else ()
 endif ()
 
 # Link Libraries
-
 target_link_libraries(${PROJECT_NAME} PRIVATE
         ${OPENGL_LIBRARIES}
         glew
@@ -178,7 +182,6 @@ if (USE_SYSTEM_GLUT)
 else ()
     target_link_libraries(${PROJECT_NAME} PRIVATE freeglut_static)
 endif ()
-
 
 # Linux-specific libraries
 if (UNIX AND NOT APPLE)
@@ -205,7 +208,7 @@ endif ()
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_SOURCE_DIR}/shaders"
-        "$<TARGET_FILE_DIR:${PROJECT_NAME}>"
+        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/shaders"
         COMMENT "Copying shaders to build directory"
 )
 
@@ -246,7 +249,7 @@ endif ()
 
 # Print Configuration Summary
 message(STATUS "")
-message(STATUS "=== PGR Semestral Configuration ===")
+message(STATUS "=== Planetary Rain Configuration ===")
 message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 message(STATUS "")
 message(STATUS "Dependencies:")

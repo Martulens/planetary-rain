@@ -5,19 +5,27 @@
 #include "camera.h"
 #include "light.h"
 #include "object.h"
+#include "scene.h"
+#include "debug.h"
 #include <vector>
 
-void setupUniforms(const Object* obj, const std::vector<Light*> lights, const Camera* cam, const GameState& gameState) {
+void setupUniforms(const Object* obj, const std::vector<Light*>& lights, const Camera* cam, const GameState& gameState) {
     // === VIEW SETUP
     ShaderProgram* shader = obj->getShader();
+    GLint programLocation = shader->getProgram();
 
     glUniformMatrix4fv(shader->getProjectionMatrixLocation(), 1, GL_FALSE, &cam->getProjectionMatrix()[0][0]);
     glUniformMatrix4fv(shader->getViewMatrixLocation(), 1, GL_FALSE, &cam->getViewMatrix()[0][0]);
 
     glUniform1f(shader->getDensityLocation(), FOG_DENSITY);
     glUniform1f(shader->getGradientLocation(), FOG_GRADIENT);
-    CHECK_GL_ERROR();
 
+    // Camera position for specular calculations
+    glm::vec3 camPos = cam->getPosition();
+    GLint camPosLoc = glGetUniformLocation(programLocation, "cameraPosition");
+    glUniform3f(camPosLoc, camPos.x, camPos.y, camPos.z);
+
+    CHECK_GL_ERROR();
 
     // === TEXTURE -- ONLY COLOR -- SETUP
     ModelTexture* texture = obj->getTexture();
@@ -33,15 +41,13 @@ void setupUniforms(const Object* obj, const std::vector<Light*> lights, const Ca
     glUniform3f(shader->getSkyColorLocation(), skyColorConst.r, skyColorConst.g, skyColorConst.b);
     CHECK_GL_ERROR();
 
-
     // === LIGHTS SETUP
     size_t lightsLen = lights.size();
-    GLint programLocation = shader->getProgram();
 
     glUniform1i(glGetUniformLocation(programLocation, "numLights"), static_cast<int>(lightsLen));
 
-    for (int i = 0; i < lightsLen; ++i) {
-        if(i >= LIGHTS_MAX)
+    for (size_t i = 0; i < lightsLen; ++i) {
+        if (i >= LIGHTS_MAX)
             break;
 
         std::string uniformName = "lightPositions[" + std::to_string(i) + "]";
@@ -58,34 +64,33 @@ void setupUniforms(const Object* obj, const std::vector<Light*> lights, const Ca
         glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()), light->getBrightness());
 
         uniformName = "isPointLight[" + std::to_string(i) + "]";
-        glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()), light->isPointLight());
+        glUniform1i(glGetUniformLocation(programLocation, uniformName.c_str()), light->isPointLight() ? 1 : 0);
     }
 
     CHECK_GL_ERROR();
 
-
     float currentTime = 0.001f * glutGet(GLUT_ELAPSED_TIME);
-    GLint timeLoc = glGetUniformLocation(programLocation, "elapsedTime");
+    GLint timeLoc = glGetUniformLocation(programLocation, "time");
     glUniform1f(timeLoc, currentTime);
 }
 
 void setupTextures(const Object* obj) {
     ShaderProgram* shader = obj->getShader();
 
-    glUniform1i(glGetUniformLocation(shader->getProgram(), "modelTexture"), 0);
+    glUniform1i(glGetUniformLocation(shader->getProgram(), "textureSampler"), 0);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, obj->getTexture()->getTextureID());
 
-    CHECK_GL_ERROR(glBindTexture(GL_TEXTURE_2D, 0));
+    CHECK_GL_ERROR();
 }
 
-
-
-// === draw template
 void drawTemplate(const Object* obj, const Camera* cam, const std::vector<Light*>& lights, const GameState& gameState) {
     ShaderProgram* shader = obj->getShader();
 
     glUseProgram(shader->getProgram());
+
+    // Set model matrix for this object
+    glUniformMatrix4fv(shader->getModelMatrixLocation(), 1, GL_FALSE, &obj->getModelMatrix()[0][0]);
 
     setupUniforms(obj, lights, cam, gameState);
     setupTextures(obj);
@@ -95,14 +100,25 @@ void drawTemplate(const Object* obj, const Camera* cam, const std::vector<Light*
     else
         std::cout << "[ERROR] Object geometry not initialized!" << std::endl;
 
+    glBindTexture(GL_TEXTURE_2D, 0);
     glUseProgram(0);
 }
 
-void drawScene(){
+void drawScene() {
+    // Draw debug grid
     drawGrid();
 
-    glColor3f(1.0f, 0.0f, 0.0f);
+    // Render all scene objects using drawTemplate
+    if (con::scene && con::camera && con::gameState) {
+        const std::vector<Object*>& objects = con::scene->getObjects();
+        const std::vector<Light*>& lights = con::scene->getLights();
 
+        for (Object* obj : objects) {
+            if (obj && obj->getGeometry() && obj->getShader()) {
+                drawTemplate(obj, con::camera, lights, *con::gameState);
+            }
+        }
+    }
 }
 
 void drawWindow() {
@@ -112,19 +128,20 @@ void drawWindow() {
 
     glViewport(0, 0, w, h);
 
-    // === PROJECTION FROM CAMERA
+    // For the debug grid (using fixed-function pipeline)
     glMatrixMode(GL_PROJECTION);
     glLoadMatrixf(glm::value_ptr(con::camera->getProjectionMatrix()));
 
-    // === VIEW FROM CAMERA
     glMatrixMode(GL_MODELVIEW);
     glLoadMatrixf(glm::value_ptr(con::camera->getViewMatrix()));
 
+    // Enable depth testing
+    glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    // === DRAW SCENE ===
+    // Draw the scene
     drawScene();
 
     CHECK_GL_ERROR();

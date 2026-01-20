@@ -9,14 +9,16 @@ MeshGeometry::MeshGeometry(const char* fileName) {
     loadModel(inputPath);
 }
 
-MeshGeometry::MeshGeometry(std::vector<Vertex> vertices, std::vector<unsigned int> indices): indices(indices), vertices(vertices) {
-    numVertices = vertices.size();
-    size_t numTriangles = indices.size() / 3;
-    size_t numVertices = vertices.size();
-
+MeshGeometry::MeshGeometry(std::vector<Vertex> verts, std::vector<unsigned int> inds)
+    : indices(std::move(inds)), vertices(std::move(verts)) {
+    numVertices = static_cast<unsigned int>(vertices.size());
+    numTriangles = static_cast<unsigned int>(indices.size() / 3);
     loadVAO();
 }
 
+MeshGeometry::~MeshGeometry() {
+    cleanupGeometry();
+}
 
 void MeshGeometry::processNodeHierarchy(aiNode* node, const glm::mat4& parentTransform) {
     std::string nodeName(node->mName.C_Str());
@@ -45,7 +47,6 @@ void MeshGeometry::loadModel(std::string& fileName) {
     indices.clear();
 
     unsigned int vertexOffset = 0;
-    std::vector<int> bonesAssigned;
 
     for (unsigned int m = 0; m < scene->mNumMeshes; ++m) {
         aiMesh* mesh = scene->mMeshes[m];
@@ -64,8 +65,6 @@ void MeshGeometry::loadModel(std::string& fileName) {
             vertices.push_back(vertex);
         }
 
-        bonesAssigned.resize(vertices.size(), 0);
-
         for (unsigned int i = 0; i < mesh->mNumFaces; ++i) {
             aiFace face = mesh->mFaces[i];
             for (unsigned int j = 0; j < face.mNumIndices; ++j) {
@@ -76,7 +75,8 @@ void MeshGeometry::loadModel(std::string& fileName) {
         vertexOffset += mesh->mNumVertices;
     }
 
-    numTriangles = indices.size() / 3;
+    numVertices = static_cast<unsigned int>(vertices.size());
+    numTriangles = static_cast<unsigned int>(indices.size() / 3);
 
     loadVAO();
 }
@@ -94,23 +94,37 @@ void MeshGeometry::loadVAO() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
 
     GLsizei stride = sizeof(Vertex);
-    glEnableVertexAttribArray(0); // position
+
+    // position - location 0
+    glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, position));
 
-    glEnableVertexAttribArray(2); // normal
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, normal));
-
-    glEnableVertexAttribArray(1); // texCoord
+    // texCoord - location 1
+    glEnableVertexAttribArray(1);
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, texCoord));
 
-    glEnableVertexAttribArray(3); // color
+    // normal - location 2
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, normal));
+
+    // color - location 3
+    glEnableVertexAttribArray(3);
     glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, color));
 
     glBindVertexArray(0);
 }
 
 void MeshGeometry::cleanupGeometry() {
-    glDeleteVertexArrays(1, &vao);
-    glDeleteBuffers(1, &ebo);
-    glDeleteBuffers(1, &vbo);
+    if (vao != 0) {
+        glDeleteVertexArrays(1, &vao);
+        vao = 0;
+    }
+    if (ebo != 0) {
+        glDeleteBuffers(1, &ebo);
+        ebo = 0;
+    }
+    if (vbo != 0) {
+        glDeleteBuffers(1, &vbo);
+        vbo = 0;
+    }
 }

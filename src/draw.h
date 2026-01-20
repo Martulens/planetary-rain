@@ -1,19 +1,22 @@
-//
-// Created by martul3ns on 1/19/26.
-//
-
 #ifndef DRAW_H
 #define DRAW_H
+
 #include "glm/vec3.hpp"
+#include <vector>
 
-// drawing functions
-// -> all that visualises
+// Forward declarations
+class Object;
+class Camera;
+class Light;
+struct GameState;
 
+// Main drawing functions
 void drawWindow();
+void drawScene();
 
-void drawSphere(glm::vec3 position, float radius);
-void drawCube(glm::vec3 position, float size);
-void drawGrid();
+// Template drawing functions
+void setupUniforms(const Object* obj, const std::vector<Light*>& lights, const Camera* cam, const GameState& gameState);
+void setupTextures(const Object* obj);
+void drawTemplate(const Object* obj, const Camera* cam, const std::vector<Light*>& lights, const GameState& gameState);
 
-
-#endif //DRAW_H
+#endif // DRAW_H

@@ -1,8 +1,6 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "meshGeometry.h"
-
 #include <GL/glew.h>
 #include <GL/freeglut.h>
 
@@ -19,34 +17,35 @@
 #include <iostream>
 #include <algorithm>
 
-
-struct Vertex{
+struct Vertex {
     glm::vec3 position;
     glm::vec3 normal;
     glm::vec2 texCoord;
     glm::vec3 color;
 };
 
-class MeshGeometry{
-    private:
-    GLuint vbo;
-    GLuint ebo;
-    GLuint vao;
+class MeshGeometry {
+private:
+    GLuint vbo = 0;
+    GLuint ebo = 0;
+    GLuint vao = 0;
 
     float maxY = 0.0f;
-    unsigned int numVertices;
-    unsigned int numTriangles;
+    unsigned int numVertices = 0;
+    unsigned int numTriangles = 0;
 
     std::vector<unsigned int> indices;
     std::vector<Vertex> vertices;
 
     const aiScene* scene = nullptr;
     Assimp::Importer importer;
+
 public:
     MeshGeometry() = default;
     MeshGeometry(std::string& fileName);
     MeshGeometry(const char* fileName);
     MeshGeometry(std::vector<Vertex> vertices, std::vector<unsigned int> indices);
+    ~MeshGeometry();
 
     void processNodeHierarchy(aiNode* node, const glm::mat4& mat);
 
@@ -56,12 +55,13 @@ public:
     void cleanupGeometry();
 
     // === GETTERS
-    GLuint getVBO() const{ return vbo; }
-    GLuint getEBO() const{ return ebo; }
-    GLuint getVAO() const{ return vao; }
+    GLuint getVBO() const { return vbo; }
+    GLuint getEBO() const { return ebo; }
+    GLuint getVAO() const { return vao; }
 
-    unsigned int getNumTriangles() const{ return numTriangles; }
-    unsigned int getNumVertices() const{ return numVertices; }
+    unsigned int getNumTriangles() const { return numTriangles; }
+    unsigned int getNumVertices() const { return numVertices; }
+    float getMaxY() const { return maxY; }
 };
 
 #endif // MESH_H
