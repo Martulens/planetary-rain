@@ -36,6 +36,11 @@ void setupUniforms(const Object* obj, const std::vector<Light*>& lights, const C
     glUniform1f(shader->getNsLocation(), texture->getNs());
     glUniform1f(shader->getReflectivityLocation(), texture->getReflectivity());
 
+    if(texture->isRefractive()){
+        glUniform1f(shader->getIorLocation(), texture->getIOR());
+        glUniform1f(shader->getTransparencyLocation(), texture->getTransparency());
+    }
+
     glm::vec3 baseCol = texture->getColor();
     glUniform3f(shader->getBaseColorLocation(), baseCol.r, baseCol.g, baseCol.b);
 
@@ -120,9 +125,14 @@ void drawTemplate(const Object* obj, const Camera* cam, const std::vector<Light*
     setupUniforms(obj, lights, cam, gameState);
     setupTextures(obj);
 
-    if (obj->getGeometry()->getVAO() != 0)
-        obj->draw();
-    else
+    if (obj->getGeometry()->getVAO() != 0){
+        if(obj->getTexture()->isRefractive()){
+            glDisable(GL_CULL_FACE);
+            obj->draw();
+            glEnable(GL_CULL_FACE);
+        }else
+            obj->draw();
+    }else
         std::cout << "[ERROR] Object geometry not initialized!" << std::endl;
 
     glBindTexture(GL_TEXTURE_2D, 0);

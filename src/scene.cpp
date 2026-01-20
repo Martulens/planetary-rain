@@ -103,10 +103,10 @@ void Scene::constructDebugObjects() {
     sphere1->setNeedsEnvMap(false);
     addObject(sphere1);
 
-    // Green sphere - slightly reflective
+    // Green sphere - refractive
     glm::vec3 greenColor(0.2f, 0.8f, 0.3f);
-    ModelTexture* glossyGreenMaterial = new ModelTexture(greenColor, 0.6f, 0.5f, 32.0f, 0.3f);
-    Sphere* sphere2 = new Sphere(glm::vec3(0.0f, 1.5f, 0.0f), 1.5f, 3, glossyGreenMaterial, defaultShader);
+    ModelTexture* glossyGreenMaterial = new ModelTexture(greenColor, 0.6f, 0.5f, 32.0f, 0.3f, 1.5f, 1.0f);
+    Sphere* sphere2 = new Sphere(glm::vec3(0.0f, 1.5f, 0.0f), 1.5f, 3, glossyGreenMaterial, refractiveShader);
 
     sphere2->setNeedsEnvMap(true);
     addObject(sphere2);
@@ -173,6 +173,7 @@ void Scene::init() {
 
     // Create the default shader
     defaultShader = new ShaderProgram("shaders/template.vert", "shaders/template.frag");
+    refractiveShader = new ShaderProgram("shaders/template.vert", "shaders/refractive.frag");
 
     if (!defaultShader || defaultShader->getProgram() == 0) {
         std::cerr << "[Scene] ERROR: Failed to create default shader!" << std::endl;

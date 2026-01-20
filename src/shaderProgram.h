@@ -25,6 +25,8 @@ private:
     GLint ns;
     GLint reflectivity;
     GLint skyColor;
+    GLint ior;
+    GLint transparency;
 
     // Texture sampler uniforms
     GLint backTexture;
@@ -65,6 +67,8 @@ public:
     GLint getNsLocation() const { return ns; }
     GLint getReflectivityLocation() const { return reflectivity; }
     GLint getSkyColorLocation() const { return skyColor; }
+    GLint getIorLocation() const { return ior; }
+    GLint getTransparencyLocation() const { return transparency; }
 
     GLint getBackTextureLocation() const { return backTexture; }
     GLint getRTextureLocation() const { return rTexture; }

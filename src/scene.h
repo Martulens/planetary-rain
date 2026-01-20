@@ -18,6 +18,7 @@ private:
     
     // Shared resources
     ShaderProgram* defaultShader = nullptr;
+    ShaderProgram* refractiveShader = nullptr;
     Skybox* skybox = nullptr;
 
 public:

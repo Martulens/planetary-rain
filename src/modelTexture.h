@@ -21,10 +21,17 @@ private:
 
     float reflectivity = 0.0f;
 
+    float ior = -1.0f;
+    bool refractive = false;
+    float transparency = 0.0f;
+
 public:
     ModelTexture() = default;
     ModelTexture(const std::string& fileName);
     ModelTexture(const glm::vec3& color, float pd, float ps, float k, float reflectivity);
+    ModelTexture(const glm::vec3& color, float pd, float ps, float k,
+        float reflectivity, float ior, float transparency);
+
     // === GETTERS
     glm::vec3 getColor() const{ return color; }
     GLuint getTextureID() const { return textureID; }
@@ -33,6 +40,9 @@ public:
     float getPs() const{ return ps; }
     float getNs() const{ return ns; }
     float getReflectivity() const{ return reflectivity; }
+    bool isRefractive() const{ return refractive; }
+    float getIOR() const{ return ior; }
+    float getTransparency() const{ return transparency; }
 
 };
 

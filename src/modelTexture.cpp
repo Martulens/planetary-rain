@@ -16,6 +16,23 @@ ModelTexture::ModelTexture(const std::string& fileName) {
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+ModelTexture::ModelTexture(const glm::vec3& color, float pd, float ps, float k, float reflectivity, float ior, float transparency){
+    this->textureID = 0;
+    this->color = color;
+    this->pd = pd;
+    this->ps = ps;
+    this->ns = k;
+    this->reflectivity = reflectivity;
+
+    if(ior == -1)
+        refractive = false;
+    else{
+        refractive = true;
+        this->ior = ior;
+        this->transparency = transparency;
+    }
+}
+
 ModelTexture::ModelTexture(const glm::vec3& color, float pd, float ps, float k, float reflectivity){
     this->textureID = 0;
     this->color = color;

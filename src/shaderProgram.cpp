@@ -41,6 +41,8 @@ void ShaderProgram::getAllUniforms() {
     ps = glGetUniformLocation(program, "ps");
     ns = glGetUniformLocation(program, "ns");
     reflectivity = glGetUniformLocation(program, "reflectivity");
+    ior = glGetUniformLocation(program, "ior");
+    transparency = glGetUniformLocation(program, "transparency");
 
     // === AMBIENT
     skyColor = glGetUniformLocation(program, "skyColor");
