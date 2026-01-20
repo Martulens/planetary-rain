@@ -124,6 +124,7 @@ set(SOURCES
         sphere.cpp
         light.cpp
         scene.cpp
+        skybox.cpp
 )
 
 set(HEADERS
@@ -143,6 +144,7 @@ set(HEADERS
         sphere.h
         context.h
         utilities.h
+        skybox.h
 )
 
 set(SHADERS

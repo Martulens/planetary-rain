@@ -6,6 +6,7 @@
 #include "light.h"
 #include "object.h"
 #include "scene.h"
+#include "skybox.h"
 #include "debug.h"
 #include <vector>
 
@@ -85,6 +86,7 @@ void setupTextures(const Object* obj) {
     if (texID != 0) {
         glBindTexture(GL_TEXTURE_2D, texID);
     } else {
+        // Bind no texture - shader will use baseColor instead
         glBindTexture(GL_TEXTURE_2D, 0);
     }
 
@@ -96,7 +98,6 @@ void drawTemplate(const Object* obj, const Camera* cam, const std::vector<Light*
 
     glUseProgram(shader->getProgram());
 
-    // Set model matrix for this object
     glUniformMatrix4fv(shader->getModelMatrixLocation(), 1, GL_FALSE, &obj->getModelMatrix()[0][0]);
 
     setupUniforms(obj, lights, cam, gameState);
@@ -112,8 +113,10 @@ void drawTemplate(const Object* obj, const Camera* cam, const std::vector<Light*
 }
 
 void drawScene() {
+    // Draw debug grid
     drawGrid();
 
+    // Render all scene objects using drawTemplate
     if (con::scene && con::camera && con::gameState) {
         const std::vector<Object*>& objects = con::scene->getObjects();
         const std::vector<Light*>& lights = con::scene->getLights();
@@ -121,7 +124,14 @@ void drawScene() {
         for (Object* obj : objects) {
             if (obj && obj->getGeometry() && obj->getShader()) {
                 drawTemplate(obj, con::camera, lights, *con::gameState);
+                CHECK_GL_ERROR();
             }
+        }
+
+        Skybox* skybox = con::scene->getSkybox();
+        if (skybox) {
+            skybox->draw(con::camera->getViewMatrix(), con::camera->getProjectionMatrix());
+            CHECK_GL_ERROR();
         }
     }
 }
@@ -133,7 +143,7 @@ void drawWindow() {
 
     glViewport(0, 0, w, h);
 
-    // For the debug grid (using fixed-function pipeline)
+    // For the debug grid
     glMatrixMode(GL_PROJECTION);
     glLoadMatrixf(glm::value_ptr(con::camera->getProjectionMatrix()));
 
@@ -145,16 +155,12 @@ void drawWindow() {
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
 
-    // Toggle between wireframe and solid
     if (con::gameState->wireframeMode) {
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     } else {
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
-
     // Draw the scene
     drawScene();
-
-    CHECK_GL_ERROR();
 }

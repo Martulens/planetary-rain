@@ -7,6 +7,7 @@
 #include "light.h"
 #include "shaderProgram.h"
 #include "modelTexture.h"
+#include "skybox.h"
 
 class Scene {
 private:
@@ -15,6 +16,7 @@ private:
     
     // Shared resources
     ShaderProgram* defaultShader = nullptr;
+    Skybox* skybox = nullptr;
 
 public:
     Scene() = default;
@@ -35,6 +37,7 @@ public:
     const std::vector<Object*>& getObjects() const { return objects; }
     const std::vector<Light*>& getLights() const { return lights; }
     ShaderProgram* getDefaultShader() const { return defaultShader; }
+    Skybox* getSkybox() const { return skybox; }
 };
 
 #endif // SCENE_H

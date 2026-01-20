@@ -36,11 +36,143 @@
   <component name="ChangeListManager">
     <list default="true" id="7e67c233-aa83-4b0c-8b19-93b0c02930ad" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/callbacks.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/callbacks.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/draw.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/draw.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gamestate.h" beforeDir="false" afterPath="$PROJECT_DIR$/gamestate.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scene.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/scene.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scene.h" beforeDir="false" afterPath="$PROJECT_DIR$/scene.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/blendmapA.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/blendmapB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/blendmapC.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/blendmapD.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/characters.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/cross.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/cross.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/grassB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/grassH.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/grassN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/grassO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/grassR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/horse.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/moon.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/path.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/player.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/player.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/sandB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/sandH.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/sandN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/sandO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/sandR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/skybox.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/skybox.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/skybox/back.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/skybox/bottom.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/skybox/front.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/skybox/left.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/skybox/right.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/skybox/top.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/skyobject.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/skyobject.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/sun.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/terrain.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/terrain.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_100_1_Pixel_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_100_1_Pixel_Base_Color.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_100_1_Pixel_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_100_1_Pixel_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_100_1_Pixel_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_18_2_Metals_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_18_2_Metals_Base_Color.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_18_2_Metals_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_18_2_Metals_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_18_2_Metals_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_19_4_Dirt_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_19_4_Dirt_Base_Color.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_19_4_Dirt_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_19_4_Dirt_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_19_4_Dirt_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_23_1_Rocks_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_23_1_Rocks_Base_Color.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_23_1_Rocks_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_23_1_Rocks_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_23_1_Rocks_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_26_2_Cliffs_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_26_2_Cliffs_Base_Color.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_26_2_Cliffs_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_26_2_Cliffs_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_26_2_Cliffs_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_27_4_Lava_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_27_4_Lava_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_27_4_Lava_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_27_4_Lava_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_30_3_Roofs_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_30_3_Roofs_Base_Color.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_30_3_Roofs_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_30_3_Roofs_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_30_3_Roofs_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_34_2_Tiles_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_34_2_Tiles_Base_Color.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_34_2_Tiles_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_34_2_Tiles_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_34_2_Tiles_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_35_1_Lava_Emissive.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_35_3_Lava_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_35_3_Lava_Emissive.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_35_3_Lava_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_35_3_Lava_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_35_3_Lava_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_36_5_Water_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_49_5_Rocks_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_49_5_Rocks_Base_Color.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_49_5_Rocks_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_49_5_Rocks_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_49_5_Rocks_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_58_1_Surface_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_58_1_Surface_Base_Color.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_58_1_Surface_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_58_1_Surface_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_58_1_Surface_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_67_3_Tile_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_67_3_Tile_Base_Color.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_67_3_Tile_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_67_3_Tile_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_67_3_Tile_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_79_5_Sci-fi_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_79_5_Sci-fi_Base_Color.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_79_5_Sci-fi_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_79_5_Sci-fi_Metallic.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_79_5_Sci-fi_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_79_5_Sci-fi_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_7_1_Tiles_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_7_1_Tiles_Base_Color.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_7_1_Tiles_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_7_1_Tiles_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_81_3_Sci-fi_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_81_3_Sci-fi_Base_Color.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_81_3_Sci-fi_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_81_3_Sci-fi_Metallic.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_81_3_Sci-fi_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/Vol_81_3_Sci-fi_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/vol_2_3_Wood_Ambient_Occlusion.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/vol_2_3_Wood_Base_Color.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/vol_2_3_Wood_Height.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/vol_2_3_Wood_Normal.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texs/vol_2_3_Wood_Roughness.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texture_forest_solid.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/texture_gradient_forest.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/tilesB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/tilesH.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/tilesN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/tilesO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/tilesR.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/torch.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/treemap.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/trees.frag" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/trees.vert" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/waterB.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/waterH.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/waterN.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/waterO.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/textures/waterR.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -168,7 +300,7 @@
       <option name="presentableId" value="Default" />
       <updated>1768872097575</updated>
       <workItem from="1768872100228" duration="2563000" />
-      <workItem from="1768926663534" duration="9998000" />
+      <workItem from="1768926663534" duration="11263000" />
     </task>
     <servers />
   </component>

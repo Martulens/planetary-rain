@@ -11,6 +11,8 @@ Scene::~Scene() {
 }
 
 void Scene::constructObjects(){
+    std::cout << "[Scene] Initializing objects..." << std::endl;
+
     glm::vec3 redColor(1.0f, 0.2f, 0.2f);
     ModelTexture* matteRedMaterial = new ModelTexture(
         redColor,
@@ -67,6 +69,8 @@ void Scene::constructObjects(){
 }
 
 void Scene::constructLights(){
+    std::cout << "[Scene] Initializing lights..." << std::endl;
+
     Light* sunLight = new Light(
         glm::vec3(1.0f, -1.0f, -0.5f),
         glm::vec3(1.0f, 0.95f, 0.9f),
@@ -103,8 +107,16 @@ void Scene::init() {
         return;
     }
 
+    std::cout << "[Scene] Initializing skybox..." << std::endl;
+    int numSkybox = rand() % 5;
+    skybox = new Skybox("shaders/skybox.vert", "shaders/skybox.frag", "textures/skybox/" + std::to_string(numSkybox) + "/");
+    CHECK_GL_ERROR();
+
     constructObjects();
+    CHECK_GL_ERROR();
+
     constructLights();
+    CHECK_GL_ERROR();
 
     std::cout << "[Scene] Created " << objects.size() << " objects and "
               << lights.size() << " lights" << std::endl;
@@ -133,6 +145,11 @@ void Scene::cleanup() {
     if (defaultShader) {
         delete defaultShader;
         defaultShader = nullptr;
+    }
+
+    if (skybox) {
+        delete skybox;
+        skybox = nullptr;
     }
 }
 
