@@ -33,21 +33,21 @@ void renderUI(PlanetParams& params, bool& paramsChanged) {
     // Geometry
     if (ImGui::CollapsingHeader("Geometry", ImGuiTreeNodeFlags_DefaultOpen)) {
         paramsChanged |= ImGui::SliderFloat("Radius", &params.radius, 0.5f, 5.0f);
-        paramsChanged |= ImGui::SliderInt("Detail", &params.detail, 1, 4);
+        paramsChanged |= ImGui::SliderInt("Detail", &params.detail, 2, 100);  // min 2 to form triangles
         paramsChanged |= ImGui::SliderFloat("x", &params.x, -15.0f, 15.0f);
         paramsChanged |= ImGui::SliderFloat("y", &params.y, -15.0f, 15.0f);
         paramsChanged |= ImGui::SliderFloat("z", &params.z, -15.0f, 15.0f);
     }
-    
+
     // Appearance
     if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen)) {
-        paramsChanged |= ImGui::ColorEdit3("Color", &params.color.x);
+        paramsChanged |= ImGui::ColorEdit3("Color", &params.color.x);  // already 0-1
         paramsChanged |= ImGui::SliderFloat("Diffuse", &params.pd, 0.0f, 1.0f);
         paramsChanged |= ImGui::SliderFloat("Specular", &params.ps, 0.0f, 1.0f);
         paramsChanged |= ImGui::SliderFloat("Shininess", &params.ns, 1.0f, 256.0f);
         paramsChanged |= ImGui::SliderFloat("Reflectivity", &params.reflectivity, 0.0f, 1.0f);
-        paramsChanged |= ImGui::SliderFloat("IOR", &params.ior, -1.0f, 5.0f);
-        paramsChanged |= ImGui::SliderFloat("Transparency", &params.transparency, 0.0f, 1.0f);
+        paramsChanged |= ImGui::SliderFloat("IOR", &params.ior, 1.0f, 3.0f);
+        paramsChanged |= ImGui::SliderFloat("Transparency", &params.transparency, 0.0f, 1.0f);  // not used in shader currently!
     }
     
     // Animation
@@ -55,7 +55,38 @@ void renderUI(PlanetParams& params, bool& paramsChanged) {
         ImGui::Checkbox("Auto Rotate", &params.autoRotate);
         ImGui::SliderFloat("Speed (deg/s)", &params.rotationSpeed, 0.0f, 180.0f);
     }
-    
+
+    if (ImGui::Button("Randomize")) {
+        params.radius = 0.5f + (rand() / (float)RAND_MAX) * 4.5f;   // 0.5 to 5.0
+        params.detail = 5 + rand() % 50;                             // 5 to 54
+
+        params.color = glm::vec3(
+            rand() / (float)RAND_MAX,
+            rand() / (float)RAND_MAX,
+            rand() / (float)RAND_MAX
+        );
+
+        params.pd = (rand() / (float)RAND_MAX);                      // 0.0 to 1.0
+        params.ps = (rand() / (float)RAND_MAX);                      // 0.0 to 1.0
+        params.ns = 1.0f + (rand() / (float)RAND_MAX) * 255.0f;      // 1.0 to 256.0
+
+        bool reflective = (rand() % 2 == 0);
+        if(reflective)
+            params.reflectivity = (rand() / (float)RAND_MAX);
+        else
+            params.reflectivity = 0.0f;
+
+        bool refractive = (rand() % 2 == 0);
+        if(refractive){
+            params.ior = 1.0f + (rand() / (float)RAND_MAX) * 2.0f;
+            params.transparency = (rand() / (float)RAND_MAX);
+        }
+        else
+            params.ior = 1.0f;
+
+        params.changed = true;
+    }
+
     // Presets
     if (ImGui::CollapsingHeader("Presets")) {
         if (ImGui::Button("Earth-like")) {

@@ -38,7 +38,11 @@
   <component name="ChangeListManager">
     <list default="true" id="7e67c233-aa83-4b0c-8b19-93b0c02930ad" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scene.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/scene.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shaders/template.frag" beforeDir="false" afterPath="$PROJECT_DIR$/shaders/template.frag" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sphere.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sphere.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/ui.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

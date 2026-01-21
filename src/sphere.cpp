@@ -1,5 +1,7 @@
 #include "sphere.h"
 
+#include <complex>
+
 Sphere::Sphere(glm::vec3 position, float r, int det, ModelTexture* texture, ShaderProgram* shader)
     : Object(position, cubeSphere(r, det), shader, texture), radius(r), detail(det) {
     updateModelMatrix();
@@ -101,6 +103,10 @@ glm::vec3 cubeNormals[6] = {
 
 // contributions taken from:
 // -> https://mathproofs.blogspot.com/2005/07/mapping-cube-to-sphere.html?lr=1
+float projectToSphere(float in, float a, float b){
+    return in*sqrt(1 - (a*a)/2 - (b*b)/2 + ((a*a)*(b*b))/3);
+}
+
 MeshGeometry* Sphere::cubeSphere(float radius, int detail){
     std::vector<Vertex> vertices;
     std::vector<uint32_t> indices;
@@ -134,8 +140,18 @@ MeshGeometry* Sphere::cubeSphere(float radius, int detail){
             glm::vec3 iPlus = glm::vec3(0.0f);
             for(int i = 0; i <= detail; ++i){
                 Vertex v;
-                v.position = radius*(a + (float)i*iDiff + (float)j*jDiff);
-                v.normal = normal;
+                glm::vec3 cubePos = (a + (float)i*iDiff + (float)j*jDiff);
+
+                float x = projectToSphere(cubePos.x, cubePos.y, cubePos.z);
+                float y = projectToSphere(cubePos.y, cubePos.x, cubePos.z);
+                float z = projectToSphere(cubePos.z, cubePos.x, cubePos.y);
+
+                glm::vec3 spherePos = glm::vec3(x, y, z);
+                glm::vec3 sphereNormal = glm::normalize(spherePos - position);
+
+                v.position = radius*spherePos;
+                v.normal = sphereNormal;
+
                 vertices.push_back(v);
 
                 std::cout << "[CUBE] " << i+j*(detail+1) << " Position: " << v.position.x << ", " << v.position.y << ", " << v.position.z << std::endl;

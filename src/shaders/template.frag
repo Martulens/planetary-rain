@@ -103,6 +103,10 @@ void main() {
 
         vec3 halfwayDir = normalize(lightDir + viewDir);
         float spec = pow(max(dot(normal, halfwayDir), 0.0), ns);
+
+        if(ns < 1)
+            spec = 1;
+
         totalSpecular += lightColors[i] * (ps * spec) * attenuation * intensity;
     }
 

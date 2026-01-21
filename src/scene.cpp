@@ -137,8 +137,7 @@ void Scene::renderEnvironmentMaps(Camera* camera)
     glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
 }
 
-void Scene::constructDebugObjects()
-{
+void Scene::constructDebugObjects(){
     std::cout << "[Scene] Initializing objects..." << std::endl;
 
     // Red sphere - matte, no reflections needed
@@ -167,23 +166,25 @@ void Scene::constructDebugObjects()
 }
 
 void Scene::constructObjects(){
-    glm::vec3 blueColor(0.2f, 0.4f, 1.0f);
-    ModelTexture* shinyBlueMaterial = new ModelTexture(
-        blueColor,
-        0.3f,
-        0.9f,
-        128.0f,
-        0.5f,
-        1.0f,
-        1.0f
+    PlanetParams defaults;
+    ModelTexture* material = new ModelTexture(
+        defaults.color,
+        defaults.pd,
+        defaults.ps,
+        defaults.ns,
+        defaults.reflectivity,
+        defaults.ior,
+        defaults.transparency
     );
 
+    ShaderProgram* shader = (defaults.ior > 1.0f) ? refractiveShader : defaultShader;
+
     planet = new Sphere(
-        glm::vec3(4.0f, 1.5f, 0.0f),
-        3.0f,
-        3,
-        shinyBlueMaterial,
-        refractiveShader
+        glm::vec3(defaults.x, defaults.y, defaults.z),
+        defaults.radius,
+        defaults.detail,
+        material,
+        shader
     );
 
     planet->setNeedsEnvMap(true);
