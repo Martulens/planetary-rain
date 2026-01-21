@@ -33,7 +33,7 @@ void renderUI(PlanetParams& params, bool& paramsChanged) {
     // Geometry
     if (ImGui::CollapsingHeader("Geometry", ImGuiTreeNodeFlags_DefaultOpen)) {
         paramsChanged |= ImGui::SliderFloat("Radius", &params.radius, 0.5f, 5.0f);
-        paramsChanged |= ImGui::SliderInt("Detail", &params.detail, 1, 4);
+        paramsChanged |= ImGui::SliderInt("Detail", &params.detail, 1, 20);
         paramsChanged |= ImGui::SliderFloat("x", &params.x, -15.0f, 15.0f);
         paramsChanged |= ImGui::SliderFloat("y", &params.y, -15.0f, 15.0f);
         paramsChanged |= ImGui::SliderFloat("z", &params.z, -15.0f, 15.0f);
@@ -42,12 +42,21 @@ void renderUI(PlanetParams& params, bool& paramsChanged) {
     // Appearance
     if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen)) {
         paramsChanged |= ImGui::ColorEdit3("Color", &params.color.x);
-        paramsChanged |= ImGui::SliderFloat("Diffuse", &params.pd, 0.0f, 1.0f);
-        paramsChanged |= ImGui::SliderFloat("Specular", &params.ps, 0.0f, 1.0f);
+        paramsChanged |= ImGui::SliderFloat("Diffuse", &params.pd, 0.0f, 5.0f);
+        paramsChanged |= ImGui::SliderFloat("Specular", &params.ps, 0.0f, 5.0f);
         paramsChanged |= ImGui::SliderFloat("Shininess", &params.ns, 1.0f, 256.0f);
         paramsChanged |= ImGui::SliderFloat("Reflectivity", &params.reflectivity, 0.0f, 1.0f);
         paramsChanged |= ImGui::SliderFloat("IOR", &params.ior, -1.0f, 5.0f);
         paramsChanged |= ImGui::SliderFloat("Transparency", &params.transparency, 0.0f, 1.0f);
+    }
+
+    if (ImGui::CollapsingHeader("Terrain", ImGuiTreeNodeFlags_DefaultOpen)) {
+        paramsChanged |= ImGui::SliderFloat("Strength", &params.terrain.strength, 0.0f, 1.0f);
+        paramsChanged |= ImGui::SliderInt("Octaves", &params.terrain.octaves, 1, 8);
+        paramsChanged |= ImGui::SliderFloat("Roughness", &params.terrain.baseRoughness, 1.0f, 4.0f);
+        paramsChanged |= ImGui::SliderFloat("Persistence", &params.terrain.persistence, 0.1f, 0.9f);
+        paramsChanged |= ImGui::SliderFloat("Min Value", &params.terrain.minValue, -5.0f, 5.0f);
+        paramsChanged |= ImGui::SliderFloat("Max Value", &params.terrain.maxValue, -5.0f, 5.0f);
     }
     
     // Animation

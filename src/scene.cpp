@@ -41,7 +41,7 @@ void Scene::updatePlanet(const PlanetParams& params){
     }
 
     glm::vec3 newPos(params.x, params.y, params.z);
-    planet = new Sphere(newPos, params.radius, params.detail, newMaterial, shader);
+    planet = new Sphere(newPos, params.radius, params.detail, newMaterial, shader, params.terrain);
     planet->setNeedsEnvMap(needsEnv);
 
     addObject(planet);
@@ -52,8 +52,7 @@ void Scene::renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& project
         skybox->draw(view, projection);
 
     // Render all objects except the excluded one
-    for (Object* obj : objects)
-    {
+    for (Object* obj : objects){
         if (obj == excludeObject) continue;
         if (!obj || !obj->getGeometry() || !obj->getShader()) continue;
 
@@ -121,8 +120,7 @@ void Scene::renderEnvironmentMaps(Camera* camera)
         envMap->updateViewMatrices(obj->getPosition());
 
         // Render all 6 faces
-        for (int face = 0; face < 6; ++face)
-        {
+        for (int face = 0; face < 6; ++face){
             envMap->beginCapture(face);
 
             glClearColor(skyColorConst.r, skyColorConst.g, skyColorConst.b, 1.0f);
@@ -202,6 +200,7 @@ void Scene::constructDebugLights()
     );
     addLight(sunLight);
 
+    /*
     Light* pointLight1 = new Light(
         glm::vec3(0.0f, 3.0f, 5.0f),
         glm::vec3(1.0f, 0.8f, 0.6f),
@@ -217,6 +216,7 @@ void Scene::constructDebugLights()
         true
     );
     addLight(fillLight);
+    */
 }
 
 void Scene::init(){
@@ -248,13 +248,10 @@ void Scene::init(){
         << lights.size() << " lights" << std::endl;
 }
 
-void Scene::cleanup()
-{
+void Scene::cleanup(){
     // Clean up objects and their associated geometry
-    for (Object* obj : objects)
-    {
-        if (obj)
-        {
+    for (Object* obj : objects){
+        if (obj){
             // Delete the geometry
             if (obj->getGeometry())
             {
@@ -267,43 +264,35 @@ void Scene::cleanup()
     }
     objects.clear();
 
-    for (Light* light : lights)
-    {
+    for (Light* light : lights){
         delete light;
     }
     lights.clear();
 
-    if (defaultShader)
-    {
+    if (defaultShader){
         delete defaultShader;
         defaultShader = nullptr;
     }
 
-    if (skybox)
-    {
+    if (skybox){
         delete skybox;
         skybox = nullptr;
     }
 }
 
-void Scene::addObject(Object* obj)
-{
-    if (obj)
-    {
+void Scene::addObject(Object* obj){
+    if (obj){
         objects.push_back(obj);
     }
 }
 
-void Scene::addLight(Light* light)
-{
-    if (light)
-    {
+void Scene::addLight(Light* light){
+    if (light){
         lights.push_back(light);
     }
 }
 
-void Scene::update(float deltaTime)
-{
+void Scene::update(float deltaTime){
     static float angle = 0.0f;
     angle += deltaTime * 0.5f;
 

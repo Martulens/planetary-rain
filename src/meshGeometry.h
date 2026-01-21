@@ -54,6 +54,9 @@ public:
 
     void cleanupGeometry();
 
+    void setVertex(Vertex vertex);
+    void setIndice(std::vector<unsigned int> indices);
+
     // === GETTERS
     GLuint getVBO() const { return vbo; }
     GLuint getEBO() const { return ebo; }

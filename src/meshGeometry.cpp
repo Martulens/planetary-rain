@@ -114,6 +114,14 @@ void MeshGeometry::loadVAO() {
     glBindVertexArray(0);
 }
 
+void MeshGeometry::setVertex(Vertex vertex){
+    vertices.push_back(vertex);
+}
+
+void MeshGeometry::setIndice(std::vector<unsigned int> ind){
+    indices.insert(indices.end(), ind.begin(), ind.end());
+}
+
 void MeshGeometry::cleanupGeometry() {
     if (vao != 0) {
         glDeleteVertexArrays(1, &vao);

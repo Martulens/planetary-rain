@@ -2,6 +2,7 @@
 #define UI_H
 
 #include "glm/vec3.hpp"
+#include "sphere.h"
 
 struct PlanetParams {
     float x = 4.0f;
@@ -10,6 +11,7 @@ struct PlanetParams {
 
     float radius = 1.5f;
     int detail = 3;              // 1-4
+    Terrain terrain;
 
     // Colour
     glm::vec3 color = glm::vec3(0.2f, 0.4f, 1.0f);
