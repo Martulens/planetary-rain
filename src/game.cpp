@@ -22,8 +22,9 @@ void restartGame() {
     if (h == 0) h = 1;
 
     // Initialize camera - positioned to see all three spheres
+    glm::vec3 spherePos = glm::vec3(4.0f, 1.5f, 0.0f);
     glm::vec3 camPosition = glm::vec3(0.0f, 4.0f, 12.0f);
-    glm::vec3 direction = glm::vec3(0.0f, -0.2f, -1.0f);
+    glm::vec3 direction = camPosition - spherePos;
     float angle = 0.0f;
 
     Camera* camera = new Camera(w, h, camPosition, direction, angle);

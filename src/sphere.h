@@ -12,7 +12,8 @@ public:
   Sphere() = default;
   Sphere(glm::vec3 position, float radius, int detail, ModelTexture* texture, ShaderProgram* shader);
 
-  static MeshGeometry* generateGeometry(float radius, int detail);
+  MeshGeometry* uvSphere(float radius, int detail);
+  MeshGeometry* cubeSphere(float radius, int detail);
 
   float getRadius() const { return radius; }
   int getDetail() const { return detail; }
