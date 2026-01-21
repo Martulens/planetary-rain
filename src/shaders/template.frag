@@ -9,9 +9,9 @@ in vec3 fragColor;
 in float visibility;
 
 uniform vec3 baseColor;
-uniform float pd;
-uniform float ps;
-uniform float ns;
+uniform float pd;          // diffuse coefficient
+uniform float ps;          // specular coefficient
+uniform float ns;          // specular exponent (shininess)
 uniform float reflectivity;
 
 uniform sampler2D textureSampler;
@@ -46,7 +46,7 @@ void main() {
     vec3 normal = normalize(fragNormal);
     vec3 viewDir = normalize(cameraPosition - fragPosition);
 
-    // Surface color
+    // === SURFACE COLOR ===
     vec3 surfaceColor = baseColor;
     vec4 texColor = texture(textureSampler, fragTexCoord);
     if (texColor.r > 0.01 || texColor.g > 0.01 || texColor.b > 0.01) {
@@ -58,23 +58,20 @@ void main() {
     vec3 envReflection = vec3(0.0);
 
     if (useDynamicReflections) {
-        // Use dynamic environment map (reflects other objects)
         envReflection = texture(envMapSampler, reflectDir).rgb;
     } else if (useEnvironmentLighting) {
-        // Fall back to skybox reflection
         envReflection = texture(skyboxSampler, reflectDir).rgb;
     }
 
     // === FRESNEL ===
     float cosTheta = max(dot(normal, viewDir), 0.0);
-    vec3 F0 = vec3(0.04);  // Base reflectivity for dielectrics
-    F0 = mix(F0, surfaceColor, reflectivity);  // Metallic surfaces reflect their color
+    vec3 F0 = vec3(0.04);
+    F0 = mix(F0, surfaceColor, reflectivity);
     vec3 fresnel = fresnelSchlick(cosTheta, F0);
 
     // === AMBIENT ===
     vec3 ambient;
     if (useEnvironmentLighting || useDynamicReflections) {
-        // Sample environment in normal direction for ambient
         vec3 envAmbient = useDynamicReflections
         ? texture(envMapSampler, normal).rgb
         : texture(skyboxSampler, normal).rgb;
@@ -112,9 +109,10 @@ void main() {
     // === COMBINE ===
     vec3 lighting = ambient + (totalDiffuse * surfaceColor) + totalSpecular;
 
-    // Blend reflection using Fresnel
-    float reflectionStrength = reflectivity * fresnel.r;
-    lighting = mix(lighting, envReflection, reflectionStrength);
+    // Blend reflection using Fresnel (use average of fresnel components)
+    float fresnelFactor = (fresnel.r + fresnel.g + fresnel.b) / 3.0;
+    float reflectionStrength = reflectivity * fresnelFactor;
+    lighting = mix(lighting, envReflection, clamp(reflectionStrength, 0.0, 1.0));
 
     // Apply fog
     vec3 finalColor = mix(skyColor, lighting, visibility);

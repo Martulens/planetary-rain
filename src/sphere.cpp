@@ -1,11 +1,11 @@
 #include "sphere.h"
 
 Sphere::Sphere(glm::vec3 position, float r, int det, ModelTexture* texture, ShaderProgram* shader)
-    : Object(position, generateGeometry(r, det), shader, texture), radius(r), detail(det) {
+    : Object(position, cubeSphere(r, det), shader, texture), radius(r), detail(det) {
     updateModelMatrix();
 }
 
-MeshGeometry* Sphere::generateGeometry(float radius, int detail) {
+MeshGeometry* Sphere::uvSphere(float radius, int detail) {
     // detail: 1=low, 2=medium, 3=high, 4=ultra
     int latSegments = 8 * detail;
     int lonSegments = 16 * detail;
@@ -45,6 +45,84 @@ MeshGeometry* Sphere::generateGeometry(float radius, int detail) {
             indices.push_back(second + 1);
             indices.push_back(first + 1);
         }
+    }
+
+    return new MeshGeometry(vertices, indices);
+}
+
+glm::vec3 cubeVertices[24] = {
+    // +x
+    glm::vec3(1.0f, -1.0f, 1.0f),
+    glm::vec3(1.0f, -1.0f, -1.0f),
+    glm::vec3(1.0f, 1.0f, -1.0f),
+    glm::vec3(1.0f, 1.0f, 1.0f),
+
+    // -x
+    glm::vec3(-1.0f, -1.0f, -1.0f),
+    glm::vec3(-1.0f, -1.0f, 1.0f),
+    glm::vec3(-1.0f, 1.0f, 1.0f),
+    glm::vec3(-1.0f, 1.0f, -1.0f),
+
+    // +y
+    glm::vec3(-1.0f, 1.0f, 1.0f),
+    glm::vec3(1.0f, 1.0f, 1.0f),
+    glm::vec3(1.0f, 1.0f, -1.0f),
+    glm::vec3(-1.0f, 1.0f, -1.0f),
+
+    // -y
+    glm::vec3(-1.0f, -1.0f, 1.0f),
+    glm::vec3(1.0f, -1.0f, 1.0f),
+    glm::vec3(1.0f, -1.0f, -1.0f),
+    glm::vec3(-1.0f, -1.0f, -1.0f),
+
+    // +z
+    glm::vec3(-1.0f, -1.0f, 1.0f),
+    glm::vec3(1.0f, -1.0f, 1.0f),
+    glm::vec3(1.0f, 1.0f, 1.0f),
+    glm::vec3(-1.0f, 1.0f, 1.0f),
+
+    // -z
+    glm::vec3(-1.0f, -1.0f, -1.0f),
+    glm::vec3(1.0f, -1.0f, -1.0f),
+    glm::vec3(1.0f, 1.0f, -1.0f),
+    glm::vec3(-1.0f, 1.0f, -1.0f),
+};
+
+glm::vec3 cubeNormals[6] = {
+    // x
+    glm::vec3(1.0f, 0.0f, 0.0f),
+    glm::vec3(-1.0f, 0.0f, 0.0f),
+    // y
+    glm::vec3(0.0f, 1.0f, 0.0f),
+    glm::vec3(0.0f, -1.0f, 0.0f),
+    // z
+    glm::vec3(0.0f, 0.0f, 1.0f),
+    glm::vec3(0.0f, 0.0f, -1.0f)
+};
+
+MeshGeometry* Sphere::cubeSphere(float radius, int detail){
+    std::vector<Vertex> vertices;
+    std::vector<uint32_t> indices;
+
+    for(int face = 0; face < 6; ++face){
+        glm::vec3 normal = cubeNormals[face];
+
+        for(int i = 0; i < 4; ++i){
+            Vertex vertex;
+            vertex.position = cubeVertices[face*4 + i]*radius;
+            vertex.normal = normal;
+            vertices.push_back(vertex);
+        }
+
+        // abc
+        indices.push_back(face*4);
+        indices.push_back(face*4+1);
+        indices.push_back(face*4+2);
+
+        //acd
+        indices.push_back(face*4);
+        indices.push_back(face*4+2);
+        indices.push_back(face*4+3);
     }
 
     return new MeshGeometry(vertices, indices);
