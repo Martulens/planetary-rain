@@ -152,6 +152,7 @@ set(SOURCES
         skybox.cpp
         envMap.cpp
         ui.cpp
+        noise.cpp
 )
 
 set(HEADERS
@@ -174,6 +175,7 @@ set(HEADERS
         skybox.h
         envMap.h
         ui.h
+        noise.h
 )
 
 set(SHADERS

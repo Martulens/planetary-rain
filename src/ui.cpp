@@ -49,6 +49,11 @@ void renderUI(PlanetParams& params, bool& paramsChanged) {
         paramsChanged |= ImGui::SliderFloat("IOR", &params.ior, 1.0f, 3.0f);
         paramsChanged |= ImGui::SliderFloat("Transparency", &params.transparency, 0.0f, 1.0f);  // not used in shader currently!
     }
+
+    // Terrain
+    if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen)) {
+        paramsChanged |= ImGui::SliderInt("Repeat", &params.repeat, 0.0f, 10.0f);
+    }
     
     // Animation
     if (ImGui::CollapsingHeader("Animation")) {

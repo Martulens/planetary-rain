@@ -41,7 +41,7 @@ void Scene::updatePlanet(const PlanetParams& params){
     }
 
     glm::vec3 newPos(params.x, params.y, params.z);
-    planet = new Sphere(newPos, params.radius, params.detail, newMaterial, shader);
+    planet = new Sphere(newPos, params.radius, params.detail, params.repeat, newMaterial, shader);
     planet->setNeedsEnvMap(needsEnv);
 
     addObject(planet);
@@ -139,30 +139,6 @@ void Scene::renderEnvironmentMaps(Camera* camera)
 
 void Scene::constructDebugObjects(){
     std::cout << "[Scene] Initializing objects..." << std::endl;
-
-    // Red sphere - matte, no reflections needed
-    glm::vec3 redColor(1.0f, 0.2f, 0.2f);
-    ModelTexture* matteRedMaterial = new ModelTexture(redColor, 0.9f, 0.1f, 8.0f, 0.0f);
-    Sphere* sphere1 = new Sphere(glm::vec3(-4.0f, 1.5f, 0.0f), 1.5f, 3, matteRedMaterial, defaultShader);
-
-    sphere1->setNeedsEnvMap(false);
-    addObject(sphere1);
-
-    // Green sphere - refractive
-    glm::vec3 greenColor(0.2f, 0.8f, 0.3f);
-    ModelTexture* glossyGreenMaterial = new ModelTexture(greenColor, 0.6f, 0.5f, 32.0f, 0.3f, 1.5f, 1.0f);
-    Sphere* sphere2 = new Sphere(glm::vec3(0.0f, 1.5f, 0.0f), 1.5f, 3, glossyGreenMaterial, refractiveShader);
-
-    sphere2->setNeedsEnvMap(true);
-    addObject(sphere2);
-
-    // Blue sphere - very reflective
-    glm::vec3 blueColor(0.2f, 0.4f, 1.0f);
-    ModelTexture* shinyBlueMaterial = new ModelTexture(blueColor, 0.3f, 0.9f, 128.0f, 0.6f);
-    Sphere* sphere3 = new Sphere(glm::vec3(4.0f, 1.5f, 0.0f), 1.5f, 3, shinyBlueMaterial, defaultShader);
-
-    sphere3->setNeedsEnvMap(true);
-    addObject(sphere3);
 }
 
 void Scene::constructObjects(){
@@ -183,6 +159,7 @@ void Scene::constructObjects(){
         glm::vec3(defaults.x, defaults.y, defaults.z),
         defaults.radius,
         defaults.detail,
+        defaults.repeat,
         material,
         shader
     );

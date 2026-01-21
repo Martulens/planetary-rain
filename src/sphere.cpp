@@ -2,9 +2,10 @@
 
 #include <complex>
 
-Sphere::Sphere(glm::vec3 position, float r, int det, ModelTexture* texture, ShaderProgram* shader)
-    : Object(position, cubeSphere(r, det), shader, texture), radius(r), detail(det) {
+Sphere::Sphere(glm::vec3 position, float r, int det, int repeat, ModelTexture* texture, ShaderProgram* shader)
+    : Object(position, cubeSphere(r, det, repeat), shader, texture), radius(r), detail(det), repeat(repeat) {
     updateModelMatrix();
+    noise = Noise();
 }
 
 MeshGeometry* Sphere::uvSphere(float radius, int detail) {
@@ -107,7 +108,7 @@ float projectToSphere(float in, float a, float b){
     return in*sqrt(1 - (a*a)/2 - (b*b)/2 + ((a*a)*(b*b))/3);
 }
 
-MeshGeometry* Sphere::cubeSphere(float radius, int detail){
+MeshGeometry* Sphere::cubeSphere(float radius, int detail, int repeat){
     std::vector<Vertex> vertices;
     std::vector<uint32_t> indices;
 
@@ -146,10 +147,12 @@ MeshGeometry* Sphere::cubeSphere(float radius, int detail){
                 float y = projectToSphere(cubePos.y, cubePos.x, cubePos.z);
                 float z = projectToSphere(cubePos.z, cubePos.x, cubePos.y);
 
-                glm::vec3 spherePos = glm::vec3(x, y, z);
+                glm::vec3 spherePos = radius*glm::vec3(x, y, z);
                 glm::vec3 sphereNormal = glm::normalize(spherePos - position);
 
-                v.position = radius*spherePos;
+                float height = noise.perlin(spherePos, repeat);
+
+                v.position = spherePos + sphereNormal*height;
                 v.normal = sphereNormal;
 
                 vertices.push_back(v);

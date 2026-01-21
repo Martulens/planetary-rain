@@ -2,18 +2,22 @@
 #define SPHERE_H
 
 #include "object.h"
+#include "noise.h"
 
 class Sphere : public Object {
 private:
+  Noise noise;
+
   float radius = 1.0f;
   int detail = 2;
+  int repeat = 0;
 
 public:
   Sphere() = default;
-  Sphere(glm::vec3 position, float radius, int detail, ModelTexture* texture, ShaderProgram* shader);
+  Sphere(glm::vec3 position, float radius, int detail, int repeat, ModelTexture* texture, ShaderProgram* shader);
 
   MeshGeometry* uvSphere(float radius, int detail);
-  MeshGeometry* cubeSphere(float radius, int detail);
+  MeshGeometry* cubeSphere(float radius, int detail, int repeat);
 
   float getRadius() const { return radius; }
   int getDetail() const { return detail; }

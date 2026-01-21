@@ -23,6 +23,9 @@ struct PlanetParams {
     float ior = 1.0f;
     float transparency = 1.0f;
 
+    // Terrain
+    int repeat = 1;
+
     // Rotation
     float rotationSpeed = 30.0f;
     bool autoRotate = true;
