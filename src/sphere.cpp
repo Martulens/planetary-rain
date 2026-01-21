@@ -46,7 +46,6 @@ MeshGeometry* Sphere::uvSphere(float radius, int detail) {
             indices.push_back(first + 1);
         }
     }
-
     return new MeshGeometry(vertices, indices);
 }
 
@@ -100,6 +99,8 @@ glm::vec3 cubeNormals[6] = {
     glm::vec3(0.0f, 0.0f, -1.0f)
 };
 
+// contributions taken from:
+// -> https://mathproofs.blogspot.com/2005/07/mapping-cube-to-sphere.html?lr=1
 MeshGeometry* Sphere::cubeSphere(float radius, int detail){
     std::vector<Vertex> vertices;
     std::vector<uint32_t> indices;
@@ -107,22 +108,61 @@ MeshGeometry* Sphere::cubeSphere(float radius, int detail){
     for(int face = 0; face < 6; ++face){
         glm::vec3 normal = cubeNormals[face];
 
-        for(int i = 0; i < 4; ++i){
-            Vertex vertex;
-            vertex.position = cubeVertices[face*4 + i]*radius;
-            vertex.normal = normal;
-            vertices.push_back(vertex);
+        glm::vec3 a = cubeVertices[face*4];
+        glm::vec3 b = cubeVertices[face*4+1];
+        glm::vec3 d = cubeVertices[face*4+3];
+
+        glm::vec3 u = (b - a);
+        glm::vec3 iDiff = glm::vec3(u.x/(float)detail, u.y/(float)detail, u.z/(float)detail);
+        glm::vec3 v = (d - a);
+        glm::vec3 jDiff = glm::vec3(v.x/(float)detail, v.y/(float)detail, v.z/(float)detail);
+
+        /*
+        std::cout << "[CUBE] Face: " << face << std::endl;
+        std::cout << "[CUBE] Vertices: " << std::endl;
+        std::cout << "  -> " << a.x << ", " << a.y << ", " << a.z << std::endl;
+        std::cout << "  -> " << b.x << ", " << b.y << ", " << b.z << std::endl;
+        std::cout << "  -> " << c.x << ", " << c.y << ", " << c.z << std::endl;
+        */
+
+        std::cout << "[CUBE] Diffs: " << std::endl;
+        std::cout << "  -> " << iDiff.x << ", " << iDiff.y << ", " << iDiff.z << std::endl;
+        std::cout << "  -> " << jDiff.x << ", " << jDiff.y << ", " << jDiff.z << std::endl;
+
+        glm::vec3 jPlus = glm::vec3(0.0f);
+        for(int j = 0; j <= detail; ++j){
+            glm::vec3 iPlus = glm::vec3(0.0f);
+            for(int i = 0; i <= detail; ++i){
+                Vertex v;
+                v.position = radius*(a + (float)i*iDiff + (float)j*jDiff);
+                v.normal = normal;
+                vertices.push_back(v);
+
+                std::cout << "[CUBE] " << i+j*(detail+1) << " Position: " << v.position.x << ", " << v.position.y << ", " << v.position.z << std::endl;
+            }
         }
+    }
 
-        // abc
-        indices.push_back(face*4);
-        indices.push_back(face*4+1);
-        indices.push_back(face*4+2);
+    for(int face = 0; face < 6; ++face){
+        int baseIndex = face * (detail + 1) * (detail + 1);
+        int numSquares = detail * detail;
 
-        //acd
-        indices.push_back(face*4);
-        indices.push_back(face*4+2);
-        indices.push_back(face*4+3);
+        for(int i = 0; i < numSquares; ++i){
+            int line = i / detail;
+
+            int a = baseIndex + i + line;
+            int b = a + 1;
+            int d = a + detail + 1;
+            int c = d + 1;
+
+            indices.push_back(a);
+            indices.push_back(b);
+            indices.push_back(c);
+
+            indices.push_back(a);
+            indices.push_back(c);
+            indices.push_back(d);
+        }
     }
 
     return new MeshGeometry(vertices, indices);

@@ -1,0 +1,567 @@
+Index: ui.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#include \"ui.h\"\n#include \"imgui.h\"\n#include \"imgui_impl_glut.h\"\n#include \"imgui_impl_opengl3.h\"\n#include <GL/freeglut.h>\n\nvoid initUI() {\n    IMGUI_CHECKVERSION();\n    ImGui::CreateContext();\n    ImGuiIO& io = ImGui::GetIO();\n    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;\n    \n    ImGui::StyleColorsDark();\n    \n    ImGui_ImplGLUT_Init();\n    ImGui_ImplOpenGL3_Init(\"#version 330\");\n}\n\nvoid renderUI(PlanetParams& params, bool& paramsChanged) {\n    ImGui_ImplOpenGL3_NewFrame();\n    ImGui_ImplGLUT_NewFrame();\n    ImGui::NewFrame();\n\n    params.changed = false;\n    paramsChanged = false;\n\n    ImGui::Begin(\"Planet Editor\");\n\n    // Instructions\n    ImGui::TextColored(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), \"Press TAB to toggle mouse\");\n    ImGui::Separator();\n    \n    // Geometry\n    if (ImGui::CollapsingHeader(\"Geometry\", ImGuiTreeNodeFlags_DefaultOpen)) {\n        paramsChanged |= ImGui::SliderFloat(\"Radius\", &params.radius, 0.5f, 5.0f);\n        paramsChanged |= ImGui::SliderInt(\"Detail\", &params.detail, 1, 4);\n        paramsChanged |= ImGui::SliderFloat(\"x\", &params.x, -15.0f, 15.0f);\n        paramsChanged |= ImGui::SliderFloat(\"y\", &params.y, -15.0f, 15.0f);\n        paramsChanged |= ImGui::SliderFloat(\"z\", &params.z, -15.0f, 15.0f);\n    }\n    \n    // Appearance\n    if (ImGui::CollapsingHeader(\"Material\", ImGuiTreeNodeFlags_DefaultOpen)) {\n        paramsChanged |= ImGui::ColorEdit3(\"Color\", &params.color.x);\n        paramsChanged |= ImGui::SliderFloat(\"Diffuse\", &params.pd, 0.0f, 1.0f);\n        paramsChanged |= ImGui::SliderFloat(\"Specular\", &params.ps, 0.0f, 1.0f);\n        paramsChanged |= ImGui::SliderFloat(\"Shininess\", &params.ns, 1.0f, 256.0f);\n        paramsChanged |= ImGui::SliderFloat(\"Reflectivity\", &params.reflectivity, 0.0f, 1.0f);\n        paramsChanged |= ImGui::SliderFloat(\"IOR\", &params.ior, -1.0f, 5.0f);\n        paramsChanged |= ImGui::SliderFloat(\"Transparency\", &params.transparency, 0.0f, 1.0f);\n    }\n    \n    // Animation\n    if (ImGui::CollapsingHeader(\"Animation\")) {\n        ImGui::Checkbox(\"Auto Rotate\", &params.autoRotate);\n        ImGui::SliderFloat(\"Speed (deg/s)\", &params.rotationSpeed, 0.0f, 180.0f);\n    }\n    \n    // Presets\n    if (ImGui::CollapsingHeader(\"Presets\")) {\n        if (ImGui::Button(\"Earth-like\")) {\n            params.color = glm::vec3(0.2f, 0.5f, 0.3f);\n            params.pd = 0.8f; params.ps = 0.2f; params.ns = 16.0f;\n            params.reflectivity = 0.1f;\n            params.changed = true;\n        }\n        ImGui::SameLine();\n        if (ImGui::Button(\"Gas Giant\")) {\n            params.color = glm::vec3(0.8f, 0.6f, 0.4f);\n            params.pd = 0.9f; params.ps = 0.1f; params.ns = 8.0f;\n            params.reflectivity = 0.05f;\n            params.changed = true;\n        }\n        if (ImGui::Button(\"Ice World\")) {\n            params.color = glm::vec3(0.7f, 0.85f, 0.95f);\n            params.pd = 0.5f; params.ps = 0.8f; params.ns = 64.0f;\n            params.reflectivity = 0.4f;\n            params.changed = true;\n        }\n        ImGui::SameLine();\n        if (ImGui::Button(\"Molten\")) {\n            params.color = glm::vec3(0.9f, 0.3f, 0.1f);\n            params.pd = 0.7f; params.ps = 0.6f; params.ns = 32.0f;\n            params.reflectivity = 0.2f;\n            params.changed = true;\n        }\n    }\n\n    ImGui::End();\n\n    paramsChanged = params.changed || paramsChanged;\n    \n    ImGui::Render();\n    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());\n}\n\nvoid shutdownUI() {\n    ImGui_ImplOpenGL3_Shutdown();\n    ImGui_ImplGLUT_Shutdown();\n    ImGui::DestroyContext();\n}\n\n// Forward GLUT events to ImGui\nvoid uiKeyboardCallback(unsigned char key, int x, int y) {\n    ImGui_ImplGLUT_KeyboardFunc(key, x, y);\n}\n\nvoid uiMouseCallback(int button, int state, int x, int y) {\n    ImGui_ImplGLUT_MouseFunc(button, state, x, y);\n}\n\nvoid uiMotionCallback(int x, int y) {\n    ImGui_ImplGLUT_MotionFunc(x, y);\n}\n\nvoid uiReshapeCallback(int w, int h) {\n    ImGui_ImplGLUT_ReshapeFunc(w, h);\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ui.cpp b/ui.cpp
+--- a/ui.cpp	(revision ccd9e68dd3dd294267f2e777f61ecf6e1c8e9616)
++++ b/ui.cpp	(date 1769019536027)
+@@ -33,7 +33,7 @@
+     // Geometry
+     if (ImGui::CollapsingHeader("Geometry", ImGuiTreeNodeFlags_DefaultOpen)) {
+         paramsChanged |= ImGui::SliderFloat("Radius", &params.radius, 0.5f, 5.0f);
+-        paramsChanged |= ImGui::SliderInt("Detail", &params.detail, 1, 4);
++        paramsChanged |= ImGui::SliderInt("Detail", &params.detail, 1, 20);
+         paramsChanged |= ImGui::SliderFloat("x", &params.x, -15.0f, 15.0f);
+         paramsChanged |= ImGui::SliderFloat("y", &params.y, -15.0f, 15.0f);
+         paramsChanged |= ImGui::SliderFloat("z", &params.z, -15.0f, 15.0f);
+@@ -42,13 +42,22 @@
+     // Appearance
+     if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen)) {
+         paramsChanged |= ImGui::ColorEdit3("Color", &params.color.x);
+-        paramsChanged |= ImGui::SliderFloat("Diffuse", &params.pd, 0.0f, 1.0f);
+-        paramsChanged |= ImGui::SliderFloat("Specular", &params.ps, 0.0f, 1.0f);
++        paramsChanged |= ImGui::SliderFloat("Diffuse", &params.pd, 0.0f, 5.0f);
++        paramsChanged |= ImGui::SliderFloat("Specular", &params.ps, 0.0f, 5.0f);
+         paramsChanged |= ImGui::SliderFloat("Shininess", &params.ns, 1.0f, 256.0f);
+         paramsChanged |= ImGui::SliderFloat("Reflectivity", &params.reflectivity, 0.0f, 1.0f);
+         paramsChanged |= ImGui::SliderFloat("IOR", &params.ior, -1.0f, 5.0f);
+         paramsChanged |= ImGui::SliderFloat("Transparency", &params.transparency, 0.0f, 1.0f);
+     }
++
++    if (ImGui::CollapsingHeader("Terrain", ImGuiTreeNodeFlags_DefaultOpen)) {
++        paramsChanged |= ImGui::SliderFloat("Strength", &params.terrain.strength, 0.0f, 1.0f);
++        paramsChanged |= ImGui::SliderInt("Octaves", &params.terrain.octaves, 1, 8);
++        paramsChanged |= ImGui::SliderFloat("Roughness", &params.terrain.baseRoughness, 1.0f, 4.0f);
++        paramsChanged |= ImGui::SliderFloat("Persistence", &params.terrain.persistence, 0.1f, 0.9f);
++        paramsChanged |= ImGui::SliderFloat("Min Value", &params.terrain.minValue, -5.0f, 5.0f);
++        paramsChanged |= ImGui::SliderFloat("Max Value", &params.terrain.maxValue, -5.0f, 5.0f);
++    }
+     
+     // Animation
+     if (ImGui::CollapsingHeader("Animation")) {
+Index: sphere.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#include \"sphere.h\"\n\nSphere::Sphere(glm::vec3 position, float r, int det, ModelTexture* texture, ShaderProgram* shader)\n    : Object(position, cubeSphere(r, det), shader, texture), radius(r), detail(det) {\n    updateModelMatrix();\n}\n\nMeshGeometry* Sphere::uvSphere(float radius, int detail) {\n    // detail: 1=low, 2=medium, 3=high, 4=ultra\n    int latSegments = 8 * detail;\n    int lonSegments = 16 * detail;\n\n    std::vector<Vertex> vertices;\n    for (int lat = 0; lat <= latSegments; ++lat) {\n        float theta = lat * glm::pi<float>() / latSegments;\n        float sinTheta = sin(theta);\n        float cosTheta = cos(theta);\n\n        for (int lon = 0; lon <= lonSegments; ++lon) {\n            float phi = lon * 2.0f * glm::pi<float>() / lonSegments;\n            float sinPhi = sin(phi);\n            float cosPhi = cos(phi);\n\n            Vertex vertex;\n            vertex.position = radius * glm::vec3(cosPhi * sinTheta, cosTheta, sinPhi * sinTheta);\n            vertex.normal = glm::normalize(glm::vec3(cosPhi * sinTheta, cosTheta, sinPhi * sinTheta));\n            vertex.texCoord = glm::vec2(1.0f - (float)lon / lonSegments, 1.0f - (float)lat / latSegments);\n            vertex.color = glm::vec3(1.0f);\n\n            vertices.push_back(vertex);\n        }\n    }\n\n    std::vector<unsigned int> indices;\n    for (int lat = 0; lat < latSegments; ++lat) {\n        for (int lon = 0; lon < lonSegments; ++lon) {\n            int first = lat * (lonSegments + 1) + lon;\n            int second = first + lonSegments + 1;\n\n            indices.push_back(first);\n            indices.push_back(second);\n            indices.push_back(first + 1);\n\n            indices.push_back(second);\n            indices.push_back(second + 1);\n            indices.push_back(first + 1);\n        }\n    }\n\n    return new MeshGeometry(vertices, indices);\n}\n\nglm::vec3 cubeVertices[24] = {\n    // +x\n    glm::vec3(1.0f, -1.0f, 1.0f),\n    glm::vec3(1.0f, -1.0f, -1.0f),\n    glm::vec3(1.0f, 1.0f, -1.0f),\n    glm::vec3(1.0f, 1.0f, 1.0f),\n\n    // -x\n    glm::vec3(-1.0f, -1.0f, -1.0f),\n    glm::vec3(-1.0f, -1.0f, 1.0f),\n    glm::vec3(-1.0f, 1.0f, 1.0f),\n    glm::vec3(-1.0f, 1.0f, -1.0f),\n\n    // +y\n    glm::vec3(-1.0f, 1.0f, 1.0f),\n    glm::vec3(1.0f, 1.0f, 1.0f),\n    glm::vec3(1.0f, 1.0f, -1.0f),\n    glm::vec3(-1.0f, 1.0f, -1.0f),\n\n    // -y\n    glm::vec3(-1.0f, -1.0f, 1.0f),\n    glm::vec3(1.0f, -1.0f, 1.0f),\n    glm::vec3(1.0f, -1.0f, -1.0f),\n    glm::vec3(-1.0f, -1.0f, -1.0f),\n\n    // +z\n    glm::vec3(-1.0f, -1.0f, 1.0f),\n    glm::vec3(1.0f, -1.0f, 1.0f),\n    glm::vec3(1.0f, 1.0f, 1.0f),\n    glm::vec3(-1.0f, 1.0f, 1.0f),\n\n    // -z\n    glm::vec3(-1.0f, -1.0f, -1.0f),\n    glm::vec3(1.0f, -1.0f, -1.0f),\n    glm::vec3(1.0f, 1.0f, -1.0f),\n    glm::vec3(-1.0f, 1.0f, -1.0f),\n};\n\nglm::vec3 cubeNormals[6] = {\n    // x\n    glm::vec3(1.0f, 0.0f, 0.0f),\n    glm::vec3(-1.0f, 0.0f, 0.0f),\n    // y\n    glm::vec3(0.0f, 1.0f, 0.0f),\n    glm::vec3(0.0f, -1.0f, 0.0f),\n    // z\n    glm::vec3(0.0f, 0.0f, 1.0f),\n    glm::vec3(0.0f, 0.0f, -1.0f)\n};\n\nMeshGeometry* Sphere::cubeSphere(float radius, int detail){\n    std::vector<Vertex> vertices;\n    std::vector<uint32_t> indices;\n\n    for(int face = 0; face < 6; ++face){\n        glm::vec3 normal = cubeNormals[face];\n\n        for(int i = 0; i < 4; ++i){\n            Vertex vertex;\n            vertex.position = cubeVertices[face*4 + i]*radius;\n            vertex.normal = normal;\n            vertices.push_back(vertex);\n        }\n\n        // abc\n        indices.push_back(face*4);\n        indices.push_back(face*4+1);\n        indices.push_back(face*4+2);\n\n        //acd\n        indices.push_back(face*4);\n        indices.push_back(face*4+2);\n        indices.push_back(face*4+3);\n    }\n\n    return new MeshGeometry(vertices, indices);\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/sphere.cpp b/sphere.cpp
+--- a/sphere.cpp	(revision ccd9e68dd3dd294267f2e777f61ecf6e1c8e9616)
++++ b/sphere.cpp	(date 1769019602568)
+@@ -1,11 +1,11 @@
+ #include "sphere.h"
+ 
+ Sphere::Sphere(glm::vec3 position, float r, int det, ModelTexture* texture, ShaderProgram* shader)
+-    : Object(position, cubeSphere(r, det), shader, texture), radius(r), detail(det) {
++    : Object(position, generateGeometry(r, det), shader, texture), radius(r), detail(det) {
+     updateModelMatrix();
+ }
+ 
+-MeshGeometry* Sphere::uvSphere(float radius, int detail) {
++MeshGeometry* Sphere::generateGeometry(float radius, int detail) {
+     // detail: 1=low, 2=medium, 3=high, 4=ultra
+     int latSegments = 8 * detail;
+     int lonSegments = 16 * detail;
+Index: meshGeometry.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#include \"meshGeometry.h\"\n\nMeshGeometry::MeshGeometry(std::string& fileName) {\n    loadModel(fileName);\n}\n\nMeshGeometry::MeshGeometry(const char* fileName) {\n    std::string inputPath(fileName);\n    loadModel(inputPath);\n}\n\nMeshGeometry::MeshGeometry(std::vector<Vertex> verts, std::vector<unsigned int> inds)\n    : indices(std::move(inds)), vertices(std::move(verts)) {\n    numVertices = static_cast<unsigned int>(vertices.size());\n    numTriangles = static_cast<unsigned int>(indices.size() / 3);\n    loadVAO();\n}\n\nMeshGeometry::~MeshGeometry() {\n    cleanupGeometry();\n}\n\nvoid MeshGeometry::processNodeHierarchy(aiNode* node, const glm::mat4& parentTransform) {\n    std::string nodeName(node->mName.C_Str());\n\n    glm::mat4 nodeTransform = glm::transpose(glm::make_mat4(&node->mTransformation.a1));\n    glm::mat4 globalTransform = parentTransform * nodeTransform;\n\n    for (unsigned int i = 0; i < node->mNumChildren; ++i) {\n        processNodeHierarchy(node->mChildren[i], globalTransform);\n    }\n}\n\nvoid MeshGeometry::loadModel(std::string& fileName) {\n    scene = importer.ReadFile(fileName,\n        aiProcess_Triangulate | aiProcess_FlipUVs |\n        aiProcess_GenNormals | aiProcess_LimitBoneWeights);\n\n    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {\n        std::cerr << \"ERROR::ASSIMP::\" << importer.GetErrorString() << std::endl;\n        return;\n    }\n\n    processNodeHierarchy(scene->mRootNode, glm::mat4(1.0f));\n\n    vertices.clear();\n    indices.clear();\n\n    unsigned int vertexOffset = 0;\n\n    for (unsigned int m = 0; m < scene->mNumMeshes; ++m) {\n        aiMesh* mesh = scene->mMeshes[m];\n\n        for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {\n            Vertex vertex;\n            vertex.position = glm::vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);\n            vertex.normal = glm::vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);\n            vertex.texCoord = mesh->HasTextureCoords(0)\n                ? glm::vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y)\n                : glm::vec2(0.0f);\n\n            vertex.color = glm::vec3(1.0f);\n            maxY = std::max(maxY, mesh->mVertices[i].y);\n\n            vertices.push_back(vertex);\n        }\n\n        for (unsigned int i = 0; i < mesh->mNumFaces; ++i) {\n            aiFace face = mesh->mFaces[i];\n            for (unsigned int j = 0; j < face.mNumIndices; ++j) {\n                indices.push_back(face.mIndices[j] + vertexOffset);\n            }\n        }\n\n        vertexOffset += mesh->mNumVertices;\n    }\n\n    numVertices = static_cast<unsigned int>(vertices.size());\n    numTriangles = static_cast<unsigned int>(indices.size() / 3);\n\n    loadVAO();\n}\n\nvoid MeshGeometry::loadVAO() {\n    glGenVertexArrays(1, &vao);\n    glBindVertexArray(vao);\n\n    glGenBuffers(1, &vbo);\n    glBindBuffer(GL_ARRAY_BUFFER, vbo);\n    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);\n\n    glGenBuffers(1, &ebo);\n    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);\n    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);\n\n    GLsizei stride = sizeof(Vertex);\n\n    // position - location 0\n    glEnableVertexAttribArray(0);\n    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, position));\n\n    // texCoord - location 1\n    glEnableVertexAttribArray(1);\n    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, texCoord));\n\n    // normal - location 2\n    glEnableVertexAttribArray(2);\n    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, normal));\n\n    // color - location 3\n    glEnableVertexAttribArray(3);\n    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, stride, (void*)offsetof(Vertex, color));\n\n    glBindVertexArray(0);\n}\n\nvoid MeshGeometry::cleanupGeometry() {\n    if (vao != 0) {\n        glDeleteVertexArrays(1, &vao);\n        vao = 0;\n    }\n    if (ebo != 0) {\n        glDeleteBuffers(1, &ebo);\n        ebo = 0;\n    }\n    if (vbo != 0) {\n        glDeleteBuffers(1, &vbo);\n        vbo = 0;\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/meshGeometry.cpp b/meshGeometry.cpp
+--- a/meshGeometry.cpp	(revision ccd9e68dd3dd294267f2e777f61ecf6e1c8e9616)
++++ b/meshGeometry.cpp	(date 1769019536026)
+@@ -114,6 +114,14 @@
+     glBindVertexArray(0);
+ }
+ 
++void MeshGeometry::setVertex(Vertex vertex){
++    vertices.push_back(vertex);
++}
++
++void MeshGeometry::setIndice(std::vector<unsigned int> ind){
++    indices.insert(indices.end(), ind.begin(), ind.end());
++}
++
+ void MeshGeometry::cleanupGeometry() {
+     if (vao != 0) {
+         glDeleteVertexArrays(1, &vao);
+Index: scene.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#include \"scene.h\"\n#include \"camera.h\"\n#include \"gamestate.h\"\n#include \"config.h\"\n#include \"framework.h\"\n#include <iostream>\n#include <algorithm>\n\nScene::~Scene(){\n    cleanup();\n}\n\nvoid Scene::updatePlanet(const PlanetParams& params){\n    if (!planet) return;\n\n    auto it = std::find(objects.begin(), objects.end(), planet);\n    if (it != objects.end()) {\n        objects.erase(it);\n    }\n\n    bool needsEnv = planet->getNeedsEnvMap();\n\n    if (planet->getGeometry()) delete planet->getGeometry();\n    if (planet->getTexture()) delete planet->getTexture();\n    delete planet;\n    planet = nullptr;\n\n    ModelTexture* newMaterial = new ModelTexture(\n        params.color,\n        params.pd,\n        params.ps,\n        params.ns,\n        params.reflectivity,\n        params.ior,\n        params.transparency\n    );\n\n    ShaderProgram* shader = defaultShader;\n    if (params.ior > 1.0f) {\n        shader = refractiveShader;\n    }\n\n    glm::vec3 newPos(params.x, params.y, params.z);\n    planet = new Sphere(newPos, params.radius, params.detail, newMaterial, shader);\n    planet->setNeedsEnvMap(needsEnv);\n\n    addObject(planet);\n}\n\nvoid Scene::renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& projection, Object* excludeObject){\n    if (skybox)\n        skybox->draw(view, projection);\n\n    // Render all objects except the excluded one\n    for (Object* obj : objects)\n    {\n        if (obj == excludeObject) continue;\n        if (!obj || !obj->getGeometry() || !obj->getShader()) continue;\n\n        ShaderProgram* shader = obj->getShader();\n        glUseProgram(shader->getProgram());\n\n        glUniformMatrix4fv(shader->getModelMatrixLocation(), 1, GL_FALSE, &obj->getModelMatrix()[0][0]);\n        glUniformMatrix4fv(shader->getViewMatrixLocation(), 1, GL_FALSE, glm::value_ptr(view));\n        glUniformMatrix4fv(shader->getProjectionMatrixLocation(), 1, GL_FALSE, glm::value_ptr(projection));\n\n        // Simplified uniforms for env map rendering\n        ModelTexture* texture = obj->getTexture();\n        glUniform3fv(shader->getBaseColorLocation(), 1, glm::value_ptr(texture->getColor()));\n        glUniform1f(shader->getPdLocation(), texture->getPd());\n        glUniform1f(shader->getPsLocation(), texture->getPs());\n        glUniform1f(shader->getNsLocation(), texture->getNs());\n        glUniform3fv(shader->getSkyColorLocation(), 1, glm::value_ptr(skyColorConst));\n\n        // Set up lights\n        glUniform1i(glGetUniformLocation(shader->getProgram(), \"numLights\"), static_cast<int>(lights.size()));\n        for (size_t i = 0; i < lights.size() && i < LIGHTS_MAX; ++i)\n        {\n            Light* light = lights[i];\n            std::string base = \"lightPositions[\" + std::to_string(i) + \"]\";\n            glUniform3fv(glGetUniformLocation(shader->getProgram(), base.c_str()), 1,\n                         glm::value_ptr(light->getPosition()));\n\n            base = \"lightColors[\" + std::to_string(i) + \"]\";\n            glUniform3fv(glGetUniformLocation(shader->getProgram(), base.c_str()), 1,\n                         glm::value_ptr(light->getColor()));\n\n            base = \"lightBrightness[\" + std::to_string(i) + \"]\";\n            glUniform1f(glGetUniformLocation(shader->getProgram(), base.c_str()), light->getBrightness());\n\n            base = \"isPointLight[\" + std::to_string(i) + \"]\";\n            glUniform1i(glGetUniformLocation(shader->getProgram(), base.c_str()), light->isPointLight() ? 1 : 0);\n        }\n\n        // Disable environment mapping for env map rendering (avoid recursion)\n        glUniform1i(glGetUniformLocation(shader->getProgram(), \"useEnvironmentLighting\"), 0);\n\n        obj->draw();\n        glUseProgram(0);\n    }\n}\n\nvoid Scene::renderEnvironmentMaps(Camera* camera)\n{\n    // Store original viewport\n    GLint viewport[4];\n    glGetIntegerv(GL_VIEWPORT, viewport);\n\n    for (Object* obj : objects)\n    {\n        if (!obj->getNeedsEnvMap()) continue;\n\n        EnvMap* envMap = obj->getEnvMap();\n        if (!envMap)\n        {\n            obj->createEnvMap(128);\n            envMap = obj->getEnvMap();\n        }\n\n        // Update view matrices from object's position\n        envMap->updateViewMatrices(obj->getPosition());\n\n        // Render all 6 faces\n        for (int face = 0; face < 6; ++face)\n        {\n            envMap->beginCapture(face);\n\n            glClearColor(skyColorConst.r, skyColorConst.g, skyColorConst.b, 1.0f);\n            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);\n\n            renderSceneForEnvMap(envMap->getViewMatrix(face), envMap->getProjection(), obj);\n\n            envMap->endCapture();\n        }\n    }\n\n    glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);\n}\n\nvoid Scene::constructDebugObjects()\n{\n    std::cout << \"[Scene] Initializing objects...\" << std::endl;\n\n    // Red sphere - matte, no reflections needed\n    glm::vec3 redColor(1.0f, 0.2f, 0.2f);\n    ModelTexture* matteRedMaterial = new ModelTexture(redColor, 0.9f, 0.1f, 8.0f, 0.0f);\n    Sphere* sphere1 = new Sphere(glm::vec3(-4.0f, 1.5f, 0.0f), 1.5f, 3, matteRedMaterial, defaultShader);\n\n    sphere1->setNeedsEnvMap(false);\n    addObject(sphere1);\n\n    // Green sphere - refractive\n    glm::vec3 greenColor(0.2f, 0.8f, 0.3f);\n    ModelTexture* glossyGreenMaterial = new ModelTexture(greenColor, 0.6f, 0.5f, 32.0f, 0.3f, 1.5f, 1.0f);\n    Sphere* sphere2 = new Sphere(glm::vec3(0.0f, 1.5f, 0.0f), 1.5f, 3, glossyGreenMaterial, refractiveShader);\n\n    sphere2->setNeedsEnvMap(true);\n    addObject(sphere2);\n\n    // Blue sphere - very reflective\n    glm::vec3 blueColor(0.2f, 0.4f, 1.0f);\n    ModelTexture* shinyBlueMaterial = new ModelTexture(blueColor, 0.3f, 0.9f, 128.0f, 0.6f);\n    Sphere* sphere3 = new Sphere(glm::vec3(4.0f, 1.5f, 0.0f), 1.5f, 3, shinyBlueMaterial, defaultShader);\n\n    sphere3->setNeedsEnvMap(true);\n    addObject(sphere3);\n}\n\nvoid Scene::constructObjects(){\n    glm::vec3 blueColor(0.2f, 0.4f, 1.0f);\n    ModelTexture* shinyBlueMaterial = new ModelTexture(\n        blueColor,\n        0.3f,\n        0.9f,\n        128.0f,\n        0.5f,\n        1.0f,\n        1.0f\n    );\n\n    planet = new Sphere(\n        glm::vec3(4.0f, 1.5f, 0.0f),\n        3.0f,\n        3,\n        shinyBlueMaterial,\n        refractiveShader\n    );\n\n    planet->setNeedsEnvMap(true);\n    addObject(planet);\n}\n\nvoid Scene::constructDebugLights()\n{\n    std::cout << \"[Scene] Initializing lights...\" << std::endl;\n\n    Light* sunLight = new Light(\n        glm::vec3(1.0f, -1.0f, -0.5f),\n        glm::vec3(1.0f, 0.95f, 0.9f),\n        1.0f,\n        false\n    );\n    addLight(sunLight);\n\n    Light* pointLight1 = new Light(\n        glm::vec3(0.0f, 3.0f, 5.0f),\n        glm::vec3(1.0f, 0.8f, 0.6f),\n        1.5f,\n        true\n    );\n    addLight(pointLight1);\n\n    Light* fillLight = new Light(\n        glm::vec3(-5.0f, 2.0f, 2.0f),\n        glm::vec3(0.6f, 0.7f, 1.0f),\n        0.5f,\n        true\n    );\n    addLight(fillLight);\n}\n\nvoid Scene::init(){\n    std::cout << \"[Scene] Initializing scene...\" << std::endl;\n\n    // Create the default shader\n    defaultShader = new ShaderProgram(\"shaders/template.vert\", \"shaders/template.frag\");\n    refractiveShader = new ShaderProgram(\"shaders/template.vert\", \"shaders/refractive.frag\");\n\n    if (!defaultShader || defaultShader->getProgram() == 0)\n    {\n        std::cerr << \"[Scene] ERROR: Failed to create default shader!\" << std::endl;\n        return;\n    }\n\n    std::cout << \"[Scene] Initializing skybox...\" << std::endl;\n    int numSkybox = rand() % 5;\n    skybox = new Skybox(\"shaders/skybox.vert\", \"shaders/skybox.frag\",\n                        \"textures/skybox/\" + std::to_string(numSkybox) + \"/\");\n    CHECK_GL_ERROR();\n\n    constructObjects();\n    CHECK_GL_ERROR();\n\n    constructDebugLights();\n    CHECK_GL_ERROR();\n\n    std::cout << \"[Scene] Created \" << objects.size() << \" objects and \"\n        << lights.size() << \" lights\" << std::endl;\n}\n\nvoid Scene::cleanup()\n{\n    // Clean up objects and their associated geometry\n    for (Object* obj : objects)\n    {\n        if (obj)\n        {\n            // Delete the geometry\n            if (obj->getGeometry())\n            {\n                delete obj->getGeometry();\n            }\n            // Delete the texture\n            delete obj->getTexture();\n            delete obj;\n        }\n    }\n    objects.clear();\n\n    for (Light* light : lights)\n    {\n        delete light;\n    }\n    lights.clear();\n\n    if (defaultShader)\n    {\n        delete defaultShader;\n        defaultShader = nullptr;\n    }\n\n    if (skybox)\n    {\n        delete skybox;\n        skybox = nullptr;\n    }\n}\n\nvoid Scene::addObject(Object* obj)\n{\n    if (obj)\n    {\n        objects.push_back(obj);\n    }\n}\n\nvoid Scene::addLight(Light* light)\n{\n    if (light)\n    {\n        lights.push_back(light);\n    }\n}\n\nvoid Scene::update(float deltaTime)\n{\n    static float angle = 0.0f;\n    angle += deltaTime * 0.5f;\n\n    for (Object* obj : objects)\n        obj->setRotationY(angle * 30.0f);\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/scene.cpp b/scene.cpp
+--- a/scene.cpp	(revision ccd9e68dd3dd294267f2e777f61ecf6e1c8e9616)
++++ b/scene.cpp	(date 1769019536026)
+@@ -41,7 +41,7 @@
+     }
+ 
+     glm::vec3 newPos(params.x, params.y, params.z);
+-    planet = new Sphere(newPos, params.radius, params.detail, newMaterial, shader);
++    planet = new Sphere(newPos, params.radius, params.detail, newMaterial, shader, params.terrain);
+     planet->setNeedsEnvMap(needsEnv);
+ 
+     addObject(planet);
+@@ -52,8 +52,7 @@
+         skybox->draw(view, projection);
+ 
+     // Render all objects except the excluded one
+-    for (Object* obj : objects)
+-    {
++    for (Object* obj : objects){
+         if (obj == excludeObject) continue;
+         if (!obj || !obj->getGeometry() || !obj->getShader()) continue;
+ 
+@@ -121,8 +120,7 @@
+         envMap->updateViewMatrices(obj->getPosition());
+ 
+         // Render all 6 faces
+-        for (int face = 0; face < 6; ++face)
+-        {
++        for (int face = 0; face < 6; ++face){
+             envMap->beginCapture(face);
+ 
+             glClearColor(skyColorConst.r, skyColorConst.g, skyColorConst.b, 1.0f);
+@@ -202,6 +200,7 @@
+     );
+     addLight(sunLight);
+ 
++    /*
+     Light* pointLight1 = new Light(
+         glm::vec3(0.0f, 3.0f, 5.0f),
+         glm::vec3(1.0f, 0.8f, 0.6f),
+@@ -217,6 +216,7 @@
+         true
+     );
+     addLight(fillLight);
++    */
+ }
+ 
+ void Scene::init(){
+@@ -248,13 +248,10 @@
+         << lights.size() << " lights" << std::endl;
+ }
+ 
+-void Scene::cleanup()
+-{
++void Scene::cleanup(){
+     // Clean up objects and their associated geometry
+-    for (Object* obj : objects)
+-    {
+-        if (obj)
+-        {
++    for (Object* obj : objects){
++        if (obj){
+             // Delete the geometry
+             if (obj->getGeometry())
+             {
+@@ -267,43 +264,35 @@
+     }
+     objects.clear();
+ 
+-    for (Light* light : lights)
+-    {
++    for (Light* light : lights){
+         delete light;
+     }
+     lights.clear();
+ 
+-    if (defaultShader)
+-    {
++    if (defaultShader){
+         delete defaultShader;
+         defaultShader = nullptr;
+     }
+ 
+-    if (skybox)
+-    {
++    if (skybox){
+         delete skybox;
+         skybox = nullptr;
+     }
+ }
+ 
+-void Scene::addObject(Object* obj)
+-{
+-    if (obj)
+-    {
++void Scene::addObject(Object* obj){
++    if (obj){
+         objects.push_back(obj);
+     }
+ }
+ 
+-void Scene::addLight(Light* light)
+-{
+-    if (light)
+-    {
++void Scene::addLight(Light* light){
++    if (light){
+         lights.push_back(light);
+     }
+ }
+ 
+-void Scene::update(float deltaTime)
+-{
++void Scene::update(float deltaTime){
+     static float angle = 0.0f;
+     angle += deltaTime * 0.5f;
+ 
+Index: camera.h
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#ifndef CAMERA_CLASS_H\n#define CAMERA_CLASS_H\n\n#include \"glm/glm.hpp\"\n#include \"framework.h\"\n\nclass Camera {\npublic:\nprivate:\n    glm::vec3 position;\n    glm::vec3 direction;\n    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);\n\n    glm::mat4 viewMatrix;\n    glm::mat4 projectionMatrix;\n\n    int width;\n    int height;\n\n    float fieldOfView = 60.0f;\n\npublic:\n    float pitch = 0.0f;\n    float viewAngle = 0.0f;   // yaw\n    float distance = 30.0f;\n\n    Camera() = default;\n    Camera(int w, int h, glm::vec3 pos, glm::vec3 dir, float angle);\n\n    void update(int w = -1, int h = -1);\n    void updateProjection();\n\n    void zoom(float offset);\n    void rotatePitch(float offset);\n    void rotateAngleAround(float offset);\n    void changeDir(glm::vec3 dir);\n    void setPosition(glm::vec3 pos);\n\n    // === Movement\n    void moveForward(float amount);\n    void moveRight(float amount);\n    void moveUp(float amount);\n\n    // === Getters\n    glm::vec3 getPosition() const { return position; }\n    glm::vec3 getDirection() const { return direction; }\n    glm::vec3 getUp() const { return up; }\n    glm::vec3 getRight() const { return glm::normalize(glm::cross(direction, up)); }\n    glm::mat4 getViewMatrix() const { return viewMatrix; }\n    glm::mat4 getProjectionMatrix() const { return projectionMatrix; }\n    float getFOV() const { return fieldOfView; }\n\n    glm::vec3 getMouseRay(int mouseX, int mouseY, int screenWidth, int screenHeight) const;\n};\n\n\n#endif
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/camera.h b/camera.h
+--- a/camera.h	(revision ccd9e68dd3dd294267f2e777f61ecf6e1c8e9616)
++++ b/camera.h	(date 1769019536025)
+@@ -7,8 +7,8 @@
+ class Camera {
+ public:
+ private:
+-    glm::vec3 position;
+-    glm::vec3 direction;
++    glm::vec3 position = glm::vec3(0.0f);
++    glm::vec3 direction = glm::vec3(4.0f, 1.5f, 0.0f);
+     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
+ 
+     glm::mat4 viewMatrix;
+Index: CMakeLists.txt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>cmake_minimum_required(VERSION 3.16)\nproject(main.cpp LANGUAGES CXX C)\n\nset(CMAKE_CXX_STANDARD 17)\nset(CMAKE_CXX_STANDARD_REQUIRED ON)\n\n# Policy for FetchContent\nif (POLICY CMP0135)\n    cmake_policy(SET CMP0135 NEW)\nendif ()\n\ninclude(FetchContent)\n\n# Find OpenGL\nfind_package(OpenGL REQUIRED)\n\n# Fetch Dependencies\nmessage(STATUS \"Fetching dependencies...\")\n\n# --- GLM (header-only) ---\nFetchContent_Declare(\n        glm\n        GIT_REPOSITORY https://github.com/g-truc/glm.git\n        GIT_TAG 1.0.1\n)\nFetchContent_MakeAvailable(glm)\nmessage(STATUS \"GLM fetched\")\n\n# --- GLEW ---\nFetchContent_Declare(\n        glew\n        URL https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0.tgz\n)\nFetchContent_GetProperties(glew)\nif (NOT glew_POPULATED)\n    FetchContent_Populate(glew)\n\n    # GLEW doesn't have a proper CMakeLists.txt in the root, so we build it manually\n    add_library(glew STATIC\n            ${glew_SOURCE_DIR}/src/glew.c\n    )\n    target_include_directories(glew PUBLIC ${glew_SOURCE_DIR}/include)\n    target_compile_definitions(glew PUBLIC GLEW_STATIC)\n    target_link_libraries(glew PUBLIC ${OPENGL_LIBRARIES})\n\n    if (WIN32)\n        target_link_libraries(glew PUBLIC opengl32)\n    endif ()\nendif ()\nmessage(STATUS \"GLEW fetched\")\n\n# --- FreeGLUT ---\nif (UNIX AND NOT APPLE)\n    # On Linux, use system-installed freeglut (more reliable)\n    find_package(GLUT REQUIRED)\n    set(FREEGLUT_LIBRARIES ${GLUT_LIBRARIES})\n    set(FREEGLUT_INCLUDE_DIRS ${GLUT_INCLUDE_DIR})\n    set(USE_SYSTEM_GLUT TRUE)\n    message(STATUS \"Using system FreeGLUT\")\nelse ()\n    # On Windows, fetch FreeGLUT\n    set(FREEGLUT_BUILD_DEMOS OFF CACHE BOOL \"\" FORCE)\n    set(FREEGLUT_BUILD_STATIC_LIBS ON CACHE BOOL \"\" FORCE)\n    set(FREEGLUT_BUILD_SHARED_LIBS OFF CACHE BOOL \"\" FORCE)\n    set(FREEGLUT_PRINT_ERRORS ON CACHE BOOL \"\" FORCE)\n    set(FREEGLUT_PRINT_WARNINGS ON CACHE BOOL \"\" FORCE)\n\n    FetchContent_Declare(\n            freeglut\n            GIT_REPOSITORY https://github.com/FreeGLUTProject/freeglut.git\n            GIT_TAG v3.2.2\n    )\n    FetchContent_MakeAvailable(freeglut)\n    set(USE_SYSTEM_GLUT FALSE)\n    message(STATUS \"FreeGLUT fetched\")\nendif ()\n\n# --- Assimp ---\nset(ASSIMP_BUILD_TESTS OFF CACHE BOOL \"\" FORCE)\nset(ASSIMP_INSTALL OFF CACHE BOOL \"\" FORCE)\nset(ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL \"\" FORCE)\nset(ASSIMP_BUILD_SAMPLES OFF CACHE BOOL \"\" FORCE)\nset(ASSIMP_BUILD_DOCS OFF CACHE BOOL \"\" FORCE)\nset(ASSIMP_INJECT_DEBUG_POSTFIX OFF CACHE BOOL \"\" FORCE)\nset(ASSIMP_BUILD_ZLIB ON CACHE BOOL \"\" FORCE)\n\nFetchContent_Declare(\n        assimp\n        GIT_REPOSITORY https://github.com/assimp/assimp.git\n        GIT_TAG v5.3.1\n        GIT_SHALLOW TRUE\n)\nFetchContent_MakeAvailable(assimp)\nmessage(STATUS \"Assimp fetched\")\n\n# --- stb_image (header-only) ---\nFetchContent_Declare(\n        stb\n        GIT_REPOSITORY https://github.com/nothings/stb.git\n        GIT_TAG master\n        GIT_SHALLOW TRUE\n)\nFetchContent_GetProperties(stb)\nif (NOT stb_POPULATED)\n    FetchContent_Populate(stb)\nendif ()\nmessage(STATUS \"stb_image fetched\")\n\n# --- imgui ---\nFetchContent_Declare(\n        imgui\n        GIT_REPOSITORY https://github.com/ocornut/imgui.git\n        GIT_TAG v1.90.1\n        GIT_SHALLOW TRUE\n)\nFetchContent_MakeAvailable(imgui)\n\n# Create ImGui library with GLUT backend\nadd_library(imgui STATIC\n        ${imgui_SOURCE_DIR}/imgui.cpp\n        ${imgui_SOURCE_DIR}/imgui_draw.cpp\n        ${imgui_SOURCE_DIR}/imgui_tables.cpp\n        ${imgui_SOURCE_DIR}/imgui_widgets.cpp\n        ${imgui_SOURCE_DIR}/imgui_demo.cpp\n        ${imgui_SOURCE_DIR}/backends/imgui_impl_glut.cpp\n        ${imgui_SOURCE_DIR}/backends/imgui_impl_opengl3.cpp\n)\ntarget_include_directories(imgui PUBLIC\n        ${imgui_SOURCE_DIR}\n        ${imgui_SOURCE_DIR}/backends\n)\ntarget_link_libraries(imgui PUBLIC ${OPENGL_LIBRARIES} glew)\n\n# Source Files\nset(SOURCES\n        main.cpp\n        framework.cpp\n        callbacks.cpp\n        game.cpp\n        utilities.cpp\n        camera.cpp\n        draw.cpp\n        debug.cpp\n        context.cpp\n        object.cpp\n        shaderProgram.cpp\n        meshGeometry.cpp\n        modelTexture.cpp\n        sphere.cpp\n        light.cpp\n        scene.cpp\n        skybox.cpp\n        envMap.cpp\n        ui.cpp\n)\n\nset(HEADERS\n        framework.h\n        config.h\n        callbacks.h\n        game.h\n        gamestate.h\n        draw.h\n        camera.h\n        debug.h\n        object.h\n        shaderProgram.h\n        light.h\n        meshGeometry.h\n        modelTexture.h\n        sphere.h\n        context.h\n        utilities.h\n        skybox.h\n        envMap.h\n        ui.h\n)\n\nset(SHADERS\n        shaders/template.vert\n        shaders/template.frag\n)\n\n# Create Executable\nadd_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS} ${SHADERS})\n\n# Include Directories\ntarget_include_directories(${PROJECT_NAME} PRIVATE\n        ${CMAKE_SOURCE_DIR}\n        ${OPENGL_INCLUDE_DIR}\n        ${glew_SOURCE_DIR}/include\n        ${assimp_SOURCE_DIR}/include\n        ${assimp_BINARY_DIR}/include\n        ${stb_SOURCE_DIR}\n)\n\nif (USE_SYSTEM_GLUT)\n    target_include_directories(${PROJECT_NAME} PRIVATE ${FREEGLUT_INCLUDE_DIRS})\nelse ()\n    target_include_directories(${PROJECT_NAME} PRIVATE ${freeglut_SOURCE_DIR}/include)\nendif ()\n\n# Link Libraries\ntarget_link_libraries(${PROJECT_NAME} PRIVATE\n        ${OPENGL_LIBRARIES}\n        glew\n        glm::glm\n        assimp\n        imgui\n)\n\nif (USE_SYSTEM_GLUT)\n    target_link_libraries(${PROJECT_NAME} PRIVATE ${FREEGLUT_LIBRARIES})\nelse ()\n    target_link_libraries(${PROJECT_NAME} PRIVATE freeglut_static)\nendif ()\n\n# Linux-specific libraries\nif (UNIX AND NOT APPLE)\n    target_link_libraries(${PROJECT_NAME} PRIVATE\n            GL\n            GLU\n            m\n            pthread\n            dl\n            X11\n            Xrandr\n            Xi\n    )\nendif ()\n\n# Compile Definitions\ntarget_compile_definitions(${PROJECT_NAME} PRIVATE GLEW_STATIC)\n\nif (NOT USE_SYSTEM_GLUT)\n    target_compile_definitions(${PROJECT_NAME} PRIVATE FREEGLUT_STATIC)\nendif ()\n\n# Copy Shaders to Build Directory\nadd_custom_command(TARGET ${PROJECT_NAME} POST_BUILD\n        COMMAND ${CMAKE_COMMAND} -E copy_directory\n        \"${CMAKE_SOURCE_DIR}/shaders\"\n        \"$<TARGET_FILE_DIR:${PROJECT_NAME}>/shaders\"\n        COMMENT \"Copying shaders to build directory\"\n)\n\n# Copy Resources to Build Directory\nif (EXISTS \"${CMAKE_SOURCE_DIR}/textures\")\n    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD\n            COMMAND ${CMAKE_COMMAND} -E copy_directory\n            \"${CMAKE_SOURCE_DIR}/textures\"\n            \"$<TARGET_FILE_DIR:${PROJECT_NAME}>/textures\"\n            COMMENT \"Copying textures to build directory\"\n    )\nendif ()\n\nif (EXISTS \"${CMAKE_SOURCE_DIR}/models\")\n    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD\n            COMMAND ${CMAKE_COMMAND} -E copy_directory\n            \"${CMAKE_SOURCE_DIR}/models\"\n            \"$<TARGET_FILE_DIR:${PROJECT_NAME}>/models\"\n            COMMENT \"Copying models to build directory\"\n    )\nendif ()\n\n# IDE Organization\nsource_group(\"Source Files\" FILES ${SOURCES})\nsource_group(\"Header Files\" FILES ${HEADERS})\nsource_group(\"Shaders\" FILES ${SHADERS})\n\n# Compiler Settings\nif (MSVC)\n    target_compile_options(${PROJECT_NAME} PRIVATE /W3)\n    target_compile_definitions(${PROJECT_NAME} PRIVATE\n            _CRT_SECURE_NO_WARNINGS\n            NOMINMAX\n    )\nelse ()\n    target_compile_options(${PROJECT_NAME} PRIVATE -Wall -Wextra -Wno-unused-parameter)\nendif ()\n\n# Print Configuration Summary\nmessage(STATUS \"\")\nmessage(STATUS \"=== Planetary Rain Configuration ===\")\nmessage(STATUS \"CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}\")\nmessage(STATUS \"\")\nmessage(STATUS \"Dependencies:\")\nmessage(STATUS \"  GLM:      ${glm_SOURCE_DIR}\")\nmessage(STATUS \"  GLEW:     ${glew_SOURCE_DIR}\")\nif (USE_SYSTEM_GLUT)\n    message(STATUS \"  FreeGLUT: System (${FREEGLUT_LIBRARIES})\")\nelse ()\n    message(STATUS \"  FreeGLUT: ${freeglut_SOURCE_DIR}\")\nendif ()\nmessage(STATUS \"  Assimp:   ${assimp_SOURCE_DIR}\")\nmessage(STATUS \"  stb:      ${stb_SOURCE_DIR}\")\nmessage(STATUS \"  imgui:      ${imgui_SOURCE_DIR}\")\n\nmessage(STATUS \"\")
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt	(revision ccd9e68dd3dd294267f2e777f61ecf6e1c8e9616)
++++ b/CMakeLists.txt	(date 1769019536025)
+@@ -152,6 +152,7 @@
+         skybox.cpp
+         envMap.cpp
+         ui.cpp
++        noise.cpp
+ )
+ 
+ set(HEADERS
+@@ -174,6 +175,7 @@
+         skybox.h
+         envMap.h
+         ui.h
++        noise.h
+ )
+ 
+ set(SHADERS
+Index: noise.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/noise.cpp b/noise.cpp
+new file mode 100644
+--- /dev/null	(date 1769019536026)
++++ b/noise.cpp	(date 1769019536026)
+@@ -0,0 +1,93 @@
++// noise.cpp
++#include "noise.h"
++#include <algorithm>
++#include <numeric>
++#include <random>
++#include <cmath>
++
++PerlinNoise::PerlinNoise(unsigned int seed) {
++    std::iota(perm, perm + 256, 0);
++    
++    // Shuffle using seed
++    std::default_random_engine engine(seed);
++    std::shuffle(perm, perm + 256, engine);
++    
++    // Duplicate for overflow handling
++    for (int i = 0; i < 256; ++i) {
++        perm[256 + i] = perm[i];
++    }
++}
++
++float PerlinNoise::fade(float t) {
++    // 6t^5 - 15t^4 + 10t^3
++    return t * t * t * (t * (t * 6.0f - 15.0f) + 10.0f);
++}
++
++float PerlinNoise::lerp(float a, float b, float t) {
++    return a + t * (b - a);
++}
++
++float PerlinNoise::grad(int hash, float x, float y, float z) {
++    // Convert low 4 bits of hash into 12 gradient directions
++    int h = hash & 15;
++    float u = h < 8 ? x : y;
++    float v = h < 4 ? y : (h == 12 || h == 14 ? x : z);
++    return ((h & 1) ? -u : u) + ((h & 2) ? -v : v);
++}
++
++float PerlinNoise::noise(float x, float y, float z) {
++    int X = static_cast<int>(floor(x)) & 255;
++    int Y = static_cast<int>(floor(y)) & 255;
++    int Z = static_cast<int>(floor(z)) & 255;
++    
++    x -= floor(x);
++    y -= floor(y);
++    z -= floor(z);
++    
++    // Compute fade curves
++    float u = fade(x);
++    float v = fade(y);
++    float w = fade(z);
++    
++    // Hash coordinates of cube corners
++    int A  = perm[X] + Y;
++    int AA = perm[A] + Z;
++    int AB = perm[A + 1] + Z;
++    int B  = perm[X + 1] + Y;
++    int BA = perm[B] + Z;
++    int BB = perm[B + 1] + Z;
++    
++    // Blend results from 8 corners
++    return lerp(
++        lerp(
++            lerp(grad(perm[AA], x, y, z),
++                 grad(perm[BA], x - 1, y, z), u),
++            lerp(grad(perm[AB], x, y - 1, z),
++                 grad(perm[BB], x - 1, y - 1, z), u), v),
++        lerp(
++            lerp(grad(perm[AA + 1], x, y, z - 1),
++                 grad(perm[BA + 1], x - 1, y, z - 1), u),
++            lerp(grad(perm[AB + 1], x, y - 1, z - 1),
++                 grad(perm[BB + 1], x - 1, y - 1, z - 1), u), v), w);
++}
++
++float PerlinNoise::noise(glm::vec3 pos) {
++    return noise(pos.x, pos.y, pos.z);
++}
++
++float PerlinNoise::octaveNoise(glm::vec3 pos, int octaves, float persistence) {
++    float total = 0.0f;
++    float frequency = 1.0f;
++    float amplitude = 1.0f;
++    float maxValue = 0.0f;
++    
++    for (int i = 0; i < octaves; ++i) {
++        total += noise(pos * frequency) * amplitude;
++        maxValue += amplitude;
++        
++        amplitude *= persistence;
++        frequency *= 2.0f;
++    }
++    
++    return total / maxValue;
++}
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"AutoImportSettings\">\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\n  </component>\n  <component name=\"BackendCodeEditorMiscSettings\">\n    <option name=\"/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue\" value=\"false\" type=\"bool\" />\n    <option name=\"/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue\" value=\"true\" type=\"bool\" />\n    <option name=\"/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue\" value=\"true\" type=\"bool\" />\n    <option name=\"/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue\" value=\"7\" type=\"long\" />\n    <option name=\"/Default/Housekeeping/OptionsDialog/SelectedPageId/@EntryValue\" value=\"CppFormatterOtherPage\" type=\"string\" />\n    <option name=\"/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexRemoved\" />\n  </component>\n  <component name=\"CMakePresetLoader\">{\n  &quot;useNewFormat&quot;: true\n}</component>\n  <component name=\"CMakeProjectFlavorService\">\n    <option name=\"flavorId\" value=\"CMakePlainProjectFlavor\" />\n  </component>\n  <component name=\"CMakeReloadState\">\n    <option name=\"reloaded\" value=\"true\" />\n  </component>\n  <component name=\"CMakeRunConfigurationManager\">\n    <generated>\n      <config projectName=\"main.cpp\" targetName=\"zlibstatic\" />\n      <config projectName=\"main.cpp\" targetName=\"imgui\" />\n      <config projectName=\"main.cpp\" targetName=\"glew\" />\n      <config projectName=\"main.cpp\" targetName=\"glm\" />\n      <config projectName=\"main.cpp\" targetName=\"main.cpp\" />\n      <config projectName=\"main.cpp\" targetName=\"assimp\" />\n    </generated>\n  </component>\n  <component name=\"CMakeSettings\">\n    <configurations>\n      <configuration PROFILE_NAME=\"Debug\" ENABLED=\"true\" CONFIG_NAME=\"Debug\" />\n    </configurations>\n  </component>\n  <component name=\"ChangeListManager\">\n    <list default=\"true\" id=\"7e67c233-aa83-4b0c-8b19-93b0c02930ad\" name=\"Changes\" comment=\"\">\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/shaders/template.frag\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/shaders/template.frag\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/sphere.cpp\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/sphere.cpp\" afterDir=\"false\" />\n      <change beforePath=\"$PROJECT_DIR$/sphere.h\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/sphere.h\" afterDir=\"false\" />\n    </list>\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\n  </component>\n  <component name=\"ClangdSettings\">\n    <option name=\"formatViaClangd\" value=\"false\" />\n  </component>\n  <component name=\"ExecutionTargetManager\" SELECTED_TARGET=\"CMakeBuildProfile:Debug\" />\n  <component name=\"FileTemplateManagerImpl\">\n    <option name=\"RECENT_TEMPLATES\">\n      <list>\n        <option value=\"GLSL Shader\" />\n        <option value=\"vs-template\" />\n        <option value=\"fs-template\" />\n      </list>\n    </option>\n  </component>\n  <component name=\"Git.Settings\">\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$/..\" />\n  </component>\n  <component name=\"HighlightingSettingsPerFile\">\n    <setting file=\"file://$PROJECT_DIR$/objects/light.h\" root0=\"FORCE_HIGHLIGHTING\" />\n    <setting file=\"file://$PROJECT_DIR$/objects/object.h\" root0=\"FORCE_HIGHLIGHTING\" />\n    <setting file=\"file://$PROJECT_DIR$/objects/utilities/meshGeometry.cpp\" root0=\"FORCE_HIGHLIGHTING\" />\n    <setting file=\"file://$PROJECT_DIR$/objects/utilities/meshGeometry.h\" root0=\"FORCE_HIGHLIGHTING\" />\n    <setting file=\"file://$PROJECT_DIR$/objects/utilities/modelTexture.cpp\" root0=\"FORCE_HIGHLIGHTING\" />\n    <setting file=\"file://$PROJECT_DIR$/objects/utilities/modelTexture.h\" root0=\"FORCE_HIGHLIGHTING\" />\n    <setting file=\"file://$PROJECT_DIR$/objects/utilities/shaderProgram.cpp\" root0=\"FORCE_HIGHLIGHTING\" />\n    <setting file=\"file://$PROJECT_DIR$/objects/utilities/shaderProgram.h\" root0=\"FORCE_HIGHLIGHTING\" />\n    <setting file=\"file://$PROJECT_DIR$/objects/utilities/utilities.cpp\" root0=\"FORCE_HIGHLIGHTING\" />\n  </component>\n  <component name=\"ProjectApplicationVersion\">\n    <option name=\"ide\" value=\"CLion\" />\n    <option name=\"majorVersion\" value=\"2024\" />\n    <option name=\"minorVersion\" value=\"2.3\" />\n    <option name=\"productBranch\" value=\"Classic\" />\n  </component>\n  <component name=\"ProjectColorInfo\">{\n  &quot;customColor&quot;: &quot;&quot;,\n  &quot;associatedIndex&quot;: 0\n}</component>\n  <component name=\"ProjectId\" id=\"38V5rZ6gjFeiHtBUu9GyowmYX3v\" />\n  <component name=\"ProjectViewState\">\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\n    <option name=\"showLibraryContents\" value=\"true\" />\n  </component>\n  <component name=\"PropertiesComponent\">{\n  &quot;keyToString&quot;: {\n    &quot;CMake Application.main.cpp.executor&quot;: &quot;Run&quot;,\n    &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,\n    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,\n    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,\n    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,\n    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,\n    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,\n    &quot;git-widget-placeholder&quot;: &quot;cubesphere&quot;,\n    &quot;last_opened_file_path&quot;: &quot;/home/martul3ns/projects/planetary-rain/src/shaders&quot;,\n    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,\n    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,\n    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,\n    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,\n    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,\n    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;\n  }\n}</component>\n  <component name=\"RecentsManager\">\n    <key name=\"CopyFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$/shaders\" />\n    </key>\n    <key name=\"MoveFile.RECENT_KEYS\">\n      <recent name=\"$PROJECT_DIR$\" />\n      <recent name=\"$PROJECT_DIR$/objects\" />\n      <recent name=\"$PROJECT_DIR$/utilities\" />\n    </key>\n  </component>\n  <component name=\"RunManager\" selected=\"CMake Application.main.cpp\">\n    <configuration name=\"Unnamed\" type=\"CMakeRunConfiguration\" factoryName=\"Application\" nameIsGenerated=\"true\" REDIRECT_INPUT=\"true\" REDIRECT_INPUT_PATH=\"$PROJECT_DIR$/CMakeLists.txt\" ELEVATE=\"false\" USE_EXTERNAL_CONSOLE=\"false\" EMULATE_TERMINAL=\"false\" PASS_PARENT_ENVS_2=\"true\">\n      <method v=\"2\">\n        <option name=\"com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration name=\"assimp\" type=\"CMakeRunConfiguration\" factoryName=\"Application\" REDIRECT_INPUT=\"false\" ELEVATE=\"false\" USE_EXTERNAL_CONSOLE=\"false\" EMULATE_TERMINAL=\"false\" PASS_PARENT_ENVS_2=\"true\" PROJECT_NAME=\"main.cpp\" TARGET_NAME=\"assimp\" CONFIG_NAME=\"Debug\">\n      <method v=\"2\">\n        <option name=\"com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration name=\"glew\" type=\"CMakeRunConfiguration\" factoryName=\"Application\" REDIRECT_INPUT=\"false\" ELEVATE=\"false\" USE_EXTERNAL_CONSOLE=\"false\" EMULATE_TERMINAL=\"false\" PASS_PARENT_ENVS_2=\"true\" PROJECT_NAME=\"main.cpp\" TARGET_NAME=\"glew\" CONFIG_NAME=\"Debug\">\n      <method v=\"2\">\n        <option name=\"com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration name=\"glm\" type=\"CMakeRunConfiguration\" factoryName=\"Application\" REDIRECT_INPUT=\"false\" ELEVATE=\"false\" USE_EXTERNAL_CONSOLE=\"false\" EMULATE_TERMINAL=\"false\" PASS_PARENT_ENVS_2=\"true\" PROJECT_NAME=\"main.cpp\" TARGET_NAME=\"glm\" CONFIG_NAME=\"Debug\">\n      <method v=\"2\">\n        <option name=\"com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration name=\"imgui\" type=\"CMakeRunConfiguration\" factoryName=\"Application\" REDIRECT_INPUT=\"false\" ELEVATE=\"false\" USE_EXTERNAL_CONSOLE=\"false\" EMULATE_TERMINAL=\"false\" PASS_PARENT_ENVS_2=\"true\" PROJECT_NAME=\"main.cpp\" TARGET_NAME=\"imgui\" CONFIG_NAME=\"Debug\">\n      <method v=\"2\">\n        <option name=\"com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration name=\"main.cpp\" type=\"CMakeRunConfiguration\" factoryName=\"Application\" REDIRECT_INPUT=\"false\" ELEVATE=\"false\" USE_EXTERNAL_CONSOLE=\"false\" EMULATE_TERMINAL=\"false\" PASS_PARENT_ENVS_2=\"true\" PROJECT_NAME=\"main.cpp\" TARGET_NAME=\"main.cpp\" CONFIG_NAME=\"Debug\" RUN_TARGET_PROJECT_NAME=\"main.cpp\" RUN_TARGET_NAME=\"main.cpp\">\n      <method v=\"2\">\n        <option name=\"com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <configuration name=\"zlibstatic\" type=\"CMakeRunConfiguration\" factoryName=\"Application\" REDIRECT_INPUT=\"false\" ELEVATE=\"false\" USE_EXTERNAL_CONSOLE=\"false\" EMULATE_TERMINAL=\"false\" PASS_PARENT_ENVS_2=\"true\" PROJECT_NAME=\"main.cpp\" TARGET_NAME=\"zlibstatic\" CONFIG_NAME=\"Debug\">\n      <method v=\"2\">\n        <option name=\"com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask\" enabled=\"true\" />\n      </method>\n    </configuration>\n    <list>\n      <item itemvalue=\"CMake Application.Unnamed\" />\n      <item itemvalue=\"CMake Application.assimp\" />\n      <item itemvalue=\"CMake Application.glew\" />\n      <item itemvalue=\"CMake Application.imgui\" />\n      <item itemvalue=\"CMake Application.glm\" />\n      <item itemvalue=\"CMake Application.main.cpp\" />\n      <item itemvalue=\"CMake Application.zlibstatic\" />\n    </list>\n  </component>\n  <component name=\"SpellCheckerSettings\" RuntimeDictionaries=\"0\" Folders=\"0\" CustomDictionaries=\"0\" DefaultDictionary=\"application-level\" UseSingleDictionary=\"true\" transferred=\"true\" />\n  <component name=\"TaskManager\">\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\n      <changelist id=\"7e67c233-aa83-4b0c-8b19-93b0c02930ad\" name=\"Changes\" comment=\"\" />\n      <created>1768872097575</created>\n      <option name=\"number\" value=\"Default\" />\n      <option name=\"presentableId\" value=\"Default\" />\n      <updated>1768872097575</updated>\n      <workItem from=\"1768872100228\" duration=\"2563000\" />\n      <workItem from=\"1768926663534\" duration=\"20770000\" />\n      <workItem from=\"1769017512491\" duration=\"1873000\" />\n    </task>\n    <servers />\n  </component>\n  <component name=\"TypeScriptGeneratedFilesManager\">\n    <option name=\"version\" value=\"3\" />\n  </component>\n  <component name=\"VCPKGProject\">\n    <isAutomaticCheckingOnLaunch value=\"false\" />\n    <isAutomaticFoundErrors value=\"true\" />\n    <isAutomaticReloadCMake value=\"true\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision ccd9e68dd3dd294267f2e777f61ecf6e1c8e9616)
++++ b/.idea/workspace.xml	(date 1769019617127)
+@@ -38,9 +38,16 @@
+   <component name="ChangeListManager">
+     <list default="true" id="7e67c233-aa83-4b0c-8b19-93b0c02930ad" name="Changes" comment="">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/shaders/template.frag" beforeDir="false" afterPath="$PROJECT_DIR$/shaders/template.frag" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/camera.h" beforeDir="false" afterPath="$PROJECT_DIR$/camera.h" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/game.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game.cpp" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/meshGeometry.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/meshGeometry.cpp" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/meshGeometry.h" beforeDir="false" afterPath="$PROJECT_DIR$/meshGeometry.h" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/scene.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/scene.cpp" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/sphere.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sphere.cpp" afterDir="false" />
+       <change beforePath="$PROJECT_DIR$/sphere.h" beforeDir="false" afterPath="$PROJECT_DIR$/sphere.h" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/ui.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/ui.cpp" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/ui.h" beforeDir="false" afterPath="$PROJECT_DIR$/ui.h" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -89,25 +96,26 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent">{
+-  &quot;keyToString&quot;: {
+-    &quot;CMake Application.main.cpp.executor&quot;: &quot;Run&quot;,
+-    &quot;RunOnceActivity.RadMigrateCodeStyle&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
+-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
+-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
+-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
+-    &quot;git-widget-placeholder&quot;: &quot;cubesphere&quot;,
+-    &quot;last_opened_file_path&quot;: &quot;/home/martul3ns/projects/planetary-rain/src/shaders&quot;,
+-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
++  <component name="PropertiesComponent"><![CDATA[{
++  "keyToString": {
++    "CMake Application.main.cpp.executor": "Run",
++    "RunOnceActivity.RadMigrateCodeStyle": "true",
++    "RunOnceActivity.ShowReadmeOnStart": "true",
++    "RunOnceActivity.cidr.known.project.marker": "true",
++    "RunOnceActivity.readMode.enableVisualFormatting": "true",
++    "cf.first.check.clang-format": "false",
++    "cidr.known.project.marker": "true",
++    "git-widget-placeholder": "Merging cubesphere",
++    "last_opened_file_path": "/home/martul3ns/projects/planetary-rain/src/shaders",
++    "node.js.detected.package.eslint": "true",
++    "node.js.detected.package.tslint": "true",
++    "node.js.selected.package.eslint": "(autodetect)",
++    "node.js.selected.package.tslint": "(autodetect)",
++    "nodejs_package_manager_path": "npm",
++    "settings.editor.selected.configurable": "preferences.sourceCode.C++",
++    "vue.rearranger.settings.migration": "true"
+   }
+-}</component>
++}]]></component>
+   <component name="RecentsManager">
+     <key name="CopyFile.RECENT_KEYS">
+       <recent name="$PROJECT_DIR$/shaders" />
+@@ -119,6 +127,11 @@
+     </key>
+   </component>
+   <component name="RunManager" selected="CMake Application.main.cpp">
++    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
++      <method v="2">
++        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
++      </method>
++    </configuration>
+     <configuration name="Unnamed" type="CMakeRunConfiguration" factoryName="Application" nameIsGenerated="true" REDIRECT_INPUT="true" REDIRECT_INPUT_PATH="$PROJECT_DIR$/CMakeLists.txt" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+       <method v="2">
+         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
+@@ -173,8 +186,7 @@
+       <option name="presentableId" value="Default" />
+       <updated>1768872097575</updated>
+       <workItem from="1768872100228" duration="2563000" />
+-      <workItem from="1768926663534" duration="20770000" />
+-      <workItem from="1769017512491" duration="1873000" />
++      <workItem from="1768926663534" duration="30001000" />
+     </task>
+     <servers />
+   </component>
+Index: noise.h
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/noise.h b/noise.h
+new file mode 100644
+--- /dev/null	(date 1769019536026)
++++ b/noise.h	(date 1769019536026)
+@@ -0,0 +1,30 @@
++#ifndef NOISE_H
++#define NOISE_H
++
++
++// Code inspired and created consecutively based on:
++// -> https://github.com/SebLague/Procedural-Landmass-Generation
++// -> https://garagefarm.net/blog/perlin-noise-implementation-procedural-generation-and-simplex-noise
++// -> https://rtouti.github.io/graphics/perlin-noise-algorithm
++// -> https://www.redblobgames.com/maps/terrain-from-noise/
++
++#include "glm/glm.hpp"
++
++class PerlinNoise {
++private:
++    int perm[512];
++
++    float fade(float t);
++    float lerp(float a, float b, float t);
++    float grad(int hash, float x, float y, float z);
++
++public:
++    PerlinNoise(unsigned int seed = 0);
++
++    float noise(glm::vec3 pos);
++    float noise(float x, float y, float z);
++
++    float octaveNoise(glm::vec3 pos, int octaves, float persistence = 0.5f);
++};
++
++#endif
+Index: ui.h
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#ifndef UI_H\n#define UI_H\n\n#include \"glm/vec3.hpp\"\n\nstruct PlanetParams {\n    float x = 4.0f;\n    float y = 1.5f;\n    float z = 0.0f;\n\n    float radius = 1.5f;\n    int detail = 3;              // 1-4\n\n    // Colour\n    glm::vec3 color = glm::vec3(0.2f, 0.4f, 1.0f);\n\n    // Material\n    float pd = 0.6f;             // diffuse\n    float ps = 0.5f;             // specular  \n    float ns = 32.0f;            // shininess\n    float reflectivity = 0.3f;\n\n    float ior = 1.0f;\n    float transparency = 1.0f;\n\n    // Rotation\n    float rotationSpeed = 30.0f;\n    bool autoRotate = true;\n    bool changed = false;\n};\n\nvoid initUI();\nvoid renderUI(PlanetParams& params, bool& paramsChanged);\nvoid shutdownUI();\n\n// GLUT callback wrappers for ImGui\nvoid uiKeyboardCallback(unsigned char key, int x, int y);\nvoid uiMouseCallback(int button, int state, int x, int y);\nvoid uiMotionCallback(int x, int y);\nvoid uiReshapeCallback(int w, int h);\n\n#endif
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/ui.h b/ui.h
+--- a/ui.h	(revision ccd9e68dd3dd294267f2e777f61ecf6e1c8e9616)
++++ b/ui.h	(date 1769019536027)
+@@ -2,6 +2,7 @@
+ #define UI_H
+ 
+ #include "glm/vec3.hpp"
++#include "sphere.h"
+ 
+ struct PlanetParams {
+     float x = 4.0f;
+@@ -10,6 +11,7 @@
+ 
+     float radius = 1.5f;
+     int detail = 3;              // 1-4
++    Terrain terrain;
+ 
+     // Colour
+     glm::vec3 color = glm::vec3(0.2f, 0.4f, 1.0f);
+Index: game.cpp
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#include \"game.h\"\n#include \"camera.h\"\n#include \"scene.h\"\n\n#include <GL/freeglut_std.h>\n#include <GL/gl.h>\n\n#include \"glm/vec3.hpp\"\n#include \"context.h\"\n#include \"gamestate.h\"\n\n\nvoid restartGame() {\n    glClearColor(skyColorConst.r, skyColorConst.g, skyColorConst.b, 1.0f);\n    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);\n\n    cleanUpObjects();\n\n    int w = glutGet(GLUT_WINDOW_WIDTH);\n    int h = glutGet(GLUT_WINDOW_HEIGHT);\n\n    if (h == 0) h = 1;\n\n    // Initialize camera - positioned to see all three spheres\n    glm::vec3 camPosition = glm::vec3(0.0f, 4.0f, 12.0f);\n    glm::vec3 direction = glm::vec3(0.0f, -0.2f, -1.0f);\n    float angle = 0.0f;\n\n    Camera* camera = new Camera(w, h, camPosition, direction, angle);\n    GameState* gs = new GameState(w, h);\n    con::init(camera, gs);\n}\n\nvoid cleanUpObjects() {\n    if (con::scene) {\n        delete con::scene;\n        con::scene = nullptr;\n    }\n    if (con::camera) {\n        delete con::camera;\n        con::camera = nullptr;\n    }\n    if (con::gameState) {\n        delete con::gameState;\n        con::gameState = nullptr;\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/game.cpp b/game.cpp
+--- a/game.cpp	(revision ccd9e68dd3dd294267f2e777f61ecf6e1c8e9616)
++++ b/game.cpp	(date 1769019536025)
+@@ -21,7 +21,6 @@
+ 
+     if (h == 0) h = 1;
+ 
+-    // Initialize camera - positioned to see all three spheres
+     glm::vec3 camPosition = glm::vec3(0.0f, 4.0f, 12.0f);
+     glm::vec3 direction = glm::vec3(0.0f, -0.2f, -1.0f);
+     float angle = 0.0f;
+Index: meshGeometry.h
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#ifndef MESH_H\n#define MESH_H\n\n#include <GL/glew.h>\n#include <GL/freeglut.h>\n\n#include <glm/glm.hpp>\n#include <glm/gtc/constants.hpp>\n#include <glm/gtc/type_ptr.hpp>\n\n#include <assimp/Importer.hpp>\n#include <assimp/scene.h>\n#include <assimp/postprocess.h>\n\n#include <string>\n#include <vector>\n#include <iostream>\n#include <algorithm>\n\nstruct Vertex {\n    glm::vec3 position;\n    glm::vec3 normal;\n    glm::vec2 texCoord;\n    glm::vec3 color;\n};\n\nclass MeshGeometry {\nprivate:\n    GLuint vbo = 0;\n    GLuint ebo = 0;\n    GLuint vao = 0;\n\n    float maxY = 0.0f;\n    unsigned int numVertices = 0;\n    unsigned int numTriangles = 0;\n\n    std::vector<unsigned int> indices;\n    std::vector<Vertex> vertices;\n\n    const aiScene* scene = nullptr;\n    Assimp::Importer importer;\n\npublic:\n    MeshGeometry() = default;\n    MeshGeometry(std::string& fileName);\n    MeshGeometry(const char* fileName);\n    MeshGeometry(std::vector<Vertex> vertices, std::vector<unsigned int> indices);\n    ~MeshGeometry();\n\n    void processNodeHierarchy(aiNode* node, const glm::mat4& mat);\n\n    void loadModel(std::string& fileName);\n    void loadVAO();\n\n    void cleanupGeometry();\n\n    // === GETTERS\n    GLuint getVBO() const { return vbo; }\n    GLuint getEBO() const { return ebo; }\n    GLuint getVAO() const { return vao; }\n\n    unsigned int getNumTriangles() const { return numTriangles; }\n    unsigned int getNumVertices() const { return numVertices; }\n    float getMaxY() const { return maxY; }\n};\n\n#endif // MESH_H
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/meshGeometry.h b/meshGeometry.h
+--- a/meshGeometry.h	(revision ccd9e68dd3dd294267f2e777f61ecf6e1c8e9616)
++++ b/meshGeometry.h	(date 1769019536026)
+@@ -54,6 +54,9 @@
+ 
+     void cleanupGeometry();
+ 
++    void setVertex(Vertex vertex);
++    void setIndice(std::vector<unsigned int> indices);
++
+     // === GETTERS
+     GLuint getVBO() const { return vbo; }
+     GLuint getEBO() const { return ebo; }
