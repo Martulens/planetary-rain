@@ -130,4 +130,4 @@ http-client.private.env.json
 .idea/**/copilot.data.migration.*.xml
 
 */.idea
-./src/.idea
+.idea
