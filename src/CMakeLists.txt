@@ -51,14 +51,12 @@ message(STATUS "GLEW fetched")
 
 # --- FreeGLUT ---
 if (UNIX AND NOT APPLE)
-    # On Linux, use system-installed freeglut (more reliable)
     find_package(GLUT REQUIRED)
     set(FREEGLUT_LIBRARIES ${GLUT_LIBRARIES})
     set(FREEGLUT_INCLUDE_DIRS ${GLUT_INCLUDE_DIR})
     set(USE_SYSTEM_GLUT TRUE)
     message(STATUS "Using system FreeGLUT")
 else ()
-    # On Windows, fetch FreeGLUT
     set(FREEGLUT_BUILD_DEMOS OFF CACHE BOOL "" FORCE)
     set(FREEGLUT_BUILD_STATIC_LIBS ON CACHE BOOL "" FORCE)
     set(FREEGLUT_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)

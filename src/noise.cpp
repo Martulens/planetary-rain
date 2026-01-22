@@ -92,14 +92,14 @@ float Noise::perlin(glm::vec3 in, int repeat){
 
     // hashing coordinates
     int aaa, aba, aab, abb, baa, bba, bab, bbb;
-    aaa = p[p[p[    xi ]+    yi ]+    zi ];
-    aba = p[p[p[    xi ]+inc(yi, repeat)]+    zi ];
-    aab = p[p[p[    xi ]+    yi ]+inc(zi, repeat)];
-    abb = p[p[p[    xi ]+inc(yi, repeat)]+inc(zi, repeat)];
-    baa = p[p[p[inc(xi, repeat)]+    yi ]+    zi ];
-    bba = p[p[p[inc(xi, repeat)]+inc(yi, repeat)]+    zi ];
-    bab = p[p[p[inc(xi, repeat)]+    yi ]+inc(zi, repeat)];
-    bbb = p[p[p[inc(xi, repeat)]+inc(yi, repeat)]+inc(zi, repeat)];
+    aaa = p[p[p[    xi]+                    yi ]+                   zi ];
+    aba = p[p[p[    xi]+                    inc(yi, repeat)]+   zi ];
+    aab = p[p[p[    xi]+                    yi ]+                   inc(zi, repeat)];
+    abb = p[p[p[    xi]+                    inc(yi, repeat)]+   inc(zi, repeat)];
+    baa = p[p[p[    inc(xi, repeat)]+   yi ]+                   zi ];
+    bba = p[p[p[    inc(xi, repeat)]+   inc(yi, repeat)]+   zi ];
+    bab = p[p[p[    inc(xi, repeat)]+   yi ]+                   inc(zi, repeat)];
+    bbb = p[p[p[    inc(xi, repeat)]+   inc(yi, repeat)]+   inc(zi, repeat)];
 
     double x1, x2, y1, y2;
     x1 = glm::lerp( grad (aaa, xf  , yf  , zf),
@@ -117,7 +117,6 @@ float Noise::perlin(glm::vec3 in, int repeat){
                     grad (bbb, xf-1, yf-1, zf-1),
                     u);
     y2 = glm::lerp (x1, x2, v);
-    
+
     return (glm::lerp(y1, y2, w)+1)/2;
 }
-

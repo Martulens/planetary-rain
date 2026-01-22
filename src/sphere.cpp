@@ -132,13 +132,12 @@ MeshGeometry* Sphere::cubeSphere(float radius, int detail, int repeat){
         std::cout << "  -> " << c.x << ", " << c.y << ", " << c.z << std::endl;
         */
 
+        /*
         std::cout << "[CUBE] Diffs: " << std::endl;
         std::cout << "  -> " << iDiff.x << ", " << iDiff.y << ", " << iDiff.z << std::endl;
         std::cout << "  -> " << jDiff.x << ", " << jDiff.y << ", " << jDiff.z << std::endl;
-
-        glm::vec3 jPlus = glm::vec3(0.0f);
+        */
         for(int j = 0; j <= detail; ++j){
-            glm::vec3 iPlus = glm::vec3(0.0f);
             for(int i = 0; i <= detail; ++i){
                 Vertex v;
                 glm::vec3 cubePos = (a + (float)i*iDiff + (float)j*jDiff);
@@ -147,17 +146,16 @@ MeshGeometry* Sphere::cubeSphere(float radius, int detail, int repeat){
                 float y = projectToSphere(cubePos.y, cubePos.x, cubePos.z);
                 float z = projectToSphere(cubePos.z, cubePos.x, cubePos.y);
 
-                glm::vec3 spherePos = radius*glm::vec3(x, y, z);
-                glm::vec3 sphereNormal = glm::normalize(spherePos - position);
-
+                glm::vec3 spherePos = glm::vec3(x, y, z);
                 float height = noise.perlin(spherePos, repeat);
+                v.position = radius*spherePos*(height+1);
 
-                v.position = spherePos + sphereNormal*height;
+                glm::vec3 sphereNormal = glm::normalize(v.position - position);
                 v.normal = sphereNormal;
 
                 vertices.push_back(v);
 
-                std::cout << "[CUBE] " << i+j*(detail+1) << " Position: " << v.position.x << ", " << v.position.y << ", " << v.position.z << std::endl;
+                //std::cout << "[CUBE] " << i+j*(detail+1) << " Position: " << v.position.x << ", " << v.position.y << ", " << v.position.z << std::endl;
             }
         }
     }

@@ -4,15 +4,15 @@
 #include "context.h"
 #include "framework.h"
 
-ShaderProgram::ShaderProgram(const std::string& vert, const std::string& frag) {
+ShaderProgram::ShaderProgram(const std::string& vert, const std::string& frag){
     init(vert, frag);
 }
 
-void ShaderProgram::loadFloat(GLint location, float value) {
+void ShaderProgram::loadFloat(GLint location, float value){
     glUniform1f(location, value);
 }
 
-void ShaderProgram::init(const std::string& vert, const std::string& frag) {
+void ShaderProgram::init(const std::string& vert, const std::string& frag){
     std::vector<GLuint> shaderList;
     shaderList.push_back(framework::createShaderFromFile(GL_VERTEX_SHADER, vert));
     shaderList.push_back(framework::createShaderFromFile(GL_FRAGMENT_SHADER, frag));
@@ -25,7 +25,7 @@ void ShaderProgram::init(const std::string& vert, const std::string& frag) {
     bindAttributes();
 }
 
-void ShaderProgram::getAllUniforms() {
+void ShaderProgram::getAllUniforms(){
     // === MVP
     modelMatrix = glGetUniformLocation(program, "modelMatrix");
     projectionMatrix = glGetUniformLocation(program, "projectionMatrix");
@@ -48,7 +48,8 @@ void ShaderProgram::getAllUniforms() {
     skyColor = glGetUniformLocation(program, "skyColor");
 }
 
-void ShaderProgram::getSamplerUniforms() {
+void ShaderProgram::getSamplerUniforms()
+{
     backTexture = glGetUniformLocation(program, "backTexture");
     rTexture = glGetUniformLocation(program, "rTexture");
     gTexture = glGetUniformLocation(program, "gTexture");
@@ -56,7 +57,8 @@ void ShaderProgram::getSamplerUniforms() {
     blendMap = glGetUniformLocation(program, "blendMap");
 }
 
-void ShaderProgram::bindAttributes() {
+void ShaderProgram::bindAttributes()
+{
     glBindAttribLocation(program, 0, "position");
     glBindAttribLocation(program, 1, "texCoord");
     glBindAttribLocation(program, 2, "normal");
@@ -64,6 +66,7 @@ void ShaderProgram::bindAttributes() {
 }
 
 
-ShaderProgram::~ShaderProgram() {
+ShaderProgram::~ShaderProgram()
+{
     framework::deleteProgramAndShaders(program);
 }
