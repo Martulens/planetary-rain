@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22)
 project(main.cpp LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
+#add_compile_options(-Wall -Wextra -Wpedantic -Werror)
 # Policy for FetchContent
 if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
@@ -50,14 +50,14 @@ endif ()
 message(STATUS "GLEW fetched")
 
 # --- FreeGLUT ---
-if (UNIX AND NOT APPLE)
+#if (UNIX AND NOT APPLE)
     # On Linux, use system-installed freeglut (more reliable)
-    find_package(GLUT REQUIRED)
-    set(FREEGLUT_LIBRARIES ${GLUT_LIBRARIES})
-    set(FREEGLUT_INCLUDE_DIRS ${GLUT_INCLUDE_DIR})
-    set(USE_SYSTEM_GLUT TRUE)
-    message(STATUS "Using system FreeGLUT")
-else ()
+    #find_package(GLUT REQUIRED)
+    #set(FREEGLUT_LIBRARIES ${GLUT_LIBRARIES})
+    #set(FREEGLUT_INCLUDE_DIRS ${GLUT_INCLUDE_DIR})
+    #set(USE_SYSTEM_GLUT TRUE)
+    #message(STATUS "Using system FreeGLUT")
+#else ()
     # On Windows, fetch FreeGLUT
     set(FREEGLUT_BUILD_DEMOS OFF CACHE BOOL "" FORCE)
     set(FREEGLUT_BUILD_STATIC_LIBS ON CACHE BOOL "" FORCE)
@@ -73,7 +73,7 @@ else ()
     FetchContent_MakeAvailable(freeglut)
     set(USE_SYSTEM_GLUT FALSE)
     message(STATUS "FreeGLUT fetched")
-endif ()
+#endif ()
 
 # --- Assimp ---
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
