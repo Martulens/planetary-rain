@@ -29,6 +29,7 @@ struct PlanetParams {
     bool changed = false;
 };
 
+// \todo Review UI should also be a class
 void initUI();
 void renderUI(PlanetParams& params, bool& paramsChanged);
 void shutdownUI();

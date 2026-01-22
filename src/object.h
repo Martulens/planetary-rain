@@ -13,6 +13,9 @@
 
 class Object {
 protected:
+// \todo Review: member variables should be differentiated.
+// Either use mPosition or _position. Something which indicates the private variable.
+// If you have a structure, don't use the prefix as all the vars are public
     glm::vec3 position = glm::vec3(0.0f);    ///< Object world position.
     glm::vec3 direction = glm::vec3(0.0f, 0.0f, -1.0f);  ///< Facing direction.
     float rotationY = 0.0f;                   ///< Y-axis rotation.
