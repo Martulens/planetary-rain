@@ -14,10 +14,10 @@ private:
 
 public:
   Sphere() = default;
-  Sphere(glm::vec3 position, float radius, int detail, int repeat, ModelTexture* texture, ShaderProgram* shader);
+  Sphere(glm::vec3 position, float radius, int detail, const std::vector<NoiseSettings>& sets, ModelTexture* texture, ShaderProgram* shader);
 
   MeshGeometry* uvSphere(float radius, int detail);
-  MeshGeometry* cubeSphere(float radius, int detail, int repeat);
+  MeshGeometry* cubeSphere(float radius, int detail);
 
   float getRadius() const { return radius; }
   int getDetail() const { return detail; }

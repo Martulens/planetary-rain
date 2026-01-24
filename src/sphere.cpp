@@ -2,10 +2,15 @@
 
 #include <complex>
 
-Sphere::Sphere(glm::vec3 position, float r, int det, int repeat, ModelTexture* texture, ShaderProgram* shader)
-    : Object(position, cubeSphere(r, det, repeat), shader, texture), radius(r), detail(det), repeat(repeat) {
+Sphere::Sphere(glm::vec3 position, float r, int det, const std::vector<NoiseSettings>& sets, ModelTexture* texture, ShaderProgram* shader)
+    : radius(r), detail(det) {
+    this->position = position;
+    this->texture = texture;
+    this->shader = shader;
+
     updateModelMatrix();
-    noise = Noise();
+    noise = Noise(sets);
+    this->geometry = cubeSphere(radius, detail);
 }
 
 MeshGeometry* Sphere::uvSphere(float radius, int detail) {
@@ -108,13 +113,11 @@ float projectToSphere(float in, float a, float b){
     return in*sqrt(1 - (a*a)/2 - (b*b)/2 + ((a*a)*(b*b))/3);
 }
 
-MeshGeometry* Sphere::cubeSphere(float radius, int detail, int repeat){
+MeshGeometry* Sphere::cubeSphere(float radius, int detail){
     std::vector<Vertex> vertices;
     std::vector<uint32_t> indices;
 
     for(int face = 0; face < 6; ++face){
-        glm::vec3 normal = cubeNormals[face];
-
         glm::vec3 a = cubeVertices[face*4];
         glm::vec3 b = cubeVertices[face*4+1];
         glm::vec3 d = cubeVertices[face*4+3];
@@ -147,11 +150,17 @@ MeshGeometry* Sphere::cubeSphere(float radius, int detail, int repeat){
                 float z = projectToSphere(cubePos.z, cubePos.x, cubePos.y);
 
                 glm::vec3 spherePos = glm::vec3(x, y, z);
-                float height = noise.perlin(spherePos, repeat);
-                v.position = radius*spherePos*(height+1);
+                float height = noise.computeAll(spherePos);
 
-                glm::vec3 sphereNormal = glm::normalize(v.position - position);
-                v.normal = sphereNormal;
+                std::cout << "height = " << height << std::endl;
+
+                if(height < 1)
+                    height = 1.0f;
+
+                v.position = radius*spherePos*(height+1);
+                v.normal = glm::normalize(v.position - position);
+
+                std::cout << "[CUBE] normal: " << v.normal.x << ", " << v.normal.y << ", " << v.normal.z << std::endl;
 
                 vertices.push_back(v);
 

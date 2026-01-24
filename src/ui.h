@@ -1,9 +1,14 @@
 #ifndef UI_H
 #define UI_H
 
-#include "glm/vec3.hpp"
+#include <vector>
 
-struct PlanetParams {
+#include "noise.h"
+#include "glm/vec3.hpp"
+#include "noise.h"
+
+class PlanetParams {
+public:
     float x = 4.0f;
     float y = 1.5f;
     float z = 0.0f;
@@ -15,21 +20,26 @@ struct PlanetParams {
     glm::vec3 color = glm::vec3(0.2f, 0.4f, 1.0f);
 
     // Material
-    float pd = 0.6f;             // diffuse
-    float ps = 0.5f;             // specular  
-    float ns = 32.0f;            // shininess
-    float reflectivity = 0.3f;
+    float pd = 1.0f;             // diffuse
+    float ps = 0.0f;             // specular
+    float ns = 0.0f;            // shininess
+    float reflectivity = 0.0f;
 
-    float ior = 1.0f;
+    float ior = 0.5f;
     float transparency = 1.0f;
 
     // Terrain
-    int repeat = 1;
+    int noiseCount = 1;
+    std::vector<NoiseSettings> noise;
 
     // Rotation
     float rotationSpeed = 30.0f;
     bool autoRotate = true;
     bool changed = false;
+
+    PlanetParams(){
+        noise.emplace_back();
+    }
 };
 
 void initUI();

@@ -3,6 +3,7 @@
 #include <set>
 #include <utility>
 #include <algorithm>
+#define GLM_ENABLE_EXPERIMENTAL
 
 #include "framework.h"
 #include "config.h"

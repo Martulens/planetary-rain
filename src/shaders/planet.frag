@@ -50,19 +50,18 @@ void main() {
             lightDir = normalize(-lightPositions[i]);
         }
 
-        // Diffuse (Lambert)
-        float diff = max(dot(normal, lightDir), 0.0);
-        diffuse += lightColors[i] * lightBrightness[i] * diff * attenuation;
+        float diff = dot(normal, lightDir);
+        diff = max(diff, 0.0);
 
-        // Specular (Blinn-Phong)
-        vec3 halfDir = normalize(lightDir + viewDir);
-        float spec = pow(max(dot(normal, halfDir), 0.0), ns);
-        specular += lightColors[i] * lightBrightness[i] * spec * attenuation;
+        vec3 refl = reflect(lightDir, normal);
+        float spec = dot(refl, viewDir);
+        spec = max(spec, 0.0);
+
+        diffuse += diff * lightBrightness[i] * lightColors[i];
+        specular += diff * lightBrightness[i] * lightColors[i];
     }
 
     // === COMBINE ===
-    float ao = clamp(dot(normal, vec3(0.0, 1.0, 0.0)) * 0.5 + 0.5, 0.3, 1.0);
-    ambient *= ao;
     vec3 result = ambient + (pd * diffuse * baseColor) + (ps * specular);
 
     // === FOG ===

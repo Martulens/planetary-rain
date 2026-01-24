@@ -41,7 +41,7 @@ void Scene::updatePlanet(const PlanetParams& params){
     }
 
     glm::vec3 newPos(params.x, params.y, params.z);
-    planet = new Sphere(newPos, params.radius, params.detail, params.repeat, newMaterial, shader);
+    planet = new Sphere(newPos, params.radius, params.detail, params.noise, newMaterial, shader);
     planet->setNeedsEnvMap(needsEnv);
 
     addObject(planet);
@@ -159,7 +159,7 @@ void Scene::constructObjects(){
         glm::vec3(defaults.x, defaults.y, defaults.z),
         defaults.radius,
         defaults.detail,
-        defaults.repeat,
+        defaults.noise,
         material,
         shader
     );
@@ -264,24 +264,21 @@ void Scene::cleanup()
     }
 }
 
-void Scene::addObject(Object* obj)
-{
+void Scene::addObject(Object* obj){
     if (obj)
     {
         objects.push_back(obj);
     }
 }
 
-void Scene::addLight(Light* light)
-{
+void Scene::addLight(Light* light){
     if (light)
     {
         lights.push_back(light);
     }
 }
 
-void Scene::update(float deltaTime)
-{
+void Scene::update(float deltaTime){
     static float angle = 0.0f;
     angle += deltaTime * 0.5f;
 
