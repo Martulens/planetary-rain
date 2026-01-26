@@ -7,7 +7,7 @@ in vec3 fragPosition;
 in vec3 fragNormal;
 in vec3 fragColor;
 in float visibility;
-
+in float vHeight;
 
 // === UNIFORMS ===
 uniform vec3 baseColor;
@@ -15,7 +15,6 @@ uniform float pd;           // diffuse coefficient
 uniform float ps;           // specular coefficient
 uniform float ns;           // shininess exponent
 
-uniform float vHeight;
 uniform bool usingTerrain;
 
 uniform vec3 skyColor;
@@ -58,11 +57,12 @@ void main() {
     vec3 normal = normalize(fragNormal);
     vec3 viewDir = normalize(cameraPosition - fragPosition);
 
-    if(usingTerrain)
-        fragColor = terrainColor(vHeight);
-    else
-        fragColor = gradientColor(vHeight);
+    //if(usingTerrain)
+    //    fragColor = terrainColor(vHeight);
+    //else
+    //    fragColor = gradientColor(vHeight);
 
+    fragColor = baseColor;
     // === AMBIENT ===
     vec3 ambient = 0.1 * fragColor;
 
@@ -74,7 +74,7 @@ void main() {
         vec3 lightDir;
         float attenuation = 1.0;
 
-        if (isPointLight[i]) {
+        if (isPointLight[i]) {z
             // Point light: direction from fragment to light
             vec3 lightVec = lightPositions[i] - fragPosition;
             float dist = length(lightVec);

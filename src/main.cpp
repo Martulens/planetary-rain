@@ -33,6 +33,7 @@ void finalizeApp() {
 
 int main(int argc, char** argv){
     var::init();
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -55,7 +56,7 @@ int main(int argc, char** argv){
     // warning: if you pass [game], the instance is copied. I highly recommend getting familiar with lambdas
     // the lambda body is just as any function you would implement
 
-    glutKeyboardFunc([](unsigned char keyPressed, int mouseX, int mouseY){});
+    glutKeyboardFunc(keyboardCallback);
     glutKeyboardUpFunc(keyboardUpCallback);
 
     glutSpecialFunc(onSpecialKeyPress);
@@ -71,6 +72,7 @@ int main(int argc, char** argv){
     if (!framework::initialize(framework::OGL_VER_MAJOR, framework::OGL_VER_MINOR))
         framework::dieWithError("Init failed, required OpenGL not supported?");
 
+    var::getUI()->initUI();
     initApp();
 
     glutCloseFunc(finalizeApp);

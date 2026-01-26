@@ -198,8 +198,8 @@ void Scene::init(){
     std::cout << "[Scene] Initializing scene..." << std::endl;
 
     // Create the default shader
-    mDefaultShader = std::make_shared<ShaderProgram>("shaders/mPlanet.vert", "shaders/mPlanet.frag");
-    mRefractiveShader = std::make_shared<ShaderProgram>("shaders/mPlanet.vert", "shaders/refractive.frag");
+    mDefaultShader = std::make_shared<ShaderProgram>("shaders/planet.vert", "shaders/planet.frag");
+    mRefractiveShader = std::make_shared<ShaderProgram>("shaders/planet.vert", "shaders/refractive.frag");
 
     if (!mDefaultShader || mDefaultShader->getProgram() == 0){
         std::cerr << "[Scene] ERROR: Failed to create default shader!" << std::endl;
@@ -208,8 +208,8 @@ void Scene::init(){
 
     std::cout << "[Scene] Initializing mSkybox..." << std::endl;
     int numSkybox = rand() % 5;
-    mSkybox = std::make_shared<Skybox>("shaders/mSkybox.vert", "shaders/mSkybox.frag",
-                        "textures/mSkybox/" + std::to_string(numSkybox) + "/");
+    mSkybox = std::make_shared<Skybox>("shaders/skybox.vert", "shaders/skybox.frag",
+                        "textures/skybox/" + std::to_string(numSkybox) + "/");
     CHECK_GL_ERROR();
 
     constructObjects();
@@ -239,4 +239,17 @@ void Scene::update(float deltaTime){
 
     for (auto obj : mObjects)
         obj->setRotationY(angle * 30.0f);
+}
+
+Scene::~Scene() {
+    cleanup();
+}
+
+void Scene::cleanup() {
+    mObjects.clear();
+    mLights.clear();
+    mPlanet = nullptr;
+    mDefaultShader = nullptr;
+    mRefractiveShader = nullptr;
+    mSkybox = nullptr;
 }

@@ -25,7 +25,6 @@ out vec3 fragNormal;                        // World-space normal
 out vec3 fragColor;                         // Vertex color
 out float visibility;                       // Fog visibility factor (0 = fog, 1 = clear)
 
-// TODO -> vertex including perlin! -> all computed in shader == faster babe
 void main() {
     // Transform vertex to world space
     vec4 worldPosition = modelMatrix * vec4(position, 1.0);
