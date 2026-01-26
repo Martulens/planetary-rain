@@ -10,9 +10,9 @@ MeshGeometry::MeshGeometry(const char* fileName) {
 }
 
 MeshGeometry::MeshGeometry(std::vector<Vertex> verts, std::vector<unsigned int> inds)
-    : indices(std::move(inds)), vertices(std::move(verts)) {
-    numVertices = static_cast<unsigned int>(vertices.size());
-    numTriangles = static_cast<unsigned int>(indices.size() / 3);
+    : mIndices(std::move(inds)), mVertices(std::move(verts)) {
+    mNumVertices = static_cast<unsigned int>(mVertices.size());
+    mNumTriangles = static_cast<unsigned int>(mIndices.size() / 3);
     loadVAO();
 }
 
@@ -32,24 +32,24 @@ void MeshGeometry::processNodeHierarchy(aiNode* node, const glm::mat4& parentTra
 }
 
 void MeshGeometry::loadModel(std::string& fileName) {
-    scene = importer.ReadFile(fileName,
+    mScene = mImporter.ReadFile(fileName,
         aiProcess_Triangulate | aiProcess_FlipUVs |
         aiProcess_GenNormals | aiProcess_LimitBoneWeights);
 
-    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        std::cerr << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
+    if (!mScene || mScene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !mScene->mRootNode) {
+        std::cerr << "ERROR::ASSIMP::" << mImporter.GetErrorString() << std::endl;
         return;
     }
 
-    processNodeHierarchy(scene->mRootNode, glm::mat4(1.0f));
+    processNodeHierarchy(mScene->mRootNode, glm::mat4(1.0f));
 
-    vertices.clear();
-    indices.clear();
+    mVertices.clear();
+    mIndices.clear();
 
     unsigned int vertexOffset = 0;
 
-    for (unsigned int m = 0; m < scene->mNumMeshes; ++m) {
-        aiMesh* mesh = scene->mMeshes[m];
+    for (unsigned int m = 0; m < mScene->mNumMeshes; ++m) {
+        aiMesh* mesh = mScene->mMeshes[m];
 
         for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
             Vertex vertex;
@@ -60,38 +60,38 @@ void MeshGeometry::loadModel(std::string& fileName) {
                 : glm::vec2(0.0f);
 
             vertex.color = glm::vec3(1.0f);
-            maxY = std::max(maxY, mesh->mVertices[i].y);
+            mMaxY = std::max(mMaxY, mesh->mVertices[i].y);
 
-            vertices.push_back(vertex);
+            mVertices.push_back(vertex);
         }
 
         for (unsigned int i = 0; i < mesh->mNumFaces; ++i) {
             aiFace face = mesh->mFaces[i];
             for (unsigned int j = 0; j < face.mNumIndices; ++j) {
-                indices.push_back(face.mIndices[j] + vertexOffset);
+                mIndices.push_back(face.mIndices[j] + vertexOffset);
             }
         }
 
         vertexOffset += mesh->mNumVertices;
     }
 
-    numVertices = static_cast<unsigned int>(vertices.size());
-    numTriangles = static_cast<unsigned int>(indices.size() / 3);
+    mNumVertices = static_cast<unsigned int>(mVertices.size());
+    mNumTriangles = static_cast<unsigned int>(mIndices.size() / 3);
 
     loadVAO();
 }
 
 void MeshGeometry::loadVAO() {
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    glGenVertexArrays(1, &mVao);
+    glBindVertexArray(mVao);
 
-    glGenBuffers(1, &vbo);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(Vertex), vertices.data(), GL_STATIC_DRAW);
+    glGenBuffers(1, &mVbo);
+    glBindBuffer(GL_ARRAY_BUFFER, mVbo);
+    glBufferData(GL_ARRAY_BUFFER, mVertices.size() * sizeof(Vertex), mVertices.data(), GL_STATIC_DRAW);
 
-    glGenBuffers(1, &ebo);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(unsigned int), indices.data(), GL_STATIC_DRAW);
+    glGenBuffers(1, &mEbo);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mEbo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mIndices.size() * sizeof(unsigned int), mIndices.data(), GL_STATIC_DRAW);
 
     GLsizei stride = sizeof(Vertex);
 
@@ -115,16 +115,16 @@ void MeshGeometry::loadVAO() {
 }
 
 void MeshGeometry::cleanupGeometry() {
-    if (vao != 0) {
-        glDeleteVertexArrays(1, &vao);
-        vao = 0;
+    if (mVao != 0) {
+        glDeleteVertexArrays(1, &mVao);
+        mVao = 0;
     }
-    if (ebo != 0) {
-        glDeleteBuffers(1, &ebo);
-        ebo = 0;
+    if (mEbo != 0) {
+        glDeleteBuffers(1, &mEbo);
+        mEbo = 0;
     }
-    if (vbo != 0) {
-        glDeleteBuffers(1, &vbo);
-        vbo = 0;
+    if (mVbo != 0) {
+        glDeleteBuffers(1, &mVbo);
+        mVbo = 0;
     }
 }

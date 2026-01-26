@@ -9,21 +9,25 @@
 
 class Light{
 private:
-    glm::vec3 position;
-    glm::vec3 color;
-    float brightness = 0.0f;
+    glm::vec3 mPosition;
+    glm::vec3 mColor;
+    float mBrightness = 0.0f;
 
-    bool pointLight = false;
+    bool mPointLight = false;
 public:
     Light() = default;
-    Light(glm::vec3 position, glm::vec3 color, float brightness, bool isPoint);
+    Light(  glm::vec3 position,
+            glm::vec3 color,
+            float brightness,
+            bool isPoint)
+    : mPosition(position), mColor(color), mBrightness(brightness), mPointLight(isPoint) {};
 
     // === GETERS
-    glm::vec3 getColor() const { return color; }
-    glm::vec3 getPosition() const { return position; }
+    glm::vec3 getColor() const { return mColor; }
+    glm::vec3 getPosition() const { return mPosition; }
 
-    float getBrightness() const { return brightness; }
-    bool isPointLight() const { return pointLight; }
+    float getBrightness() const { return mBrightness; }
+    bool isPointLight() const { return mPointLight; }
 
 };
 

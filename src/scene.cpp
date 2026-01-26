@@ -6,26 +6,18 @@
 #include <iostream>
 #include <algorithm>
 
-Scene::~Scene(){
-    cleanup();
-}
-
 void Scene::updatePlanet(const PlanetParams& params){
-    if (!planet) return;
+    if (!mPlanet) return;
 
-    auto it = std::find(objects.begin(), objects.end(), planet);
-    if (it != objects.end()) {
-        objects.erase(it);
+    auto it = std::find(mObjects.begin(), mObjects.end(), mPlanet);
+    if (it != mObjects.end()) {
+        mObjects.erase(it);
     }
 
-    bool needsEnv = planet->getNeedsEnvMap();
+    bool needsEnv = mPlanet->getNeedsEnvMap();
+    mPlanet = nullptr;
 
-    if (planet->getGeometry()) delete planet->getGeometry();
-    if (planet->getTexture()) delete planet->getTexture();
-    delete planet;
-    planet = nullptr;
-
-    ModelTexture* newMaterial = new ModelTexture(
+    auto newMaterial = std::make_shared<ModelTexture>(
         params.color,
         params.pd,
         params.ps,
@@ -35,29 +27,35 @@ void Scene::updatePlanet(const PlanetParams& params){
         params.transparency
     );
 
-    ShaderProgram* shader = defaultShader;
+    auto shader = mDefaultShader;
     if (params.ior > 1.0f) {
-        shader = refractiveShader;
+        shader = mRefractiveShader;
     }
 
     glm::vec3 newPos(params.x, params.y, params.z);
-    planet = new Sphere(newPos, params.radius, params.detail, params.noise, params.showTerrain, newMaterial, shader);
-    planet->setNeedsEnvMap(needsEnv);
+    mPlanet = std::make_shared<Sphere>(  newPos,
+                                        params.radius,
+                                        params.detail,
+                                        params.noise,
+                                        params.showTerrain,
+                                        newMaterial,
+                                        shader);
+    mPlanet->setNeedsEnvMap(needsEnv);
 
-    addObject(planet);
+    addObject(mPlanet);
 }
 
-void Scene::renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& projection, Object* excludeObject){
-    if (skybox)
-        skybox->draw(view, projection);
+void Scene::renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& projection, std::shared_ptr<Object> excludeObject){
+    if (mSkybox)
+        mSkybox->draw(view, projection);
 
-    // Render all objects except the excluded one
-    for (Object* obj : objects)
+    // Render all mObjects except the excluded one
+    for (auto& obj : mObjects)
     {
         if (obj == excludeObject) continue;
         if (!obj || !obj->getGeometry() || !obj->getShader()) continue;
 
-        ShaderProgram* shader = obj->getShader();
+        auto shader = obj->getShader();
         glUseProgram(shader->getProgram());
 
         glUniformMatrix4fv(shader->getModelMatrixLocation(), 1, GL_FALSE, &obj->getModelMatrix()[0][0]);
@@ -65,18 +63,17 @@ void Scene::renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& project
         glUniformMatrix4fv(shader->getProjectionMatrixLocation(), 1, GL_FALSE, glm::value_ptr(projection));
 
         // Simplified uniforms for env map rendering
-        ModelTexture* texture = obj->getTexture();
+        auto texture = obj->getTexture();
         glUniform3fv(shader->getBaseColorLocation(), 1, glm::value_ptr(texture->getColor()));
         glUniform1f(shader->getPdLocation(), texture->getPd());
         glUniform1f(shader->getPsLocation(), texture->getPs());
         glUniform1f(shader->getNsLocation(), texture->getNs());
-        glUniform3fv(shader->getSkyColorLocation(), 1, glm::value_ptr(skyColorConst));
+        glUniform3fv(shader->getSkyColorLocation(), 1, glm::value_ptr(SKY_COLOR));
 
-        // Set up lights
-        glUniform1i(glGetUniformLocation(shader->getProgram(), "numLights"), static_cast<int>(lights.size()));
-        for (size_t i = 0; i < lights.size() && i < LIGHTS_MAX; ++i)
-        {
-            Light* light = lights[i];
+        // Set up mLights
+        glUniform1i(glGetUniformLocation(shader->getProgram(), "numLights"), static_cast<int>(mLights.size()));
+        for (size_t i = 0; i < mLights.size() && i < LIGHTS_MAX; ++i){
+            auto light = mLights[i];
             std::string base = "lightPositions[" + std::to_string(i) + "]";
             glUniform3fv(glGetUniformLocation(shader->getProgram(), base.c_str()), 1,
                          glm::value_ptr(light->getPosition()));
@@ -100,19 +97,16 @@ void Scene::renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& project
     }
 }
 
-void Scene::renderEnvironmentMaps(Camera* camera)
-{
+void Scene::renderEnvironmentMaps(std::shared_ptr<Camera> camera){
     // Store original viewport
     GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
 
-    for (Object* obj : objects)
-    {
+    for (auto& obj : mObjects){
         if (!obj->getNeedsEnvMap()) continue;
 
-        EnvMap* envMap = obj->getEnvMap();
-        if (!envMap)
-        {
+        auto envMap = obj->getEnvMap();
+        if (!envMap){
             obj->createEnvMap(128);
             envMap = obj->getEnvMap();
         }
@@ -121,11 +115,10 @@ void Scene::renderEnvironmentMaps(Camera* camera)
         envMap->updateViewMatrices(obj->getPosition());
 
         // Render all 6 faces
-        for (int face = 0; face < 6; ++face)
-        {
+        for (int face = 0; face < 6; ++face){
             envMap->beginCapture(face);
 
-            glClearColor(skyColorConst.r, skyColorConst.g, skyColorConst.b, 1.0f);
+            glClearColor(SKY_COLOR.r, SKY_COLOR.g, SKY_COLOR.b, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             renderSceneForEnvMap(envMap->getViewMatrix(face), envMap->getProjection(), obj);
@@ -138,12 +131,12 @@ void Scene::renderEnvironmentMaps(Camera* camera)
 }
 
 void Scene::constructDebugObjects(){
-    std::cout << "[Scene] Initializing objects..." << std::endl;
+    std::cout << "[Scene] Initializing mObjects..." << std::endl;
 }
 
 void Scene::constructObjects(){
     PlanetParams defaults;
-    ModelTexture* material = new ModelTexture(
+    auto material = std::make_shared<ModelTexture>(
         defaults.color,
         defaults.pd,
         defaults.ps,
@@ -153,9 +146,9 @@ void Scene::constructObjects(){
         defaults.transparency
     );
 
-    ShaderProgram* shader = (defaults.ior > 1.0f) ? refractiveShader : defaultShader;
+    auto shader = (defaults.ior > 1.0f) ? mRefractiveShader : mDefaultShader;
 
-    planet = new Sphere(
+    mPlanet = std::make_shared<Sphere>(
         glm::vec3(defaults.x, defaults.y, defaults.z),
         defaults.radius,
         defaults.detail,
@@ -165,15 +158,15 @@ void Scene::constructObjects(){
         shader
     );
 
-    planet->setNeedsEnvMap(true);
-    addObject(planet);
+    mPlanet->setNeedsEnvMap(true);
+    addObject(mPlanet);
 }
 
 void Scene::constructDebugLights()
 {
-    std::cout << "[Scene] Initializing lights..." << std::endl;
+    std::cout << "[Scene] Initializing mLights..." << std::endl;
 
-    Light* sunLight = new Light(
+    auto sunLight = std::make_shared<Light>(
         glm::vec3(1.0f, -1.0f, -0.5f),
         glm::vec3(1.0f, 0.95f, 0.9f),
         1.0f,
@@ -204,19 +197,18 @@ void Scene::init(){
     std::cout << "[Scene] Initializing scene..." << std::endl;
 
     // Create the default shader
-    defaultShader = new ShaderProgram("shaders/planet.vert", "shaders/planet.frag");
-    refractiveShader = new ShaderProgram("shaders/template.vert", "shaders/refractive.frag");
+    mDefaultShader = std::make_shared<ShaderProgram>("shaders/mPlanet.vert", "shaders/mPlanet.frag");
+    mRefractiveShader = std::make_shared<ShaderProgram>("shaders/mPlanet.vert", "shaders/refractive.frag");
 
-    if (!defaultShader || defaultShader->getProgram() == 0)
-    {
+    if (!mDefaultShader || mDefaultShader->getProgram() == 0){
         std::cerr << "[Scene] ERROR: Failed to create default shader!" << std::endl;
         return;
     }
 
-    std::cout << "[Scene] Initializing skybox..." << std::endl;
+    std::cout << "[Scene] Initializing mSkybox..." << std::endl;
     int numSkybox = rand() % 5;
-    skybox = new Skybox("shaders/skybox.vert", "shaders/skybox.frag",
-                        "textures/skybox/" + std::to_string(numSkybox) + "/");
+    mSkybox = std::make_shared<Skybox>("shaders/mSkybox.vert", "shaders/mSkybox.frag",
+                        "textures/mSkybox/" + std::to_string(numSkybox) + "/");
     CHECK_GL_ERROR();
 
     constructObjects();
@@ -225,67 +217,25 @@ void Scene::init(){
     constructDebugLights();
     CHECK_GL_ERROR();
 
-    std::cout << "[Scene] Created " << objects.size() << " objects and "
-        << lights.size() << " lights" << std::endl;
+    std::cout << "[Scene] Created " << mObjects.size() << " mObjects and "
+        << mLights.size() << " mLights" << std::endl;
 }
 
-void Scene::cleanup()
-{
-    // Clean up objects and their associated geometry
-    for (Object* obj : objects)
-    {
-        if (obj)
-        {
-            // Delete the geometry
-            if (obj->getGeometry())
-            {
-                delete obj->getGeometry();
-            }
-            // Delete the texture
-            delete obj->getTexture();
-            delete obj;
-        }
-    }
-    objects.clear();
-
-    for (Light* light : lights)
-    {
-        delete light;
-    }
-    lights.clear();
-
-    if (defaultShader)
-    {
-        delete defaultShader;
-        defaultShader = nullptr;
-    }
-
-    if (skybox)
-    {
-        delete skybox;
-        skybox = nullptr;
-    }
-}
-
-void Scene::addObject(Object* obj)
-{
+void Scene::addObject(std::shared_ptr<Object> obj){
     if (obj)
-    {
-        objects.push_back(obj);
-    }
+        mObjects.push_back(obj);
+
 }
 
-void Scene::addLight(Light* light){
+void Scene::addLight(std::shared_ptr<Light> light){
     if (light)
-    {
-        lights.push_back(light);
-    }
+        mLights.push_back(light);
 }
 
 void Scene::update(float deltaTime){
     static float angle = 0.0f;
     angle += deltaTime * 0.5f;
 
-    for (Object* obj : objects)
+    for (auto obj : mObjects)
         obj->setRotationY(angle * 30.0f);
 }

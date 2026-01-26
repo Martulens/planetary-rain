@@ -14,22 +14,22 @@
 
 class Object {
 protected:
-    glm::vec3 position = glm::vec3(0.0f);    ///< Object world position.
-    glm::vec3 direction = glm::vec3(0.0f, 0.0f, -1.0f);  ///< Facing direction.
-    float rotationY = 0.0f;                   ///< Y-axis rotation.
-    glm::mat4 modelMatrix = glm::mat4(1.0f);  ///< Model transformation matrix.
+    glm::vec3 mPosition = glm::vec3(0.0f);
+    glm::vec3 mDirection = glm::vec3(0.0f, 0.0f, -1.0f);
+    float mRotationY = 0.0f;
+    glm::mat4 mModelMatrix = glm::mat4(1.0f);
 
-    float speed = 0.1f;           ///< Optional speed for movement.
-    float size = 1.0f;            ///< Optional size scalar.
+    float mSpeed = 0.1f;
+    float mSize = 1.0f;
 
-    float starTime = 0.0f;        ///< Custom timer start.
-    float currTime = 0.0f;        ///< Current time value.
+    float mStarTime = 0.0f;
+    float mCurrTime = 0.0f;
 
-    std::shared_ptr<ShaderProgram> shader = nullptr;   ///< Pointer to shader used for this object.
-    std::shared_ptr<MeshGeometry> geometry = nullptr;  ///< Pointer to mesh geometry.
-    std::shared_ptr<ModelTexture> texture = nullptr;   ///< Pointer to object's texture(s).
-    std::shared_ptr<EnvMap> envMap = nullptr;
-    bool needsEnvMap = false;
+    std::shared_ptr<ShaderProgram> mShader = nullptr;
+    std::shared_ptr<MeshGeometry> mGeometry = nullptr;
+    std::shared_ptr<ModelTexture> mTexture = nullptr;
+    std::shared_ptr<EnvMap> mEnvMap = nullptr;
+    bool mNeedsEnvMap = false;
 
 public:
     Object() = default;
@@ -45,31 +45,34 @@ public:
     void createEnvMap(int resolution = 128);
     void deleteEnvMap();
 
-    // === Setters
-    void setPosition(const glm::vec3& pos) { position = pos; updateModelMatrix(); }
-    void setRotationY(float rot) { rotationY = rot; updateModelMatrix(); }
-    void setSize(float s) { size = s; updateModelMatrix(); }
-    void setNeedsEnvMap(bool needs) { needsEnvMap = needs; }
+    // === SETTERS
+    void setPosition(const glm::vec3& pos) { mPosition = pos; updateModelMatrix(); }
+    void setRotationY(float rot) { mRotationY = rot; updateModelMatrix(); }
+    void setSize(float s) { mSize = s; updateModelMatrix(); }
+    void setNeedsEnvMap(bool needs) { mNeedsEnvMap = needs; }
 
-    // === Getters
-    std::shared_ptr<ShaderProgram> getShader() const { return shader; }
-    std::shared_ptr<MeshGeometry> getGeometry() const { return geometry; }
-    std::shared_ptr<ModelTexture> getTexture() const { return texture; }
-    std::shared_ptr<EnvMap> getEnvMap() const { return envMap; }
-    bool getNeedsEnvMap() const { return needsEnvMap; }
-    const glm::mat4& getModelMatrix() const { return modelMatrix; }
+    // === GETTERS
+    // -> model properties
+    const glm::mat4& getModelMatrix() const { return mModelMatrix; }
+    glm::vec3 getPosition() const { return mPosition; }
+    glm::vec3 getDirection() const { return mDirection; }
 
-    glm::vec3 getPosition() const { return position; }
-    glm::vec3 getDirection() const { return direction; }
+    std::shared_ptr<ShaderProgram> getShader() const { return mShader; }
+    std::shared_ptr<MeshGeometry> getGeometry() const { return mGeometry; }
+    std::shared_ptr<ModelTexture> getTexture() const { return mTexture; }
+    std::shared_ptr<EnvMap> getEnvMap() const { return mEnvMap; }
+    bool getNeedsEnvMap() const { return mNeedsEnvMap; }
 
-    float getRotationY() const { return rotationY; }
-    float getSpeed() const { return speed; }
-    float getSize() const { return size; }
-
-    float getStarTime() const { return starTime; }
-    float getCurrTime() const { return currTime; }
-
+    // -> terrain
     virtual bool getUsingTerrain() const { return false; };
+
+    // -> interaction
+    float getRotationY() const { return mRotationY; }
+    float getSpeed() const { return mSpeed; }
+    float getSize() const { return mSize; }
+
+    float getStarTime() const { return mStarTime; }
+    float getCurrTime() const { return mCurrTime; }
 };
 
 #endif // OBJECT_H

@@ -37,8 +37,40 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7e67c233-aa83-4b0c-8b19-93b0c02930ad" name="Changes" comment="Reworked layuot noise, began to rework the app architecture">
-      <change beforePath="$PROJECT_DIR$/context.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/context.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CMakeLists.txt" beforeDir="false" afterPath="$PROJECT_DIR$/CMakeLists.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/callbacks.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/callbacks.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/callbacks.h" beforeDir="false" afterPath="$PROJECT_DIR$/callbacks.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/camera.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera.h" beforeDir="false" afterPath="$PROJECT_DIR$/camera.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.h" beforeDir="false" afterPath="$PROJECT_DIR$/config.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draw.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/draw.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draw.h" beforeDir="false" afterPath="$PROJECT_DIR$/draw.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/envMap.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/envMap.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/envMap.h" beforeDir="false" afterPath="$PROJECT_DIR$/envMap.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.h" beforeDir="false" afterPath="$PROJECT_DIR$/game.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/light.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/light.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/light.h" beforeDir="false" afterPath="$PROJECT_DIR$/light.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/meshGeometry.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/meshGeometry.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/meshGeometry.h" beforeDir="false" afterPath="$PROJECT_DIR$/meshGeometry.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modelTexture.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/modelTexture.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modelTexture.h" beforeDir="false" afterPath="$PROJECT_DIR$/modelTexture.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noise.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/noise.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/noise.h" beforeDir="false" afterPath="$PROJECT_DIR$/noise.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/object.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/object.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/object.h" beforeDir="false" afterPath="$PROJECT_DIR$/object.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scene.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/scene.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scene.h" beforeDir="false" afterPath="$PROJECT_DIR$/scene.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shaderProgram.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/shaderProgram.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shaderProgram.h" beforeDir="false" afterPath="$PROJECT_DIR$/shaderProgram.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/skybox.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/skybox.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/skybox.h" beforeDir="false" afterPath="$PROJECT_DIR$/skybox.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sphere.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sphere.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sphere.h" beforeDir="false" afterPath="$PROJECT_DIR$/sphere.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/ui.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ui.h" beforeDir="false" afterPath="$PROJECT_DIR$/ui.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,7 +95,11 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///home/martul3ns/projects/planetary-rain/src/callbacks.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/martul3ns/projects/planetary-rain/src/debug.h" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///home/martul3ns/projects/planetary-rain/src/draw.cpp" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="ProjectApplicationVersion">
     <option name="ide" value="CLion" />
@@ -111,6 +147,11 @@
     </key>
   </component>
   <component name="RunManager" selected="CMake Application.main.cpp">
+    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+      <method v="2">
+        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Unnamed" type="CMakeRunConfiguration" factoryName="Application" nameIsGenerated="true" REDIRECT_INPUT="true" REDIRECT_INPUT_PATH="$PROJECT_DIR$/CMakeLists.txt" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -171,7 +212,7 @@
       <workItem from="1769112693785" duration="3524000" />
       <workItem from="1769268385931" duration="4002000" />
       <workItem from="1769420719296" duration="6761000" />
-      <workItem from="1769429521615" duration="4411000" />
+      <workItem from="1769429521615" duration="10755000" />
     </task>
     <task id="LOCAL-00001" summary="Reworked layuot noise, began to rework the app architecture">
       <option name="closed" value="true" />
@@ -201,24 +242,28 @@
       <breakpoints>
         <line-breakpoint enabled="true" suspend="NONE" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/scene.cpp</url>
-          <line>191</line>
+          <line>184</line>
           <log-expression expression="    addLight(pointLight1);&#10;&#10;    Light* fillLight = new Light(&#10;        glm::vec3(-5.0f, 2.0f, 2.0f),&#10;        glm::vec3(0.6f, 0.7f, 1.0f),&#10;        0.5f,&#10;        true&#10;    );&#10;    addLight(fillLight);" language="C++" />
           <option name="timeStamp" value="6" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/camera.cpp</url>
-          <line>26</line>
+          <line>28</line>
           <option name="timeStamp" value="7" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/camera.cpp</url>
-          <line>21</line>
+          <line>23</line>
           <option name="timeStamp" value="9" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
           <url>file://$PROJECT_DIR$/camera.cpp</url>
-          <line>7</line>
+          <line>9</line>
           <option name="timeStamp" value="10" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/callbacks.cpp</url>
+          <option name="timeStamp" value="14" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

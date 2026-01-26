@@ -139,7 +139,6 @@ set(SOURCES
         camera.cpp
         draw.cpp
         debug.cpp
-        context.cpp
         object.cpp
         shaderProgram.cpp
         meshGeometry.cpp
@@ -168,12 +167,12 @@ set(HEADERS
         meshGeometry.h
         modelTexture.h
         sphere.h
-        context.h
         utilities.h
         skybox.h
         envMap.h
         ui.h
         noise.h
+        variables.h
 )
 
 set(SHADERS

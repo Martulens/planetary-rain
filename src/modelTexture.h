@@ -9,21 +9,21 @@
 
 class ModelTexture {
 private:
-    GLuint textureID = 0;
-    glm::vec3 color = glm::vec3(1.0f);
+    GLuint mTextureID = 0;
+    glm::vec3 mColor = glm::vec3(1.0f);
 
-    int width = 0;
-    int height = 0;
+    int mWidth = 0;
+    int mHeight = 0;
 
-    float pd = 1.0f;
-    float ps = 1.0f;
-    float ns = 1.0f;
+    float mPd = 1.0f;
+    float mPs = 1.0f;
+    float mNs = 1.0f;
 
-    float reflectivity = 0.0f;
+    float mReflectivity = 0.0f;
 
-    float ior = -1.0f;
-    bool refractive = false;
-    float transparency = 0.0f;
+    float mIor = -1.0f;
+    bool mRefractive = false;
+    float mTransparency = 0.0f;
 
 public:
     ModelTexture() = default;
@@ -33,16 +33,17 @@ public:
         float reflectivity, float ior, float transparency);
 
     // === GETTERS
-    glm::vec3 getColor() const{ return color; }
-    GLuint getTextureID() const { return textureID; }
+    glm::vec3 getColor() const{ return mColor; }
+    GLuint getTextureID() const { return mTextureID; }
 
-    float getPd() const{ return pd; }
-    float getPs() const{ return ps; }
-    float getNs() const{ return ns; }
-    float getReflectivity() const{ return reflectivity; }
-    bool isRefractive() const{ return refractive; }
-    float getIOR() const{ return ior; }
-    float getTransparency() const{ return transparency; }
+    // -> light model
+    float getPd() const{ return mPd; }
+    float getPs() const{ return mPs; }
+    float getNs() const{ return mNs; }
+    float getReflectivity() const{ return mReflectivity; }
+    bool isRefractive() const{ return mRefractive; }
+    float getIOR() const{ return mIor; }
+    float getTransparency() const{ return mTransparency; }
 
 };
 

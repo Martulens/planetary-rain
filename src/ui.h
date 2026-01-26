@@ -7,8 +7,7 @@
 #include "glm/vec3.hpp"
 #include "noise.h"
 
-class PlanetParams {
-public:
+struct PlanetParams {
     float x = 100.0f;
     float y = 0.0f;
     float z = 20.0f;
@@ -42,14 +41,19 @@ public:
     }
 };
 
-void initUI();
-void renderUI(PlanetParams& params, bool& paramsChanged);
-void shutdownUI();
+class UI{
+private:
+    PlanetParams mPlanetParams;
+    bool mParamsChanged = false;
+public:
+    UI();
+    ~UI();
 
-// GLUT callback wrappers for ImGui
-void uiKeyboardCallback(unsigned char key, int x, int y);
-void uiMouseCallback(int button, int state, int x, int y);
-void uiMotionCallback(int x, int y);
-void uiReshapeCallback(int w, int h);
+    void renderUI();
 
+    // === GETTERS
+    PlanetParams getPlanetParams() const { return mPlanetParams; };
+    bool getParamsChanged() const { return mParamsChanged; };
+
+};
 #endif

@@ -4,6 +4,9 @@
 
 #include "glm/vec3.hpp"
 
+// TODO:
+// Move all into vertex shader
+
 // sources:
 //  -> https://www.cs.cmu.edu/~112-s23/notes/student-tp-guides/Terrain.pdf
 //  -> https://adrianb.io/2014/08/09/perlinnoise.html
@@ -13,7 +16,8 @@
 class NoiseSettings{
 private:
 public:
-    // remake
+
+    // TODO remake
     bool shown = true;
     int octaves = 2;
     float frequency = 1;
@@ -40,11 +44,11 @@ public:
 
 class Noise {
 private:
-    std::vector<NoiseSettings> settings;
+    std::vector<NoiseSettings> mSettings;
 
 public:
     Noise() = default;
-    Noise(const std::vector<NoiseSettings>& set): settings(set) {};
+    Noise(const std::vector<NoiseSettings>& set): mSettings(set) {};
 
     float perlin(const glm::vec3& in);
     float computeNoise(const glm::vec3& in, int i );

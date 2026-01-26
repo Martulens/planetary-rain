@@ -10,8 +10,8 @@
 #include "callbacks.h"
 #include "game.h"
 #include "camera.h"
-#include "context.h"
 #include "ui.h"
+#include "variables.h"
 
 int lastMouseX = 0;
 int lastMouseY = 0;
@@ -19,20 +19,19 @@ int lastMouseY = 0;
 // === APP SETUP
 void initApp() {
     srand((unsigned int)time(NULL));
-    glClearColor(0.5f, 0.4f, 0.8f, 1.0f);
+    glClearColor(SKY_COLOR.r, SKY_COLOR.g, SKY_COLOR.b, SKY_COLOR.w);
     glEnable(GL_DEPTH_TEST);
 
-    initUI();
-    game.restartGame();
+    var::getUI()->renderUI();
+    var::getGame()->restartGame();
 }
 
+// === APP END
 void finalizeApp() {
-    shutdownUI();
 }
 
 int main(int argc, char** argv){
-    Game game = Game();
-
+    var::init();
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -59,7 +58,7 @@ int main(int argc, char** argv){
     if (!framework::initialize(framework::OGL_VER_MAJOR, framework::OGL_VER_MINOR))
         framework::dieWithError("pgr init failed, required OpenGL not supported?");
 
-    initApp(game);
+    initApp();
 
     glutCloseFunc(finalizeApp);
 

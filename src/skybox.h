@@ -1,6 +1,8 @@
 #ifndef SKYBOX_H
 #define SKYBOX_H
 
+#include <memory>
+
 #include "framework.h"
 #include "shaderProgram.h"
 #include "modelTexture.h"
@@ -10,10 +12,10 @@
 
 class Skybox {
 private:
-    GLuint vao = 0;
-    GLuint vbo = 0;
-    GLuint cubemapTexture = 0;
-    ShaderProgram* shader = nullptr;
+    GLuint mVao = 0;
+    GLuint mVbo = 0;
+    GLuint mCubemapTexture = 0;
+    std::shared_ptr<ShaderProgram> shader = nullptr;
 
     GLint viewMatrixLocation = -1;
     GLint projectionMatrixLocation = -1;
@@ -32,9 +34,9 @@ public:
     void draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix);
     void cleanup();
 
-    // Getters
-    GLuint getCubemapTexture() const { return cubemapTexture; }
-    ShaderProgram* getShader() const { return shader; }
+    // === GETTERS
+    GLuint getCubemapTexture() const { return mCubemapTexture; }
+    std::shared_ptr<ShaderProgram> getShader() const { return shader; }
 };
 
 #endif // SKYBOX_H

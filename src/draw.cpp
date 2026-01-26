@@ -4,7 +4,6 @@
 
 #include "framework.h"
 #include "gamestate.h"
-#include "context.h"
 #include "camera.h"
 #include "light.h"
 #include "object.h"
@@ -18,8 +17,10 @@ void Draw::setupUniforms(std::shared_ptr<Object> object, std::shared_ptr<Camera>
     std::shared_ptr<ShaderProgram> shader = object->getShader();
     GLint programLocation = shader->getProgram();
 
-    glUniformMatrix4fv(shader->getProjectionMatrixLocation(), 1, GL_FALSE, &cam->getProjectionMatrix()[0][0]);
-    glUniformMatrix4fv(shader->getViewMatrixLocation(), 1, GL_FALSE, &cam->getViewMatrix()[0][0]);
+    glUniformMatrix4fv( shader->getProjectionMatrixLocation(),
+                        1, GL_FALSE, &cam->getProjectionMatrix()[0][0]);
+    glUniformMatrix4fv( shader->getViewMatrixLocation(),
+                        1, GL_FALSE, &cam->getViewMatrix()[0][0]);
 
     glUniform1f(shader->getDensityLocation(), FOG_DENSITY);
     glUniform1f(shader->getGradientLocation(), FOG_GRADIENT);
@@ -48,9 +49,11 @@ void Draw::setupUniforms(std::shared_ptr<Object> object, std::shared_ptr<Camera>
     }
 
     glm::vec3 baseCol = texture->getColor();
-    glUniform3f(shader->getBaseColorLocation(), baseCol.r, baseCol.g, baseCol.b);
+    glUniform3f(shader->getBaseColorLocation(),
+                baseCol.r, baseCol.g, baseCol.b);
 
-    glUniform3f(shader->getSkyColorLocation(), skyColorConst.r, skyColorConst.g, skyColorConst.b);
+    glUniform3f(shader->getSkyColorLocation(),
+                skyColorConst.r, skyColorConst.g, skyColorConst.b);
     CHECK_GL_ERROR();
 
     // === LIGHTS SETUP
@@ -125,13 +128,15 @@ void Draw::setupTextures(std::shared_ptr<Object> obj, std::shared_ptr<Scene> sce
     CHECK_GL_ERROR();
 }
 
-void Draw::drawTemplate(std::shared_ptr<Object> obj){
-    std::shared_ptr<ShaderProgram> shader = obj->getShader();
-    glUseProgram(shader->getProgram());
-    glUniformMatrix4fv(shader->getModelMatrixLocation(), 1, GL_FALSE, &obj->getModelMatrix()[0][0]);
+void Draw::drawTemplate(std::shared_ptr<Object> obj, std::shared_ptr<Camera> camera, std::shared_ptr<Scene> scene){
+    auto shader = obj->getShader();
 
-    setupUniforms(obj);
-    setupTextures(obj);
+    glUseProgram(shader->getProgram());
+    glUniformMatrix4fv( shader->getModelMatrixLocation(),
+                        1, GL_FALSE, &obj->getModelMatrix()[0][0]);
+
+    setupUniforms(obj, camera, scene);
+    setupTextures(obj, scene);
 
     if (obj->getGeometry()->getVAO() != 0){
         if (obj->getTexture()->isRefractive()){
@@ -158,9 +163,9 @@ void Draw::drawScene(std::shared_ptr<Scene> scene, std::shared_ptr<Camera> camer
         const std::vector<std::shared_ptr<Object>> objects = scene->getObjects();
         const std::vector<std::shared_ptr<Light>> lights = scene->getLights();
 
-        for (auto obj& : objects){
+        for (auto obj : objects){
             if (obj && obj->getGeometry() && obj->getShader()){
-                drawTemplate(obj);
+                drawTemplate(obj, camera, scene);
                 CHECK_GL_ERROR();
             }
         }
@@ -177,8 +182,10 @@ void Draw::drawWindow(std::shared_ptr<Scene> scene, std::shared_ptr<Camera> came
     static float lastTime = 0.0f;
     float currentTime = glutGet(GLUT_ELAPSED_TIME) * 0.001f;
     float deltaTime = currentTime - lastTime;
+
     lastTime = currentTime;
-    if (deltaTime > 0.1f) deltaTime = 0.016f;
+    if (deltaTime > 0.1f)
+        deltaTime = 0.016f;
 
     // Update scene
     if(!camera)
@@ -191,7 +198,8 @@ void Draw::drawWindow(std::shared_ptr<Scene> scene, std::shared_ptr<Camera> came
 
     int w = glutGet(GLUT_WINDOW_WIDTH);
     int h = glutGet(GLUT_WINDOW_HEIGHT);
-    if (h == 0) h = 1;
+    if (h == 0)
+        h = 1;
 
     glViewport(0, 0, w, h);
     glClearColor(skyColorConst.r, skyColorConst.g, skyColorConst.b, 1.0f);
@@ -219,5 +227,5 @@ void Draw::drawWindow(std::shared_ptr<Scene> scene, std::shared_ptr<Camera> came
     if (scene)
         scene->update(deltaTime);
 
-    drawScene();
+    drawScene(scene, camera, gameState);
 }

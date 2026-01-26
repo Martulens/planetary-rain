@@ -13,16 +13,15 @@
 #include <GL/freeglut_std.h>
 
 #include "camera.h"
-#include "context.h"
 #include "gamestate.h"
 #include "ui.h"
+#include "variables.h"
 
-static PlanetParams g_planetParams;
-static bool g_paramsChanged = false;
-
-void Callbacks keyboardCallback(unsigned char keyPressed, int mouseX, int mouseY) {
+void keyboardCallback(unsigned char keyPressed, int mouseX, int mouseY) {
+    auto gameState = var::game->getGameState();
+    
     // Forward to ImGui first if in UI mode
-    if (con::gameState->uiMode) {
+    if (gameState->uiMode) {
         uiKeyboardCallback(keyPressed, mouseX, mouseY);
     }
 
@@ -31,81 +30,87 @@ void Callbacks keyboardCallback(unsigned char keyPressed, int mouseX, int mouseY
         glutLeaveMainLoop();
         break;
     case 'r':
-        restartGame();
+        var::game->restartGame();
         break;
     case '\t':
-        con::gameState->uiMode = !con::gameState->uiMode;
-        if (con::gameState->uiMode) {
+        gameState->uiMode = !gameState->uiMode;
+        if (gameState->uiMode) {
             glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
         } else {
             glutSetCursor(GLUT_CURSOR_NONE);
             // Re-center mouse when returning to FPS mode
-            int centerX = con::gameState->windowWidth / 2;
-            int centerY = con::gameState->windowHeight / 2;
+            int centerX = gameState->windowWidth / 2;
+            int centerY = gameState->windowHeight / 2;
             glutWarpPointer(centerX, centerY);
         }
         break;
 
     case 'w':
     case 'W':
-        if (!con::gameState->uiMode) con::gameState->keyW = true;
+        if (!gameState->uiMode) gameState->keyW = true;
         break;
     case 's':
     case 'S':
-        if (!con::gameState->uiMode) con::gameState->keyS = true;
+        if (!gameState->uiMode) gameState->keyS = true;
         break;
     case 'a':
     case 'A':
-        if (!con::gameState->uiMode) con::gameState->keyA = true;
+        if (!gameState->uiMode) gameState->keyA = true;
         break;
     case 'd':
     case 'D':
-        if (!con::gameState->uiMode) con::gameState->keyD = true;
+        if (!gameState->uiMode) gameState->keyD = true;
         break;
     case ' ':
-        if (!con::gameState->uiMode) con::gameState->keySpace = true;
+        if (!gameState->uiMode) gameState->keySpace = true;
         break;
     case 'f':
     case 'F':
-        con::gameState->wireframeMode = !con::gameState->wireframeMode;
+        gameState->wireframeMode = !gameState->wireframeMode;
         break;
     }
 }
 
 void keyboardUpCallback(unsigned char keyReleased, int mouseX, int mouseY){
-    switch (keyReleased)
-    {
+    auto gameState = var::game->getGameState();
+
+    switch (keyReleased){
     case 'w':
     case 'W':
-        con::gameState->keyW = false;
+        gameState->keyW = false;
         break;
     case 's':
     case 'S':
-        con::gameState->keyS = false;
+        gameState->keyS = false;
         break;
     case 'a':
     case 'A':
-        con::gameState->keyA = false;
+        gameState->keyA = false;
         break;
     case 'd':
     case 'D':
-        con::gameState->keyD = false;
+        gameState->keyD = false;
         break;
     case ' ':
-        con::gameState->keySpace = false;
+        gameState->keySpace = false;
         break;
     }
 }
 
 void onMouseClick(int button, int state, int x, int y) {
-    if (con::gameState->uiMode) {
+    auto gameState = var::game->getGameState();
+
+    if (gameState->uiMode) {
         uiMouseCallback(button, state, x, y);
     }
 }
 
 void onMouseMove(int x, int y) {
+    auto gameState = var::game->getGameState();
+    auto camera = var::game->getCamera();
+    
     // UI mode: forward to ImGui, no camera movement
-    if (con::gameState->uiMode) {
+    if (gameState->uiMode) {
         uiMotionCallback(x, y);
         return;
     }
@@ -117,66 +122,78 @@ void onMouseMove(int x, int y) {
         return;
     }
 
-    int centerX = con::gameState->windowWidth / 2;
-    int centerY = con::gameState->windowHeight / 2;
+    int centerX = gameState->windowWidth / 2;
+    int centerY = gameState->windowHeight / 2;
 
     int dx = x - centerX;
     int dy = centerY - y;
 
     if (dx == 0 && dy == 0) return;
 
-    con::camera->viewAngle -= dx * PLAYER_MOUSE_SENSITIVITY;
-    con::camera->pitch += dy * PLAYER_MOUSE_SENSITIVITY;
-    con::camera->pitch = glm::clamp(con::camera->pitch, -89.0f, 89.0f);
+   camera->viewAngle -= dx * PLAYER_MOUSE_SENSITIVITY;
+   camera->pitch += dy * PLAYER_MOUSE_SENSITIVITY;
+   camera->pitch = glm::clamp(camera->pitch, -PITCH_VAL, PITCH_VAL);
 
-    con::camera->update(-1, -1);
+   camera->update(-1, -1);
 
     warping = true;
     glutWarpPointer(centerX, centerY);
 }
 
 void onReshape(int w, int h) {
+    auto gameState = var::game->getGameState();
+    auto camera = var::game->getCamera();
+
     glViewport(0, 0, (GLsizei)w, (GLsizei)h);
-    con::gameState->windowWidth = w;
-    con::gameState->windowHeight = h;
-    con::camera->update(w, h);
+    gameState->windowWidth = w;
+    gameState->windowHeight = h;
+    camera->update(w, h);
     uiReshapeCallback(w, h);
 }
 
 void onMouseScroll(int button, int dir, int x, int y) {
-    con::camera->zoom(dir * 2.0f);
+    auto camera = var::game->getCamera();
+
+    camera->zoom(dir * 2.0f);
 }
 
 void updateMovement() {
-    if (con::gameState->keyW)
-        con::camera->moveForward(MOVE_SPEED);
-    if (con::gameState->keyS)
-        con::camera->moveForward(-MOVE_SPEED);
-    if (con::gameState->keyA)
-        con::camera->moveRight(-MOVE_SPEED);
-    if (con::gameState->keyD)
-        con::camera->moveRight(MOVE_SPEED);
-    if (con::gameState->keySpace)
-        con::camera->moveUp(MOVE_SPEED);
+    auto gameState = var::game->getGameState();
+    auto camera = var::game->getCamera();
 
-    if(!con::gameState->uiMode)
-        con::camera->update(-1, -1);
+    if (gameState->keyW)
+       camera->moveForward(MOVE_SPEED);
+    if (gameState->keyS)
+       camera->moveForward(-MOVE_SPEED);
+    if (gameState->keyA)
+       camera->moveRight(-MOVE_SPEED);
+    if (gameState->keyD)
+       camera->moveRight(MOVE_SPEED);
+    if (gameState->keySpace)
+       camera->moveUp(MOVE_SPEED);
+
+    if(!gameState->uiMode)
+       camera->update(-1, -1);
 }
 
 void onSpecialKeyPress(int key, int x, int y){
+    auto gameState = var::game->getGameState();
+
     switch (key) {
     case GLUT_KEY_SHIFT_L:
     case GLUT_KEY_SHIFT_R:
-        con::gameState->keyShift = true;
+        gameState->keyShift = true;
         break;
     }
 }
 
 void onSpecialKeyRelease(int key, int x, int y){
+    auto gameState = var::game->getGameState();
+
     switch (key) {
     case GLUT_KEY_SHIFT_L:
     case GLUT_KEY_SHIFT_R:
-        con::gameState->keyShift = false;
+        gameState->keyShift = false;
         break;
     }
 }
@@ -192,15 +209,34 @@ void onDisplay(){
     updateMovement();
 
     CHECK_GL_ERROR();
-    drawWindow();
+    auto camera = var::game->getCamera();
+    auto scene = var::game->getScene();
+    auto gameState = var::game->getGameState();
 
-    renderUI(g_planetParams, g_paramsChanged);
+    var::game->getDraw()->drawWindow(scene, camera, gameState);
+    var::ui->renderUI();
 
-    if (g_paramsChanged && con::scene)
-        con::scene->updatePlanet(g_planetParams);
+    if (var::ui->getParamsChanged() && scene)
+        scene->updatePlanet(var::ui->getPlanetParams());
 
     CHECK_GL_ERROR();
     glutSwapBuffers();
 
     FPS();
+}
+
+void uiKeyboardCallback(unsigned char key, int x, int y){
+    ImGui_ImplGLUT_KeyboardFunc(key, x, y);
+}
+
+void uiMouseCallback(int button, int state, int x, int y){
+    ImGui_ImplGLUT_MouseFunc(button, state, x, y);
+}
+
+void uiMotionCallback(int x, int y){
+    ImGui_ImplGLUT_MotionFunc(x, y);
+}
+
+void uiReshapeCallback(int w, int h){
+    ImGui_ImplGLUT_ReshapeFunc(w, h);
 }

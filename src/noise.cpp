@@ -44,11 +44,11 @@ float NoiseSettings::computeNoise(const glm::vec3& in){
 
 float Noise::computeAll(const glm::vec3& in){
     float out = 0.0f;
-    size_t size = settings.size();
+    size_t size = mSettings.size();
 
     for (size_t i = 0; i < size; i++){
-        if(settings[i].shown)
-            out += settings[i].computeNoise(in);
+        if(mSettings[i].shown)
+            out += mSettings[i].computeNoise(in);
     }
 
     return out;
