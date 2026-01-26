@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef SCENE_H
 #define SCENE_H
 
@@ -14,15 +16,14 @@
 
 class Scene {
 private:
-// \todo Review use smart pointers if possible. They ensure cleanup on exceptions and other out of scope exits
-    std::vector<Object*> objects;
-    std::vector<Light*> lights;
-    
+    std::vector<std::shared_ptr<Object>> mObjects;
+    std::vector<std::shared_ptr<Light>> mLights;
+    std::shared_ptr<Sphere> mPlanet;
+
     // Shared resources
-    ShaderProgram* defaultShader = nullptr;
-    ShaderProgram* refractiveShader = nullptr;
-    Skybox* skybox = nullptr;
-    Sphere* planet = nullptr;
+    std::shared_ptr<ShaderProgram> mDefaultShader = nullptr;
+    std::shared_ptr<ShaderProgram> mRefractiveShader = nullptr;
+    std::shared_ptr<Skybox> mSkybox = nullptr;
 
 public:
     Scene() = default;
@@ -31,25 +32,29 @@ public:
     void init();
     void cleanup();
 
-    void renderEnvironmentMaps(Camera* camera);
-    void renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& projection, Object* excludeObject);
+    // === Render surroundings
+    void renderEnvironmentMaps(std::shared_ptr<Camera> camera);
+    void renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& projection, std::shared_ptr<Object> excludeObject);
 
+    // === Contructing scene
     void constructLights();
     void constructDebugLights();
     void constructObjects();
     void constructDebugObjects();
 
-    void addObject(Object* obj);
-    void addLight(Light* light);
-
+    // === Update cycle
     void update(float deltaTime);
     void updatePlanet(const PlanetParams& params);
 
+    // === Addition functions
+    void addObject(std::shared_ptr<Object> obj);
+    void addLight(std::shared_ptr<Light> light);
+
     // === GETTERS
-    const std::vector<Object*>& getObjects() const { return objects; }
-    const std::vector<Light*>& getLights() const { return lights; }
-    ShaderProgram* getDefaultShader() const { return defaultShader; }
-    Skybox* getSkybox() const { return skybox; }
+    std::vector<std::shared_ptr<Object>> getObjects() const { return mObjects; }
+    std::vector<std::shared_ptr<Light>> getLights() const { return mLights; }
+    std::shared_ptr<ShaderProgram> getDefaultShader() const { return mDefaultShader; }
+    std::shared_ptr<Skybox> getSkybox() const { return mSkybox; }
 };
 
 #endif // SCENE_H

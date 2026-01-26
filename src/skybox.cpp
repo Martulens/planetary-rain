@@ -17,7 +17,7 @@ Skybox::Skybox(const std::string& vertShader, const std::string& fragShader,
         texturePrefix + "back.png"
     };
 
-    shader = new ShaderProgram(vertShader, fragShader);
+    shader = std::make_shared<ShaderProgram>(vertShader, fragShader);
 
     if (!shader || shader->getProgram() == 0) {
         std::cerr << "[Skybox] Failed to create shader program!" << std::endl;
@@ -72,11 +72,11 @@ Skybox::Skybox(const std::string& vertShader, const std::string& fragShader,
          1.0f, -1.0f,  1.0f
     };
 
-    glGenVertexArrays(1, &vao);
-    glGenBuffers(1, &vbo);
+    glGenVertexArrays(1, &mVao);
+    glGenBuffers(1, &mVbo);
 
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBindVertexArray(mVao);
+    glBindBuffer(GL_ARRAY_BUFFER, mVbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), skyboxVertices, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
@@ -102,8 +102,8 @@ bool Skybox::loadCubemap(const std::vector<std::string>& facesPaths){
         return false;
     }
 
-    glGenTextures(1, &cubemapTexture);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+    glGenTextures(1, &mCubemapTexture);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, mCubemapTexture);
 
     // Don't flip skybox images (they're usually authored correctly)
     stbi_set_flip_vertically_on_load(false);
@@ -152,7 +152,7 @@ bool Skybox::loadCubemap(const std::vector<std::string>& facesPaths){
 }
 
 void Skybox::draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix) {
-    if (!shader || vao == 0 || cubemapTexture == 0) {
+    if (!shader || mVao == 0 || mCubemapTexture == 0) {
         return;
     }
 
@@ -171,10 +171,10 @@ void Skybox::draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix
     glUniformMatrix4fv(projectionMatrixLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
     glActiveTexture(GL_TEXTURE0);
-    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, mCubemapTexture);
     glUniform1i(skyboxSamplerLocation, 0);
 
-    glBindVertexArray(vao);
+    glBindVertexArray(mVao);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
 
@@ -185,23 +185,22 @@ void Skybox::draw(const glm::mat4& viewMatrix, const glm::mat4& projectionMatrix
 }
 
 void Skybox::cleanup(){
-    if (vao != 0){
-        glDeleteVertexArrays(1, &vao);
-        vao = 0;
+    if (mVao != 0){
+        glDeleteVertexArrays(1, &mVao);
+        mVao = 0;
     }
 
-    if (vbo != 0){
-        glDeleteBuffers(1, &vbo);
-        vbo = 0;
+    if (mVbo != 0){
+        glDeleteBuffers(1, &mVbo);
+        mVbo = 0;
     }
 
-    if (cubemapTexture != 0){
-        glDeleteTextures(1, &cubemapTexture);
-        cubemapTexture = 0;
+    if (mCubemapTexture != 0){
+        glDeleteTextures(1, &mCubemapTexture);
+        mCubemapTexture = 0;
     }
 
     if (shader != nullptr){
-        delete shader;
         shader = nullptr;
     }
 }

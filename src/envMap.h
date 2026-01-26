@@ -1,18 +1,22 @@
+#pragma once
+
 #ifndef EnvMap_H
 #define EnvMap_H
 
 #include "framework.h"
 #include <glm/glm.hpp>
 
+#include "config.h"
+
 class EnvMap {
 private:
-    GLuint framebuffer = 0;
-    GLuint cubemap = 0;
-    GLuint depthRenderbuffer = 0;
-    int resolution = 256;
+    GLuint mFramebuffer = 0;
+    GLuint mCubemap = 0;
+    GLuint mDepthRenderBuffer = 0;
+    int mResolution = ENV_MAP_RESOLUTION;
 
-    glm::mat4 captureProjection;
-    glm::mat4 captureViews[6];
+    glm::mat4 mCaptureProjection;
+    glm::mat4 mCaptureViews[6];
 
 public:
     EnvMap() = default;
@@ -27,12 +31,12 @@ public:
 
     void updateViewMatrices(const glm::vec3& position);
 
-    // Getters
-    GLuint getCubemap() const { return cubemap; }
-    GLuint getFramebuffer() const { return framebuffer; }
-    int getResolution() const { return resolution; }
-    glm::mat4 getProjection() const { return captureProjection; }
-    glm::mat4 getViewMatrix(int face) const { return captureViews[face]; }
+    // === GETTERS
+    GLuint getCubemap() const { return mCubemap; }
+    GLuint getFramebuffer() const { return mFramebuffer; }
+    int getResolution() const { return mResolution; }
+    glm::mat4 getProjection() const { return mCaptureProjection; }
+    glm::mat4 getViewMatrix(int face) const { return mCaptureViews[face]; }
 };
 
 #endif // EnvMap_H

@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef GAMESTATE_H
 #define GAMESTATE_H
 
@@ -23,7 +25,7 @@ struct GameState {
 
     // Rendering options
     bool wireframeMode = false;
-    bool uiMode = false;
+    bool uiMode = true;
 
     GameState(int w, int h) {
         windowHeight = h;

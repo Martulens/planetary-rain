@@ -1,13 +1,31 @@
-// \todo REVIEW all headers should start with #pragma once, this ensures that headers wont be included
-//  twice often caused by linking. It would result in double definition of functions
+#pragma once
+
 #ifndef GAME_H
 #define GAME_H
+#include "callbacks.h"
+#include "draw.h"
+#include "scene.h"
 
 // main game logic
+class Game{
+private:
+    std::shared_ptr<Draw> mDraw;
 
-// \todo REVIEW this should be wrapped in a class. Approach the programming with more objective programing mindset
-void restartGame();
+    std::shared_ptr<Camera> mCamera = nullptr;
+    std::shared_ptr<GameState> mGameState = nullptr;
+    std::shared_ptr<Scene> mScene = nullptr;
 
-void cleanUpObjects();
+public:
+    Game();
 
+    void restartGame();
+    void cleanUpObjects();
+
+    // === GETTERS
+    std::shared_ptr<Camera> getCamera() const{ return mCamera;}
+    std::shared_ptr<GameState> getGameState() const { return mGameState;}
+    std::shared_ptr<Scene> getScene() const { return mScene;}
+
+    std::shared_ptr<Draw> getDraw() const { return mDraw;}
+};
 #endif

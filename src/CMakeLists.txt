@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.22)
+cmake_minimum_required(VERSION 3.16)
 project(main.cpp LANGUAGES CXX C)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-#add_compile_options(-Wall -Wextra -Wpedantic -Werror)
+
 # Policy for FetchContent
 if (POLICY CMP0135)
     cmake_policy(SET CMP0135 NEW)
@@ -50,15 +50,13 @@ endif ()
 message(STATUS "GLEW fetched")
 
 # --- FreeGLUT ---
-#if (UNIX AND NOT APPLE)
-    # On Linux, use system-installed freeglut (more reliable)
-    #find_package(GLUT REQUIRED)
-    #set(FREEGLUT_LIBRARIES ${GLUT_LIBRARIES})
-    #set(FREEGLUT_INCLUDE_DIRS ${GLUT_INCLUDE_DIR})
-    #set(USE_SYSTEM_GLUT TRUE)
-    #message(STATUS "Using system FreeGLUT")
-#else ()
-    # On Windows, fetch FreeGLUT
+if (UNIX AND NOT APPLE)
+    find_package(GLUT REQUIRED)
+    set(FREEGLUT_LIBRARIES ${GLUT_LIBRARIES})
+    set(FREEGLUT_INCLUDE_DIRS ${GLUT_INCLUDE_DIR})
+    set(USE_SYSTEM_GLUT TRUE)
+    message(STATUS "Using system FreeGLUT")
+else ()
     set(FREEGLUT_BUILD_DEMOS OFF CACHE BOOL "" FORCE)
     set(FREEGLUT_BUILD_STATIC_LIBS ON CACHE BOOL "" FORCE)
     set(FREEGLUT_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
@@ -73,7 +71,7 @@ message(STATUS "GLEW fetched")
     FetchContent_MakeAvailable(freeglut)
     set(USE_SYSTEM_GLUT FALSE)
     message(STATUS "FreeGLUT fetched")
-#endif ()
+endif ()
 
 # --- Assimp ---
 set(ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
@@ -141,7 +139,6 @@ set(SOURCES
         camera.cpp
         draw.cpp
         debug.cpp
-        context.cpp
         object.cpp
         shaderProgram.cpp
         meshGeometry.cpp
@@ -152,6 +149,7 @@ set(SOURCES
         skybox.cpp
         envMap.cpp
         ui.cpp
+        noise.cpp
 )
 
 set(HEADERS
@@ -169,11 +167,12 @@ set(HEADERS
         meshGeometry.h
         modelTexture.h
         sphere.h
-        context.h
         utilities.h
         skybox.h
         envMap.h
         ui.h
+        noise.h
+        variables.h
 )
 
 set(SHADERS

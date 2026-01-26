@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef SHADERPROGRAM_H
 #define SHADERPROGRAM_H
 
@@ -6,34 +8,36 @@
 
 class ShaderProgram {
 private:
-    GLuint program;
-    GLint posLocation;
-    GLint colorLocation;
+    GLuint mProgram;
+    GLint mPosLocation;
+    GLint mColorLocation;
 
     // Vertex shader uniform locations
-    GLint modelMatrix;
-    GLint projectionMatrix;
-    GLint viewMatrix;
+    GLint mModelMatrix;
+    GLint mProjectionMatrix;
+    GLint mViewMatrix;
 
-    GLint density;
-    GLint gradient;
+    GLint mDensity;
+    GLint mGradient;
 
     // Fragment shader uniform locations
-    GLint baseColor;
-    GLint ps;
-    GLint pd;
-    GLint ns;
-    GLint reflectivity;
-    GLint skyColor;
-    GLint ior;
-    GLint transparency;
+    GLint mBaseColor;
+    GLint mPs;
+    GLint mPd;
+    GLint mNs;
+    GLint mReflectivity;
+    GLint mSkyColor;
+    GLint mIor;
+    GLint mTransparency;
 
     // Texture sampler uniforms
-    GLint backTexture;
-    GLint rTexture;
-    GLint bTexture;
-    GLint gTexture;
-    GLint blendMap;
+    GLint mBackTexture;
+    GLint mRTexture;
+    GLint mBTexture;
+    GLint mGTexture;
+
+    // Terrain
+    GLint mUsingTerrain;
 
     GLint screenCoordLocation;
 
@@ -50,30 +54,38 @@ public:
     void bindAttributes();
 
     // === GETTERS
-    GLuint getProgram() const{ return program; }
-    GLint getPosLocation() const { return posLocation; }
-    GLint getColorLocation() const { return colorLocation; }
+    // -> shader
+    GLuint getProgram() const{ return mProgram; }
 
-    GLint getModelMatrixLocation() const { return modelMatrix; }
-    GLint getProjectionMatrixLocation() const { return projectionMatrix; }
-    GLint getViewMatrixLocation() const { return viewMatrix; }
+    // -> model
+    GLint getPosLocation() const { return mPosLocation; }
+    GLint getModelMatrixLocation() const { return mModelMatrix; }
+    GLint getProjectionMatrixLocation() const { return mProjectionMatrix; }
+    GLint getViewMatrixLocation() const { return mViewMatrix; }
 
-    GLint getDensityLocation() const { return density; }
-    GLint getGradientLocation() const { return gradient; }
+    // -> advanced terrain
+    GLint getUsingTerrain() const { return mUsingTerrain; };
 
-    GLint getBaseColorLocation() const { return baseColor; }
-    GLint getPsLocation() const { return ps; }
-    GLint getPdLocation() const { return pd; }
-    GLint getNsLocation() const { return ns; }
-    GLint getReflectivityLocation() const { return reflectivity; }
-    GLint getSkyColorLocation() const { return skyColor; }
-    GLint getIorLocation() const { return ior; }
-    GLint getTransparencyLocation() const { return transparency; }
+    // -> material
+    GLint getColorLocation() const { return mColorLocation; }
+    GLint getBaseColorLocation() const { return mBaseColor; }
+    GLint getPsLocation() const { return mPs; }
+    GLint getPdLocation() const { return mPd; }
+    GLint getNsLocation() const { return mNs; }
+    GLint getReflectivityLocation() const { return mReflectivity; }
+    GLint getIorLocation() const { return mIor; }
+    GLint getTransparencyLocation() const { return mTransparency; }
 
-    GLint getBackTextureLocation() const { return backTexture; }
-    GLint getRTextureLocation() const { return rTexture; }
-    GLint getBTextureLocation() const { return bTexture; }
-    GLint getGTextureLocation() const { return gTexture; }
+    // -> environment
+    GLint getSkyColorLocation() const { return mSkyColor; }
+    GLint getDensityLocation() const { return mDensity; }
+    GLint getGradientLocation() const { return mGradient; }
+
+    // -> HDR texture
+    GLint getBackTextureLocation() const { return mBackTexture; }
+    GLint getRTextureLocation() const { return mRTexture; }
+    GLint getBTextureLocation() const { return mBTexture; }
+    GLint getGTextureLocation() const { return mGTexture; }
 };
 
 

@@ -6,46 +6,44 @@
 #include <GL/gl.h>
 
 #include "glm/vec3.hpp"
-#include "context.h"
 #include "gamestate.h"
 
+Game::Game(){
+    mDraw = std::make_shared<Draw>();
+}
 
-void restartGame() {
-    glClearColor(skyColorConst.r, skyColorConst.g, skyColorConst.b, 1.0f);
+void Game::restartGame()
+{
+    glClearColor(SKY_COLOR.r, SKY_COLOR.g, SKY_COLOR.b, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
 
     cleanUpObjects();
 
     int w = glutGet(GLUT_WINDOW_WIDTH);
     int h = glutGet(GLUT_WINDOW_HEIGHT);
 
-    if (h == 0) h = 1;
+    if (h == 0)
+        h = 1;
 
     // Initialize camera - positioned to see all three spheres
-    // \todo REVIEW practice to always write const, unless the value is modified. It helps readability but also is a best practice
-    glm::vec3 spherePos = glm::vec3(4.0f, 1.5f, 0.0f);
-    glm::vec3 camPosition = glm::vec3(0.0f, 4.0f, 12.0f);
-    glm::vec3 direction = camPosition - spherePos;
-    float angle = 0.0f;
+    glm::vec3 spherePos = SPHERE_POS;
+    glm::vec3 camPosition = CAM_POS;
+    glm::vec3 direction = spherePos;
+    float angle = YAW;
 
-    // \todo REVIEW if a game class is used, camera and game state, eventually scene could be member variables.
-    //  This would help avoiding unintentional leaking if we were to change camera/scenes/state during the runtime
-    Camera* camera = new Camera(w, h, camPosition, direction, angle);
-    GameState* gs = new GameState(w, h);
-    con::init(camera, gs);
+    mCamera = std::make_shared<Camera>(w, h, camPosition, direction, angle);
+    mGameState = std::make_shared<GameState>(w, h);
+
+    mScene = std::make_shared<Scene>();
+    mScene->init();
 }
 
-void cleanUpObjects() {
-    if (con::scene) {
-        delete con::scene;
-        con::scene = nullptr;
-    }
-    if (con::camera) {
-        delete con::camera;
-        con::camera = nullptr;
-    }
-    if (con::gameState) {
-        delete con::gameState;
-        con::gameState = nullptr;
-    }
+void Game::cleanUpObjects() {
+    if (mScene)
+        mScene = nullptr;
+    if (mCamera)
+        mCamera = nullptr;
+    if (mGameState)
+        mGameState = nullptr;
 }

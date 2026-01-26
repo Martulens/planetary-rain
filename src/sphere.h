@@ -1,22 +1,42 @@
+#pragma once
+
 #ifndef SPHERE_H
 #define SPHERE_H
 
 #include "object.h"
+#include "noise.h"
 
-class Sphere : public Object {
+class Sphere : public Object{
 private:
-  float radius = 1.0f;
-  int detail = 2;
+    Noise mNoise;
+
+    float mRadius = 1.0f;
+    int mDetail = 2;
+    int mRepeat = 0;
+    bool mShowTerrain = false;
 
 public:
-  Sphere() = default;
-  Sphere(glm::vec3 position, float radius, int detail, ModelTexture* texture, ShaderProgram* shader);
+    Sphere() = default;
+    Sphere(glm::vec3 position,
+           float radius,
+           int detail,
+           const std::vector<NoiseSettings>& sets,
+           bool show,
+           std::shared_ptr<ModelTexture> texture,
+           std::shared_ptr<ShaderProgram> shader);
 
-  MeshGeometry* uvSphere(float radius, int detail);
-  MeshGeometry* cubeSphere(float radius, int detail);
+    // TODO remake
+    glm::vec3 mapColor(float height);
+    glm::vec3 mapTerrain(float height);
 
-  float getRadius() const { return radius; }
-  int getDetail() const { return detail; }
+    /// === MESH GENERATORS
+    std::shared_ptr<MeshGeometry> uvSphere();
+    std::shared_ptr<MeshGeometry> cubeSphere();
+
+    // === GETTERS
+    float getRadius() const { return mRadius; }
+    int getDetail() const { return mDetail; }
+    bool getUsingTerrain() const override { return mShowTerrain; }
 };
 
 #endif // SPHERE_H

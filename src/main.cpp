@@ -3,13 +3,15 @@
 #include <set>
 #include <utility>
 #include <algorithm>
+#define GLM_ENABLE_EXPERIMENTAL
+
+#include "variables.h"
 
 #include "framework.h"
 #include "config.h"
 #include "callbacks.h"
 #include "game.h"
 #include "camera.h"
-#include "context.h"
 #include "ui.h"
 
 int lastMouseX = 0;
@@ -18,19 +20,19 @@ int lastMouseY = 0;
 // === APP SETUP
 void initApp() {
     srand((unsigned int)time(NULL));
-    glClearColor(0.5f, 0.4f, 0.8f, 1.0f);
+    glClearColor(SKY_COLOR.r, SKY_COLOR.g, SKY_COLOR.b, SKY_COLOR.w);
     glEnable(GL_DEPTH_TEST);
 
-    initUI();  // Add this
-    restartGame();
+    var::getUI()->renderUI();
+    var::getGame()->restartGame();
 }
 
+// === APP END
 void finalizeApp() {
-    shutdownUI();
-    cleanUpObjects();
 }
 
 int main(int argc, char** argv){
+    var::init();
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -41,6 +43,7 @@ int main(int argc, char** argv){
     glutDisplayFunc(onDisplay);
     glutReshapeFunc(onReshape);
 
+    // TODO -> does not work -\_(T.T)_/-
     // \todo Review: Use lambda's instead of callbacks. The lambda needs to have the same function signature as the callback requires
     // like this:
     // [](unsigned char keyPressed, int mouseX, int mouseY){}
@@ -65,11 +68,8 @@ int main(int argc, char** argv){
 
     timer(0);
 
-    // \todo Review: this is a very strange way how to exit an app. The `dieWithError` has single usage and it does nothing extra
-    // related to the framework. Why not just execute the return without the exit here.
-    // the existence of dieWithError seems like unnecessary code bloat
     if (!framework::initialize(framework::OGL_VER_MAJOR, framework::OGL_VER_MINOR))
-        framework::dieWithError("pgr init failed, required OpenGL not supported?");
+        framework::dieWithError("Init failed, required OpenGL not supported?");
 
     initApp();
 

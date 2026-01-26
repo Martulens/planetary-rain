@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef MESH_H
 #define MESH_H
 
@@ -26,19 +28,19 @@ struct Vertex {
 
 class MeshGeometry {
 private:
-    GLuint vbo = 0;
-    GLuint ebo = 0;
-    GLuint vao = 0;
+    GLuint mVbo = 0;
+    GLuint mEbo = 0;
+    GLuint mVao = 0;
 
-    float maxY = 0.0f;
-    unsigned int numVertices = 0;
-    unsigned int numTriangles = 0;
+    float mMaxY = 0.0f;
+    unsigned int mNumVertices = 0;
+    unsigned int mNumTriangles = 0;
 
-    std::vector<unsigned int> indices;
-    std::vector<Vertex> vertices;
+    std::vector<unsigned int> mIndices;
+    std::vector<Vertex> mVertices;
 
-    const aiScene* scene = nullptr;
-    Assimp::Importer importer;
+    const aiScene* mScene = nullptr;
+    Assimp::Importer mImporter;
 
 public:
     MeshGeometry() = default;
@@ -55,13 +57,13 @@ public:
     void cleanupGeometry();
 
     // === GETTERS
-    GLuint getVBO() const { return vbo; }
-    GLuint getEBO() const { return ebo; }
-    GLuint getVAO() const { return vao; }
+    GLuint getVBO() const { return mVbo; }
+    GLuint getEBO() const { return mEbo; }
+    GLuint getVAO() const { return mVao; }
 
-    unsigned int getNumTriangles() const { return numTriangles; }
-    unsigned int getNumVertices() const { return numVertices; }
-    float getMaxY() const { return maxY; }
+    unsigned int getNumTriangles() const { return mNumTriangles; }
+    unsigned int getNumVertices() const { return mNumVertices; }
+    float getMaxY() const { return mMaxY; }
 };
 
 #endif // MESH_H
