@@ -13,11 +13,11 @@ Sphere::Sphere(glm::vec3 position,
 
     this->mPosition = position;
     this->mTexture = texture;
-    this-mShader = shader;
+    this->mShader = shader;
 
     updateModelMatrix();
     mNoise = Noise(sets);
-    this->geometry = cubeSphere(mRadius, mDetail);
+    this->mGeometry = cubeSphere();
 }
 
 std::shared_ptr<MeshGeometry> Sphere::uvSphere() {
@@ -75,6 +75,7 @@ std::shared_ptr<MeshGeometry> Sphere::cubeSphere(){
     std::vector<uint32_t> indices;
 
     for(int face = 0; face < 6; ++face){
+
         glm::vec3 a = cubeVertices[face*4];
         glm::vec3 b = cubeVertices[face*4+1];
         glm::vec3 d = cubeVertices[face*4+3];
@@ -97,6 +98,7 @@ std::shared_ptr<MeshGeometry> Sphere::cubeSphere(){
         std::cout << "  -> " << iDiff.x << ", " << iDiff.y << ", " << iDiff.z << std::endl;
         std::cout << "  -> " << jDiff.x << ", " << jDiff.y << ", " << jDiff.z << std::endl;
         */
+
         for(int j = 0; j <= mDetail; ++j){
             for(int i = 0; i <= mDetail; ++i){
                 Vertex v;

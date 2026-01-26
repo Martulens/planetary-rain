@@ -105,9 +105,10 @@ void Scene::renderEnvironmentMaps(std::shared_ptr<Camera> camera){
     for (auto& obj : mObjects){
         if (!obj->getNeedsEnvMap()) continue;
 
+
         auto envMap = obj->getEnvMap();
         if (!envMap){
-            obj->createEnvMap(128);
+            obj->createEnvMap(ENV_MAP_RESOLUTION);
             envMap = obj->getEnvMap();
         }
 

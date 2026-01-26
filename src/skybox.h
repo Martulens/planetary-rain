@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef SKYBOX_H
 #define SKYBOX_H
 

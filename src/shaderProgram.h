@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef SHADERPROGRAM_H
 #define SHADERPROGRAM_H
 

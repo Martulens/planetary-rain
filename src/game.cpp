@@ -12,7 +12,8 @@ Game::Game(){
     mDraw = std::make_shared<Draw>();
 }
 
-void Game::restartGame() {
+void Game::restartGame()
+{
     glClearColor(SKY_COLOR.r, SKY_COLOR.g, SKY_COLOR.b, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glutSetCursor(GLUT_CURSOR_LEFT_ARROW);

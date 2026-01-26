@@ -11,8 +11,8 @@ ModelTexture::ModelTexture(const std::string& fileName) {
     }
 
     glBindTexture(GL_TEXTURE_2D, mTextureID);
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &width);
-    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &height);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, &mWidth);
+    glGetTexLevelParameteriv(GL_TEXTURE_2D, 0, GL_TEXTURE_HEIGHT, &mHeight);
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 

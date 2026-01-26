@@ -53,7 +53,7 @@ void Draw::setupUniforms(std::shared_ptr<Object> object, std::shared_ptr<Camera>
                 baseCol.r, baseCol.g, baseCol.b);
 
     glUniform3f(shader->getSkyColorLocation(),
-                skyColorConst.r, skyColorConst.g, skyColorConst.b);
+                SKY_COLOR.r, SKY_COLOR.g, SKY_COLOR.b);
     CHECK_GL_ERROR();
 
     // === LIGHTS SETUP
@@ -202,7 +202,7 @@ void Draw::drawWindow(std::shared_ptr<Scene> scene, std::shared_ptr<Camera> came
         h = 1;
 
     glViewport(0, 0, w, h);
-    glClearColor(skyColorConst.r, skyColorConst.g, skyColorConst.b, 1.0f);
+    glClearColor(SKY_COLOR.r, SKY_COLOR.g, SKY_COLOR.b, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_PROJECTION);

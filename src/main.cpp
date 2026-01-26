@@ -5,13 +5,14 @@
 #include <algorithm>
 #define GLM_ENABLE_EXPERIMENTAL
 
+#include "variables.h"
+
 #include "framework.h"
 #include "config.h"
 #include "callbacks.h"
 #include "game.h"
 #include "camera.h"
 #include "ui.h"
-#include "variables.h"
 
 int lastMouseX = 0;
 int lastMouseY = 0;
@@ -42,7 +43,19 @@ int main(int argc, char** argv){
     glutDisplayFunc(onDisplay);
     glutReshapeFunc(onReshape);
 
-    glutKeyboardFunc(keyboardCallback);
+    // TODO -> does not work -\_(T.T)_/-
+    // \todo Review: Use lambda's instead of callbacks. The lambda needs to have the same function signature as the callback requires
+    // like this:
+    // [](unsigned char keyPressed, int mouseX, int mouseY){}
+    //
+    // if you want to pass additional information it should passed via capture brackets.
+    // lets say you implemented the game class as I have suggested and you have Game game; instance
+    //
+    // [&game](unsigned char keyPressed, int mouseX, int mouseY){...}
+    // warning: if you pass [game], the instance is copied. I highly recommend getting familiar with lambdas
+    // the lambda body is just as any function you would implement
+
+    glutKeyboardFunc([](unsigned char keyPressed, int mouseX, int mouseY){});
     glutKeyboardUpFunc(keyboardUpCallback);
 
     glutSpecialFunc(onSpecialKeyPress);
@@ -56,7 +69,7 @@ int main(int argc, char** argv){
     timer(0);
 
     if (!framework::initialize(framework::OGL_VER_MAJOR, framework::OGL_VER_MINOR))
-        framework::dieWithError("pgr init failed, required OpenGL not supported?");
+        framework::dieWithError("Init failed, required OpenGL not supported?");
 
     initApp();
 

@@ -1,3 +1,4 @@
+#pragma once
 
 #ifndef MODELTEXTURE_H
 #define MODELTEXTURE_H

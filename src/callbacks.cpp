@@ -6,7 +6,6 @@
 
 #include "config.h"
 #include "draw.h"
-#include "game.h"
 #include "utilities.h"
 
 #include <GL/freeglut_ext.h>
@@ -14,11 +13,10 @@
 
 #include "camera.h"
 #include "gamestate.h"
-#include "ui.h"
 #include "variables.h"
 
 void keyboardCallback(unsigned char keyPressed, int mouseX, int mouseY) {
-    auto gameState = var::game->getGameState();
+    auto gameState = var::getGame()->getGameState();
     
     // Forward to ImGui first if in UI mode
     if (gameState->uiMode) {
@@ -30,7 +28,7 @@ void keyboardCallback(unsigned char keyPressed, int mouseX, int mouseY) {
         glutLeaveMainLoop();
         break;
     case 'r':
-        var::game->restartGame();
+        var::getGame()->restartGame();
         break;
     case '\t':
         gameState->uiMode = !gameState->uiMode;
@@ -72,7 +70,7 @@ void keyboardCallback(unsigned char keyPressed, int mouseX, int mouseY) {
 }
 
 void keyboardUpCallback(unsigned char keyReleased, int mouseX, int mouseY){
-    auto gameState = var::game->getGameState();
+    auto gameState = var::getGame()->getGameState();
 
     switch (keyReleased){
     case 'w':
@@ -98,7 +96,7 @@ void keyboardUpCallback(unsigned char keyReleased, int mouseX, int mouseY){
 }
 
 void onMouseClick(int button, int state, int x, int y) {
-    auto gameState = var::game->getGameState();
+    auto gameState = var::getGame()->getGameState();
 
     if (gameState->uiMode) {
         uiMouseCallback(button, state, x, y);
@@ -106,8 +104,8 @@ void onMouseClick(int button, int state, int x, int y) {
 }
 
 void onMouseMove(int x, int y) {
-    auto gameState = var::game->getGameState();
-    auto camera = var::game->getCamera();
+    auto gameState = var::getGame()->getGameState();
+    auto camera = var::getGame()->getCamera();
     
     // UI mode: forward to ImGui, no camera movement
     if (gameState->uiMode) {
@@ -130,9 +128,9 @@ void onMouseMove(int x, int y) {
 
     if (dx == 0 && dy == 0) return;
 
-   camera->viewAngle -= dx * PLAYER_MOUSE_SENSITIVITY;
-   camera->pitch += dy * PLAYER_MOUSE_SENSITIVITY;
-   camera->pitch = glm::clamp(camera->pitch, -PITCH_VAL, PITCH_VAL);
+   camera->mViewAngle -= dx * PLAYER_MOUSE_SENSITIVITY;
+   camera->mPitch += dy * PLAYER_MOUSE_SENSITIVITY;
+   camera->mPitch = glm::clamp(camera->mPitch, -PITCH_VAL, PITCH_VAL);
 
    camera->update(-1, -1);
 
@@ -141,8 +139,8 @@ void onMouseMove(int x, int y) {
 }
 
 void onReshape(int w, int h) {
-    auto gameState = var::game->getGameState();
-    auto camera = var::game->getCamera();
+    auto gameState = var::getGame()->getGameState();
+    auto camera = var::getGame()->getCamera();
 
     glViewport(0, 0, (GLsizei)w, (GLsizei)h);
     gameState->windowWidth = w;
@@ -152,14 +150,14 @@ void onReshape(int w, int h) {
 }
 
 void onMouseScroll(int button, int dir, int x, int y) {
-    auto camera = var::game->getCamera();
+    auto camera = var::getGame()->getCamera();
 
     camera->zoom(dir * 2.0f);
 }
 
 void updateMovement() {
-    auto gameState = var::game->getGameState();
-    auto camera = var::game->getCamera();
+    auto gameState = var::getGame()->getGameState();
+    auto camera = var::getGame()->getCamera();
 
     if (gameState->keyW)
        camera->moveForward(MOVE_SPEED);
@@ -177,7 +175,7 @@ void updateMovement() {
 }
 
 void onSpecialKeyPress(int key, int x, int y){
-    auto gameState = var::game->getGameState();
+    auto gameState = var::getGame()->getGameState();
 
     switch (key) {
     case GLUT_KEY_SHIFT_L:
@@ -188,7 +186,7 @@ void onSpecialKeyPress(int key, int x, int y){
 }
 
 void onSpecialKeyRelease(int key, int x, int y){
-    auto gameState = var::game->getGameState();
+    auto gameState = var::getGame()->getGameState();
 
     switch (key) {
     case GLUT_KEY_SHIFT_L:
@@ -209,15 +207,15 @@ void onDisplay(){
     updateMovement();
 
     CHECK_GL_ERROR();
-    auto camera = var::game->getCamera();
-    auto scene = var::game->getScene();
-    auto gameState = var::game->getGameState();
+    auto camera = var::getGame()->getCamera();
+    auto scene = var::getGame()->getScene();
+    auto gameState = var::getGame()->getGameState();
 
-    var::game->getDraw()->drawWindow(scene, camera, gameState);
-    var::ui->renderUI();
+    var::getGame()->getDraw()->drawWindow(scene, camera, gameState);
+    var::getUI()->renderUI();
 
-    if (var::ui->getParamsChanged() && scene)
-        scene->updatePlanet(var::ui->getPlanetParams());
+    if (var::getUI()->getParamsChanged() && scene)
+        scene->updatePlanet(var::getUI()->getPlanetParams());
 
     CHECK_GL_ERROR();
     glutSwapBuffers();

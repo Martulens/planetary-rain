@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef EnvMap_H
 #define EnvMap_H
 

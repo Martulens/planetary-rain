@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef SCENE_H
 #define SCENE_H
 
@@ -17,7 +19,7 @@ private:
     std::vector<std::shared_ptr<Object>> mObjects;
     std::vector<std::shared_ptr<Light>> mLights;
     std::shared_ptr<Sphere> mPlanet;
-    
+
     // Shared resources
     std::shared_ptr<ShaderProgram> mDefaultShader = nullptr;
     std::shared_ptr<ShaderProgram> mRefractiveShader = nullptr;

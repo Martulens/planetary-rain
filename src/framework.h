@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef FRAMEWORK_H
 #define FRAMEWORK_H
 
@@ -32,11 +34,16 @@
 
 #define CHECK_GL_ERROR() framework::checkGLError(__FUNCTION__, __LINE__)
 
+// \todo REVIEW avoid macros for constants. Use consexpr instead.
+
 #ifndef M_PI
 /// Pi constant for compatibility (MSVC vs GCC)
 #define M_PI 3.14159265358979323846
 #endif
 
+// \todo for functional macros, define static utility functions.
+//  The compiler would use inline optimization if it considers necessary, which would result in the same effect as using macros.
+// Overall using makros can lead to non descriptive compiler errors and its more of a C-style way. Try to addapt to modern C++ practices
 #ifndef DEGTORAD
 /// Degrees to radians conversion macro
 #define DEGTORAD(a) ((a) * M_PI / 180.0)

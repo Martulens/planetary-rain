@@ -1,5 +1,11 @@
+#pragma once
+
 #ifndef CONFIG_H
 #define CONFIG_H
+#include "glm/vec3.hpp"
+#include "glm/vec4.hpp"
+#include <string>
+
 
 // === WINDOW SETUP
 constexpr int WINDOW_WIDTH = 1500;

@@ -1,3 +1,5 @@
+#pragma once
+
 #ifndef CAMERA_CLASS_H
 #define CAMERA_CLASS_H
 
@@ -17,12 +19,12 @@ private:
 
     int mWidth;
     int mHeight;
-
+public:
     float mFieldOfView = FOV;
     float mPitch = PITCH;
     float mViewAngle = YAW;
     float mDistance = DISTANCE;
-public:
+
     Camera() = default;
     Camera(int w, int h, glm::vec3 pos, glm::vec3 dir, float angle);
 
