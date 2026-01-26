@@ -112,6 +112,7 @@ MeshGeometry* Sphere::cubeSphere(float radius, int detail){
     std::vector<uint32_t> indices;
 
     for(int face = 0; face < 6; ++face){
+        // \todo REVIEW remove unused normal
         glm::vec3 normal = cubeNormals[face];
 
         glm::vec3 a = cubeVertices[face*4];
@@ -134,9 +135,10 @@ MeshGeometry* Sphere::cubeSphere(float radius, int detail){
         std::cout << "[CUBE] Diffs: " << std::endl;
         std::cout << "  -> " << iDiff.x << ", " << iDiff.y << ", " << iDiff.z << std::endl;
         std::cout << "  -> " << jDiff.x << ", " << jDiff.y << ", " << jDiff.z << std::endl;
-
+        // \todo REVIEW remove unused jPlus
         glm::vec3 jPlus = glm::vec3(0.0f);
         for(int j = 0; j <= detail; ++j){
+            // \todo REVIEW remove unused iPlus
             glm::vec3 iPlus = glm::vec3(0.0f);
             for(int i = 0; i <= detail; ++i){
                 Vertex v;

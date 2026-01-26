@@ -14,6 +14,7 @@
 
 class Scene {
 private:
+// \todo Review use smart pointers if possible. They ensure cleanup on exceptions and other out of scope exits
     std::vector<Object*> objects;
     std::vector<Light*> lights;
     

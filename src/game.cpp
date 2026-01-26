@@ -22,11 +22,14 @@ void restartGame() {
     if (h == 0) h = 1;
 
     // Initialize camera - positioned to see all three spheres
+    // \todo REVIEW practice to always write const, unless the value is modified. It helps readability but also is a best practice
     glm::vec3 spherePos = glm::vec3(4.0f, 1.5f, 0.0f);
     glm::vec3 camPosition = glm::vec3(0.0f, 4.0f, 12.0f);
     glm::vec3 direction = camPosition - spherePos;
     float angle = 0.0f;
 
+    // \todo REVIEW if a game class is used, camera and game state, eventually scene could be member variables.
+    //  This would help avoiding unintentional leaking if we were to change camera/scenes/state during the runtime
     Camera* camera = new Camera(w, h, camPosition, direction, angle);
     GameState* gs = new GameState(w, h);
     con::init(camera, gs);

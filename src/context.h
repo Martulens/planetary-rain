@@ -5,6 +5,7 @@ class Camera;
 class GameState;
 class Scene;
 
+// \todo Review: remove this and put it to a game class
 namespace con {
     extern Camera* camera;
     extern GameState* gameState;

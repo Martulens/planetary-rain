@@ -113,6 +113,7 @@ void Scene::renderEnvironmentMaps(Camera* camera)
         EnvMap* envMap = obj->getEnvMap();
         if (!envMap)
         {
+            // \todo Review remove magic constants. Rule of thumb is, all numbers should have names
             obj->createEnvMap(128);
             envMap = obj->getEnvMap();
         }
