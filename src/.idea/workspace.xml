@@ -7,7 +7,7 @@
     <option name="/Default/RiderDebugger/RiderRestoreDecompile/RestoreDecompileSetting/@EntryValue" value="false" type="bool" />
     <option name="/Default/Housekeeping/GlobalSettingsUpgraded/IsUpgraded/@EntryValue" value="true" type="bool" />
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexedValue" value="true" type="bool" />
-    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="15" type="long" />
+    <option name="/Default/Environment/Hierarchy/GeneratedFilesCacheKey/Timestamp/@EntryValue" value="7" type="long" />
     <option name="/Default/Housekeeping/OptionsDialog/SelectedPageId/@EntryValue" value="CppFormatterOtherPage" type="string" />
     <option name="/Default/Housekeeping/FeatureSuggestion/FeatureSuggestionManager/DisabledSuggesters/=SwitchToGoToActionSuggester/@EntryIndexRemoved" />
   </component>
@@ -37,155 +37,31 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7e67c233-aa83-4b0c-8b19-93b0c02930ad" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/shaders/planet.vert" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.31.6/CMakeCCompiler.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.31.6/CMakeCXXCompiler.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.31.6/CMakeDetermineCompilerABI_C.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.31.6/CMakeDetermineCompilerABI_CXX.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.31.6/CMakeSystem.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.31.6/CompilerIdC/CMakeCCompilerId.c" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/3.31.6/CompilerIdCXX/CMakeCXXCompilerId.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/CMakeConfigureLog.yaml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/CMakeDirectoryInformation.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/CheckTypeSize/OFF64_T.bin" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Makefile.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Makefile2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/1" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/10" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/100" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/11" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/12" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/13" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/14" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/15" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/16" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/17" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/18" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/19" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/20" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/21" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/22" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/23" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/24" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/25" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/26" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/27" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/28" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/29" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/3" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/30" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/31" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/32" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/33" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/34" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/35" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/36" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/37" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/38" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/39" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/4" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/40" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/41" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/42" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/43" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/44" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/45" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/46" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/47" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/48" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/49" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/5" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/50" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/51" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/52" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/53" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/54" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/55" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/56" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/57" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/58" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/59" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/6" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/60" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/61" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/62" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/63" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/64" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/65" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/66" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/67" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/68" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/69" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/7" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/70" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/71" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/72" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/73" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/74" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/75" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/76" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/77" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/78" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/79" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/8" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/80" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/81" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/82" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/83" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/84" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/85" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/86" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/87" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/88" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/89" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/9" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/90" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/91" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/92" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/93" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/95" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/96" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/97" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/98" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/99" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/Progress/count.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/TargetDirectories.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/cmake.check_cache" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/glew.dir/DependInfo.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/glew.dir/build.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/glew.dir/cmake_clean.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/glew.dir/cmake_clean_target.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/glew.dir/compiler_depend.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/glew.dir/compiler_depend.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/glew.dir/depend.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/glew.dir/flags.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/glew.dir/link.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/glew.dir/progress.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/imgui.dir/DependInfo.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/imgui.dir/build.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/imgui.dir/cmake_clean.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/imgui.dir/cmake_clean_target.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/imgui.dir/compiler_depend.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/imgui.dir/compiler_depend.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/imgui.dir/depend.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/imgui.dir/flags.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/imgui.dir/link.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/imgui.dir/progress.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/main.cpp.dir/DependInfo.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/main.cpp.dir/build.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/main.cpp.dir/cmake_clean.cmake" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/main.cpp.dir/compiler_depend.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/main.cpp.dir/compiler_depend.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/main.cpp.dir/depend.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/main.cpp.dir/flags.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/main.cpp.dir/link.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/main.cpp.dir/progress.make" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/CMakeFiles/progress.marks" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/callbacks.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/callbacks.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/callbacks.h" beforeDir="false" afterPath="$PROJECT_DIR$/callbacks.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/camera.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/camera.h" beforeDir="false" afterPath="$PROJECT_DIR$/camera.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config.h" beforeDir="false" afterPath="$PROJECT_DIR$/config.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/context.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/context.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/context.h" beforeDir="false" afterPath="$PROJECT_DIR$/context.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/debug.h" beforeDir="false" afterPath="$PROJECT_DIR$/debug.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draw.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/draw.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/draw.h" beforeDir="false" afterPath="$PROJECT_DIR$/draw.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/envMap.h" beforeDir="false" afterPath="$PROJECT_DIR$/envMap.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/game.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/game.h" beforeDir="false" afterPath="$PROJECT_DIR$/game.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gamestate.h" beforeDir="false" afterPath="$PROJECT_DIR$/gamestate.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/noise.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/noise.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/noise.h" beforeDir="false" afterPath="$PROJECT_DIR$/noise.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/object.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/object.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/object.h" beforeDir="false" afterPath="$PROJECT_DIR$/object.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scene.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/scene.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/scene.h" beforeDir="false" afterPath="$PROJECT_DIR$/scene.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shaderProgram.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/shaderProgram.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/shaderProgram.h" beforeDir="false" afterPath="$PROJECT_DIR$/shaderProgram.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/shaders/planet.frag" beforeDir="false" afterPath="$PROJECT_DIR$/shaders/planet.frag" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sphere.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/sphere.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/sphere.h" beforeDir="false" afterPath="$PROJECT_DIR$/sphere.h" afterDir="false" />
@@ -215,6 +91,71 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
@@ -272,11 +213,6 @@
     </key>
   </component>
   <component name="RunManager" selected="CMake Application.main.cpp">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
-      <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Unnamed" type="CMakeRunConfiguration" factoryName="Application" nameIsGenerated="true" REDIRECT_INPUT="true" REDIRECT_INPUT_PATH="$PROJECT_DIR$/CMakeLists.txt" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
@@ -335,6 +271,9 @@
       <workItem from="1769017512491" duration="1873000" />
       <workItem from="1769112069517" duration="529000" />
       <workItem from="1769112693785" duration="3524000" />
+      <workItem from="1769268385931" duration="4002000" />
+      <workItem from="1769420719296" duration="6761000" />
+      <workItem from="1769429521615" duration="4226000" />
     </task>
     <servers />
   </component>
@@ -349,13 +288,36 @@
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
+        <line-breakpoint enabled="true" suspend="NONE" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/scene.cpp</url>
+          <line>191</line>
+          <log-expression expression="    addLight(pointLight1);&#10;&#10;    Light* fillLight = new Light(&#10;        glm::vec3(-5.0f, 2.0f, 2.0f),&#10;        glm::vec3(0.6f, 0.7f, 1.0f),&#10;        0.5f,&#10;        true&#10;    );&#10;    addLight(fillLight);" language="C++" />
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/noise.cpp</url>
+          <url>file://$PROJECT_DIR$/camera.cpp</url>
+          <line>26</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/camera.cpp</url>
           <line>21</line>
-          <option name="timeStamp" value="4" />
+          <option name="timeStamp" value="9" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
+          <url>file://$PROJECT_DIR$/camera.cpp</url>
+          <line>7</line>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
+    <watches-manager>
+      <configuration name="CMakeRunConfiguration">
+        <watch expression="this-&gt;direction.x" language="C++" />
+        <watch expression="this-&gt;direction.y" language="C++" />
+        <watch expression="this-&gt;direction.z" language="C++" />
+      </configuration>
+    </watches-manager>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

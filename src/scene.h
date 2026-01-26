@@ -14,14 +14,13 @@
 
 class Scene {
 private:
-    std::vector<Object*> objects;
-    std::vector<Light*> lights;
+    std::vector<std::shared_ptr<Object>> objects;
+    std::vector<std::shared_ptr<Light>> lights;
     
     // Shared resources
-    ShaderProgram* defaultShader = nullptr;
-    ShaderProgram* refractiveShader = nullptr;
-    Skybox* skybox = nullptr;
-    Sphere* planet = nullptr;
+    std::shared_ptr<ShaderProgram> defaultShader = nullptr;
+    std::shared_ptr<ShaderProgram> refractiveShader = nullptr;
+    std::shared_ptr<Skybox> skybox = nullptr;
 
 public:
     Scene() = default;
@@ -45,10 +44,10 @@ public:
     void updatePlanet(const PlanetParams& params);
 
     // === GETTERS
-    const std::vector<Object*>& getObjects() const { return objects; }
-    const std::vector<Light*>& getLights() const { return lights; }
-    ShaderProgram* getDefaultShader() const { return defaultShader; }
-    Skybox* getSkybox() const { return skybox; }
+    std::vector<std::shared_ptr<Object>> getObjects() const { return objects; }
+    std::vector<std::shared_ptr<Light>> getLights() const { return lights; }
+    std::shared_ptr<ShaderProgram> getDefaultShader() const { return defaultShader; }
+    std::shared_ptr<Skybox> getSkybox() const { return skybox; }
 };
 
 #endif // SCENE_H

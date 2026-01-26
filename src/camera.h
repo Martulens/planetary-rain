@@ -21,7 +21,7 @@ private:
 
 public:
     float pitch = 0.0f;
-    float viewAngle = 0.0f;   // yaw
+    float viewAngle = 270.0f;   // yaw
     float distance = 30.0f;
 
     Camera() = default;
@@ -36,12 +36,12 @@ public:
     void changeDir(glm::vec3 dir);
     void setPosition(glm::vec3 pos);
 
-    // === Movement
+    // === MOVEMENT
     void moveForward(float amount);
     void moveRight(float amount);
     void moveUp(float amount);
 
-    // === Getters
+    // === GETTERS
     glm::vec3 getPosition() const { return position; }
     glm::vec3 getDirection() const { return direction; }
     glm::vec3 getUp() const { return up; }

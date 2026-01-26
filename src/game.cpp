@@ -9,10 +9,14 @@
 #include "context.h"
 #include "gamestate.h"
 
+Game::Game(){
+    draw = Draw();
+}
 
-void restartGame() {
+void Game::restartGame() {
     glClearColor(skyColorConst.r, skyColorConst.g, skyColorConst.b, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glutSetCursor(GLUT_CURSOR_LEFT_ARROW);
 
     cleanUpObjects();
 
@@ -22,27 +26,29 @@ void restartGame() {
     if (h == 0) h = 1;
 
     // Initialize camera - positioned to see all three spheres
-    glm::vec3 spherePos = glm::vec3(4.0f, 1.5f, 0.0f);
-    glm::vec3 camPosition = glm::vec3(0.0f, 4.0f, 12.0f);
-    glm::vec3 direction = camPosition - spherePos;
-    float angle = 0.0f;
+    glm::vec3 spherePos = glm::vec3(1.0f, 0.0f, -0.5f);
+    glm::vec3 camPosition = glm::vec3(0.0f, 0.0f, 0.0f);
+    glm::vec3 direction = spherePos;
+    float angle = 270.0f;
 
-    Camera* camera = new Camera(w, h, camPosition, direction, angle);
-    GameState* gs = new GameState(w, h);
-    con::init(camera, gs);
+    camera = std::make_shared<Camera>(w, h, camPosition, direction, angle);
+    gameState = std::make_shared<GameState>(w, h);
+
+    scene = std::make_shared<Scene>();
+    scene->init();
 }
 
-void cleanUpObjects() {
-    if (con::scene) {
-        delete con::scene;
-        con::scene = nullptr;
+void Game::cleanUpObjects() {
+    if (scene) {
+        delete scene;
+        scene = nullptr;
     }
-    if (con::camera) {
-        delete con::camera;
-        con::camera = nullptr;
+    if (camera) {
+        delete camera;
+        camera = nullptr;
     }
-    if (con::gameState) {
-        delete con::gameState;
-        con::gameState = nullptr;
+    if (gameState) {
+        delete gameState;
+        gameState = nullptr;
     }
 }

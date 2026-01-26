@@ -16,6 +16,11 @@ float NoiseSettings::perlin(const glm::vec3& in){
     return 0.5f * (glm::perlin(in) + 1);
 }
 
+float NoiseSettings::rigidPerlin(const glm::vec3& in){
+    // To normalize into x in [0, 1];
+    return 1 - fabs(sin(perlin(in)));
+}
+
 // Inspired by: https://www.ronja-tutorials.com/post/027-layered-noise/
 float NoiseSettings::computeNoise(const glm::vec3& in){
     float noise = 0;
@@ -25,7 +30,7 @@ float NoiseSettings::computeNoise(const glm::vec3& in){
     for (int i = 0; i < octaves; i++){
         glm::vec3 point = in * freq + glm::vec3(i * offset);
 
-        float local = (perlin(point) * factor)/(i + 1);
+        float local = (rigidPerlin(point) * factor)/(i + 1);
 
         noise += local;
         factor *= persistence;
@@ -37,8 +42,7 @@ float NoiseSettings::computeNoise(const glm::vec3& in){
 }
 
 
-float Noise::computeAll(const glm::vec3& in)
-{
+float Noise::computeAll(const glm::vec3& in){
     float out = 0.0f;
     size_t size = settings.size();
 

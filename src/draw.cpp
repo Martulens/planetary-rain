@@ -1,4 +1,7 @@
 #include "draw.h"
+
+#include <memory>
+
 #include "framework.h"
 #include "gamestate.h"
 #include "context.h"
@@ -10,9 +13,9 @@
 #include "debug.h"
 #include <vector>
 
-void setupUniforms(const Object* obj, const std::vector<Light*>& lights, const Camera* cam, const GameState& gameState) {
+void Draw::setupUniforms(std::shared_ptr<Object> object, std::shared_ptr<Camera> cam, std::shared_ptr<Scene> scene){
     // === VIEW SETUP
-    ShaderProgram* shader = obj->getShader();
+    std::shared_ptr<ShaderProgram> shader = object->getShader();
     GLint programLocation = shader->getProgram();
 
     glUniformMatrix4fv(shader->getProjectionMatrixLocation(), 1, GL_FALSE, &cam->getProjectionMatrix()[0][0]);
@@ -28,15 +31,18 @@ void setupUniforms(const Object* obj, const std::vector<Light*>& lights, const C
 
     CHECK_GL_ERROR();
 
-    // === MATERIAL SETUPz
-    ModelTexture* texture = obj->getTexture();
+    // === TERRAIN SETUP
+    glUniform1i(shader->getUsingTerrain(), object->getUsingTerrain());
+
+    // === MATERIAL SETUP
+    std::shared_ptr<ModelTexture> texture = object->getTexture();
 
     glUniform1f(shader->getPdLocation(), texture->getPd());
     glUniform1f(shader->getPsLocation(), texture->getPs());
     glUniform1f(shader->getNsLocation(), texture->getNs());
     glUniform1f(shader->getReflectivityLocation(), texture->getReflectivity());
 
-    if(texture->isRefractive()){
+    if (texture->isRefractive()){
         glUniform1f(shader->getIorLocation(), texture->getIOR());
         glUniform1f(shader->getTransparencyLocation(), texture->getTransparency());
     }
@@ -48,17 +54,18 @@ void setupUniforms(const Object* obj, const std::vector<Light*>& lights, const C
     CHECK_GL_ERROR();
 
     // === LIGHTS SETUP
+    std::vector<std::shared_ptr<Light>> lights = scene->getLights();
     size_t lightsLen = lights.size();
 
     glUniform1i(glGetUniformLocation(programLocation, "numLights"), static_cast<int>(lightsLen));
 
-    for (size_t i = 0; i < lightsLen; ++i) {
+    for (size_t i = 0; i < lightsLen; ++i){
         if (i >= LIGHTS_MAX)
             break;
 
         std::string uniformName = "lightPositions[" + std::to_string(i) + "]";
 
-        Light* light = lights[i];
+        std::shared_ptr<Light> light = lights[i];
         glm::vec3 pos = light->getPosition();
         glUniform3f(glGetUniformLocation(programLocation, uniformName.c_str()), pos.x, pos.y, pos.z);
 
@@ -80,8 +87,8 @@ void setupUniforms(const Object* obj, const std::vector<Light*>& lights, const C
     glUniform1f(timeLoc, currentTime);
 }
 
-void setupTextures(const Object* obj) {
-    ShaderProgram* shader = obj->getShader();
+void Draw::setupTextures(std::shared_ptr<Object> obj, std::shared_ptr<Scene> scene){
+    std::shared_ptr<ShaderProgram> shader = obj->getShader();
     GLuint programLocation = shader->getProgram();
     GLuint texID = obj->getTexture()->getTextureID();
 
@@ -91,79 +98,82 @@ void setupTextures(const Object* obj) {
     glBindTexture(GL_TEXTURE_2D, texID != 0 ? texID : 0);
 
     // Skybox cubemap on unit 1
-    Skybox* skybox = con::scene->getSkybox();
-    if (skybox && skybox->getCubemapTexture() != 0) {
+    std::shared_ptr<Skybox> skybox = scene->getSkybox();
+    if (skybox && skybox->getCubemapTexture() != 0){
         glUniform1i(glGetUniformLocation(programLocation, "skyboxSampler"), 1);
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_CUBE_MAP, skybox->getCubemapTexture());
         glUniform1i(glGetUniformLocation(programLocation, "useEnvironmentLighting"), 1);
-    } else {
+    }
+    else{
         glUniform1i(glGetUniformLocation(programLocation, "useEnvironmentLighting"), 0);
     }
 
     // Dynamic environment map on unit 2
-    EnvMap* envMap = obj->getEnvMap();
-    if (envMap && envMap->getCubemap() != 0) {
+    std::shared_ptr<EnvMap> envMap = obj->getEnvMap();
+    if (envMap && envMap->getCubemap() != 0){
         glUniform1i(glGetUniformLocation(programLocation, "envMapSampler"), 2);
         glActiveTexture(GL_TEXTURE2);
         glBindTexture(GL_TEXTURE_CUBE_MAP, envMap->getCubemap());
         glUniform1i(glGetUniformLocation(programLocation, "useDynamicReflections"), 1);
-    } else {
+    }
+    else
+    {
         glUniform1i(glGetUniformLocation(programLocation, "useDynamicReflections"), 0);
     }
 
     CHECK_GL_ERROR();
 }
 
-void drawTemplate(const Object* obj, const Camera* cam, const std::vector<Light*>& lights, const GameState& gameState) {
-    ShaderProgram* shader = obj->getShader();
-
+void Draw::drawTemplate(std::shared_ptr<Object> obj){
+    std::shared_ptr<ShaderProgram> shader = obj->getShader();
     glUseProgram(shader->getProgram());
-
     glUniformMatrix4fv(shader->getModelMatrixLocation(), 1, GL_FALSE, &obj->getModelMatrix()[0][0]);
 
-    setupUniforms(obj, lights, cam, gameState);
+    setupUniforms(obj);
     setupTextures(obj);
 
     if (obj->getGeometry()->getVAO() != 0){
-        if(obj->getTexture()->isRefractive()){
+        if (obj->getTexture()->isRefractive()){
             glDisable(GL_CULL_FACE);
             obj->draw();
             glEnable(GL_CULL_FACE);
+
         }else
             obj->draw();
-    }else
+    }
+    else
         std::cout << "[ERROR] Object geometry not initialized!" << std::endl;
 
     glBindTexture(GL_TEXTURE_2D, 0);
     glUseProgram(0);
 }
 
-void drawScene() {
+void Draw::drawScene(std::shared_ptr<Scene> scene, std::shared_ptr<Camera> camera, std::shared_ptr<GameState> gameState){
     // Draw debug grid
     // drawGrid();
 
     // Render all scene objects using drawTemplate
-    if (con::scene && con::camera && con::gameState) {
-        const std::vector<Object*>& objects = con::scene->getObjects();
-        const std::vector<Light*>& lights = con::scene->getLights();
+    if (scene && camera && gameState){
+        const std::vector<std::shared_ptr<Object>> objects = scene->getObjects();
+        const std::vector<std::shared_ptr<Light>> lights = scene->getLights();
 
-        for (Object* obj : objects) {
-            if (obj && obj->getGeometry() && obj->getShader()) {
-                drawTemplate(obj, con::camera, lights, *con::gameState);
+        for (auto obj& : objects){
+            if (obj && obj->getGeometry() && obj->getShader()){
+                drawTemplate(obj);
                 CHECK_GL_ERROR();
             }
         }
 
-        Skybox* skybox = con::scene->getSkybox();
-        if (skybox) {
-            skybox->draw(con::camera->getViewMatrix(), con::camera->getProjectionMatrix());
+        std::shared_ptr<Skybox> skybox = scene->getSkybox();
+        if (skybox){
+            skybox->draw(camera->getViewMatrix(), camera->getProjectionMatrix());
             CHECK_GL_ERROR();
         }
     }
 }
 
-void drawWindow() {
+void Draw::drawWindow(std::shared_ptr<Scene> scene, std::shared_ptr<Camera> camera, std::shared_ptr<GameState> gameState){
     static float lastTime = 0.0f;
     float currentTime = glutGet(GLUT_ELAPSED_TIME) * 0.001f;
     float deltaTime = currentTime - lastTime;
@@ -171,9 +181,12 @@ void drawWindow() {
     if (deltaTime > 0.1f) deltaTime = 0.016f;
 
     // Update scene
-    if (con::scene) {
-        con::scene->update(deltaTime);
-        con::scene->renderEnvironmentMaps(con::camera);
+    if(!camera)
+        return;
+
+    if (scene){
+        scene->update(deltaTime);
+        scene->renderEnvironmentMaps(camera);
     }
 
     int w = glutGet(GLUT_WINDOW_WIDTH);
@@ -185,23 +198,26 @@ void drawWindow() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     glMatrixMode(GL_PROJECTION);
-    glLoadMatrixf(glm::value_ptr(con::camera->getProjectionMatrix()));
+    glLoadMatrixf(glm::value_ptr(camera->getProjectionMatrix()));
 
     glMatrixMode(GL_MODELVIEW);
-    glLoadMatrixf(glm::value_ptr(con::camera->getViewMatrix()));
+    glLoadMatrixf(glm::value_ptr(camera->getViewMatrix()));
 
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
 
-    if (con::gameState->wireframeMode) {
+    if(!gameState)
+        return;
+
+    if (gameState->wireframeMode)
         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    } else {
+    else
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }
 
     // Draw the scene
-    if (con::scene)
-        con::scene->update(deltaTime);
+    if (scene)
+        scene->update(deltaTime);
+
     drawScene();
 }

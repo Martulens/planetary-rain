@@ -1,6 +1,7 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
+#include <memory>
 #include <string>
 
 #include "envMap.h"
@@ -24,16 +25,20 @@ protected:
     float starTime = 0.0f;        ///< Custom timer start.
     float currTime = 0.0f;        ///< Current time value.
 
-    ShaderProgram* shader = nullptr;   ///< Pointer to shader used for this object.
-    MeshGeometry* geometry = nullptr;  ///< Pointer to mesh geometry.
-    ModelTexture* texture = nullptr;   ///< Pointer to object's texture(s).
-    EnvMap* envMap = nullptr;
+    std::shared_ptr<ShaderProgram> shader = nullptr;   ///< Pointer to shader used for this object.
+    std::shared_ptr<MeshGeometry> geometry = nullptr;  ///< Pointer to mesh geometry.
+    std::shared_ptr<ModelTexture> texture = nullptr;   ///< Pointer to object's texture(s).
+    std::shared_ptr<EnvMap> envMap = nullptr;
     bool needsEnvMap = false;
 
 public:
     Object() = default;
-    Object(glm::vec3 position, MeshGeometry* mesh, ShaderProgram* shader, ModelTexture* texture);
-    virtual ~Object() = default;  // Note: Cleanup handled by Scene to avoid double-free
+    Object( glm::vec3 position,
+            std::shared_ptr<MeshGeometry> mesh,
+            std::shared_ptr<ShaderProgram> shader,
+            std::shared_ptr<ModelTexture> texture);
+
+    virtual ~Object() = default;
 
     virtual void draw() const;
     void updateModelMatrix();
@@ -47,10 +52,10 @@ public:
     void setNeedsEnvMap(bool needs) { needsEnvMap = needs; }
 
     // === Getters
-    ShaderProgram* getShader() const { return shader; }
-    MeshGeometry* getGeometry() const { return geometry; }
-    ModelTexture* getTexture() const { return texture; }
-    EnvMap* getEnvMap() const { return envMap; }
+    std::shared_ptr<ShaderProgram> getShader() const { return shader; }
+    std::shared_ptr<MeshGeometry> getGeometry() const { return geometry; }
+    std::shared_ptr<ModelTexture> getTexture() const { return texture; }
+    std::shared_ptr<EnvMap> getEnvMap() const { return envMap; }
     bool getNeedsEnvMap() const { return needsEnvMap; }
     const glm::mat4& getModelMatrix() const { return modelMatrix; }
 
@@ -63,6 +68,8 @@ public:
 
     float getStarTime() const { return starTime; }
     float getCurrTime() const { return currTime; }
+
+    virtual bool getUsingTerrain() const { return false; };
 };
 
 #endif // OBJECT_H

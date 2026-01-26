@@ -20,7 +20,7 @@
 static PlanetParams g_planetParams;
 static bool g_paramsChanged = false;
 
-void keyboardCallback(unsigned char keyPressed, int mouseX, int mouseY) {
+void Callbacks keyboardCallback(unsigned char keyPressed, int mouseX, int mouseY) {
     // Forward to ImGui first if in UI mode
     if (con::gameState->uiMode) {
         uiKeyboardCallback(keyPressed, mouseX, mouseY);
@@ -159,7 +159,8 @@ void updateMovement() {
     if (con::gameState->keySpace)
         con::camera->moveUp(MOVE_SPEED);
 
-    con::camera->update(-1, -1);
+    if(!con::gameState->uiMode)
+        con::camera->update(-1, -1);
 }
 
 void onSpecialKeyPress(int key, int x, int y){

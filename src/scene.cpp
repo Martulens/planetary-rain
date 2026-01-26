@@ -41,7 +41,7 @@ void Scene::updatePlanet(const PlanetParams& params){
     }
 
     glm::vec3 newPos(params.x, params.y, params.z);
-    planet = new Sphere(newPos, params.radius, params.detail, params.noise, newMaterial, shader);
+    planet = new Sphere(newPos, params.radius, params.detail, params.noise, params.showTerrain, newMaterial, shader);
     planet->setNeedsEnvMap(needsEnv);
 
     addObject(planet);
@@ -160,6 +160,7 @@ void Scene::constructObjects(){
         defaults.radius,
         defaults.detail,
         defaults.noise,
+        defaults.showTerrain,
         material,
         shader
     );
@@ -180,6 +181,7 @@ void Scene::constructDebugLights()
     );
     addLight(sunLight);
 
+    /*
     Light* pointLight1 = new Light(
         glm::vec3(0.0f, 3.0f, 5.0f),
         glm::vec3(1.0f, 0.8f, 0.6f),
@@ -195,13 +197,14 @@ void Scene::constructDebugLights()
         true
     );
     addLight(fillLight);
+    */
 }
 
 void Scene::init(){
     std::cout << "[Scene] Initializing scene..." << std::endl;
 
     // Create the default shader
-    defaultShader = new ShaderProgram("shaders/template.vert", "shaders/template.frag");
+    defaultShader = new ShaderProgram("shaders/planet.vert", "shaders/planet.frag");
     refractiveShader = new ShaderProgram("shaders/template.vert", "shaders/refractive.frag");
 
     if (!defaultShader || defaultShader->getProgram() == 0)
@@ -264,7 +267,8 @@ void Scene::cleanup()
     }
 }
 
-void Scene::addObject(Object* obj){
+void Scene::addObject(Object* obj)
+{
     if (obj)
     {
         objects.push_back(obj);

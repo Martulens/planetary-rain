@@ -9,13 +9,12 @@
 
 class PlanetParams {
 public:
-    float x = 4.0f;
-    float y = 1.5f;
-    float z = 0.0f;
+    float x = 100.0f;
+    float y = 0.0f;
+    float z = 20.0f;
 
-    float radius = 1.5f;
-    int detail = 3;              // 1-4
-
+    float radius = 10.0f;
+    int detail = 30;
     // Colour
     glm::vec3 color = glm::vec3(0.2f, 0.4f, 1.0f);
 
@@ -29,6 +28,7 @@ public:
     float transparency = 1.0f;
 
     // Terrain
+    bool showTerrain = false;
     int noiseCount = 1;
     std::vector<NoiseSettings> noise;
 

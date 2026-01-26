@@ -24,6 +24,7 @@ void Camera::update(int windowWidth, int windowHeight) {
     direction.z = -cos(p) * cos(yaw);
     direction = glm::normalize(direction);
 
+    //std::cout << "[CAMERA] direction: " << direction.x << ", " << direction.y << ", " << direction.z << std::endl;
     viewMatrix = glm::lookAt(position, position + direction, up);
     updateProjection();
 }

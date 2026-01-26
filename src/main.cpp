@@ -22,16 +22,17 @@ void initApp() {
     glClearColor(0.5f, 0.4f, 0.8f, 1.0f);
     glEnable(GL_DEPTH_TEST);
 
-    initUI();  // Add this
-    restartGame();
+    initUI();
+    game.restartGame();
 }
 
 void finalizeApp() {
     shutdownUI();
-    cleanUpObjects();
 }
 
 int main(int argc, char** argv){
+    Game game = Game();
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -58,7 +59,7 @@ int main(int argc, char** argv){
     if (!framework::initialize(framework::OGL_VER_MAJOR, framework::OGL_VER_MINOR))
         framework::dieWithError("pgr init failed, required OpenGL not supported?");
 
-    initApp();
+    initApp(game);
 
     glutCloseFunc(finalizeApp);
 

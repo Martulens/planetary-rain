@@ -1,16 +1,25 @@
 #ifndef CONTEXT_H
 #define CONTEXT_H
+#include <memory>
+#include <vector>
 
 class Camera;
-class GameState;
+class Light;
 class Scene;
+class Object;
+struct GameState;
 
-namespace con {
-    extern Camera* camera;
-    extern GameState* gameState;
-    extern Scene* scene;
+class Context {
+private:
 
-    void init(Camera* camera, GameState* gameState);
+public:
+    Context() = default;
+    Context(std::shared_ptr<Camera> camera,
+            std::shared_ptr<GameState> gameState,
+            std::vector<std::shared_ptr<Light>> lights,
+            std::vector<std::shared_ptr<Object>> objects);
+
+    // === GETTERS
+
 };
-
 #endif //CONTEXT_H

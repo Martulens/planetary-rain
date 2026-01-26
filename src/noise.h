@@ -29,6 +29,7 @@ public:
 
     float perlin(const glm::vec3& in);
     float computeNoise(const glm::vec3& in);
+    float rigidPerlin(const glm::vec3& in);
 
     // === GETTERS
     int getOctaves(){ return octaves; }

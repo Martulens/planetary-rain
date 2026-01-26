@@ -36,18 +36,16 @@ void renderUI(PlanetParams& params, bool& paramsChanged)
     ImGui::Separator();
 
     // Geometry
-    if (ImGui::CollapsingHeader("Geometry", ImGuiTreeNodeFlags_DefaultOpen))
-    {
-        paramsChanged |= ImGui::SliderFloat("Radius", &params.radius, 0.5f, 5.0f);
+    if (ImGui::CollapsingHeader("Geometry", ImGuiTreeNodeFlags_DefaultOpen)){
+        paramsChanged |= ImGui::SliderFloat("Radius", &params.radius, 0.5f, 50.0f);
         paramsChanged |= ImGui::SliderInt("Detail", &params.detail, 2, 100); // min 2 to form triangles
-        paramsChanged |= ImGui::SliderFloat("x", &params.x, -15.0f, 15.0f);
-        paramsChanged |= ImGui::SliderFloat("y", &params.y, -15.0f, 15.0f);
-        paramsChanged |= ImGui::SliderFloat("z", &params.z, -15.0f, 15.0f);
+        paramsChanged |= ImGui::SliderFloat("x", &params.x, -100.0f, 150.0f);
+        paramsChanged |= ImGui::SliderFloat("y", &params.y, -100.0f, 150.0f);
+        paramsChanged |= ImGui::SliderFloat("z", &params.z, -100.0f, 150.0f);
     }
 
     // Appearance
-    if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen))
-    {
+    if (ImGui::CollapsingHeader("Material", ImGuiTreeNodeFlags_DefaultOpen)){
         paramsChanged |= ImGui::ColorEdit3("Color", &params.color.x); // already 0-1
         paramsChanged |= ImGui::SliderFloat("Diffuse", &params.pd, 0.0f, 1.0f);
         paramsChanged |= ImGui::SliderFloat("Specular", &params.ps, 0.0f, 1.0f);
@@ -58,8 +56,9 @@ void renderUI(PlanetParams& params, bool& paramsChanged)
     }
 
     // Noise
-    if (ImGui::CollapsingHeader("Noise", ImGuiTreeNodeFlags_DefaultOpen))
-    {
+    if (ImGui::CollapsingHeader("Noise", ImGuiTreeNodeFlags_DefaultOpen)){
+        paramsChanged |= ImGui::Checkbox("Show Terrain", &params.showTerrain);
+
         if (ImGui::SliderInt("Number of Noises", &params.noiseCount, 0, 5))
         {
             paramsChanged = true;
@@ -82,9 +81,9 @@ void renderUI(PlanetParams& params, bool& paramsChanged)
             if (ImGui::CollapsingHeader(name.c_str(), ImGuiTreeNodeFlags_DefaultOpen)){
                 paramsChanged |= ImGui::Checkbox("Show", &params.noise[i].shown);
                 paramsChanged |= ImGui::SliderInt("Octaves", &params.noise[i].octaves, 0, 10);
-                paramsChanged |= ImGui::SliderFloat("Roughness", &params.noise[i].roughness, 0.0f, 10.0f);
+                paramsChanged |= ImGui::SliderFloat("Roughness", &params.noise[i].roughness, 0.0f, 5.0f);
                 paramsChanged |= ImGui::SliderFloat("Frequency", &params.noise[i].frequency, 0.0f, 5.0f);
-                paramsChanged |= ImGui::SliderFloat("Amplitude", &params.noise[i].amplitude, 0.0f, 5.0f);
+                paramsChanged |= ImGui::SliderFloat("Amplitude", &params.noise[i].amplitude, 1.0f, 2.0f);
                 paramsChanged |= ImGui::SliderFloat("Persistence", &params.noise[i].persistence, 0.0f, 1.0f);
                 paramsChanged |= ImGui::SliderFloat("Offset", &params.noise[i].offset, 0.0f, 100.0f);
             }
@@ -102,8 +101,8 @@ void renderUI(PlanetParams& params, bool& paramsChanged)
 
     if (ImGui::Button("Randomize"))
     {
-        params.radius = 0.5f + (rand() / (float)RAND_MAX) * 4.5f;
-        params.detail = 5 + rand() % 50;
+        params.radius = 1.5f + (rand() / (float)RAND_MAX) * 15.0f;
+        //params.detail = 5 + rand() % 50;
 
         params.color = glm::vec3(
             rand() / (float)RAND_MAX,
@@ -136,25 +135,21 @@ void renderUI(PlanetParams& params, bool& paramsChanged)
         */
 
         // Randomize noise
-        params.noiseCount = 1 + rand() % 3; // 1 to 3 noise layers
-        params.noise.clear();
-        for (int i = 0; i < params.noiseCount; i++){
-            // Randomize noise
-            params.noiseCount = 1 + rand() % 3;  // 1 to 3 noise layers
-            params.noise.clear();
-            for (int i = 0; i < params.noiseCount; i++) {
-                NoiseSettings n;
-                n.shown = true;
-                n.octaves = 1 + rand() % 8;                                      // 1 to 8
-                n.roughness = 1.0f + (rand() / (float)RAND_MAX) * 4.0f;          // 1.0 to 5.0
-                n.frequency = 0.5f + (rand() / (float)RAND_MAX) * 2.5f;          // 0.5 to 3.0
-                n.amplitude = 0.05f + (rand() / (float)RAND_MAX) * 0.45f;        // 0.05 to 0.5
-                n.persistence = 0.2f + (rand() / (float)RAND_MAX) * 0.8f;        // 0.2 to 1.0
-                n.offset = rand() / (float)RAND_MAX;                             // 0.0 to 1.0
-                params.noise.push_back(n);
-            }
+        //params.noiseCount = 1 + rand() % 3;  // 1 to 3 noise layers
+        std::vector<NoiseSettings> newNoises;
+        for (int i = 0; i < params.noiseCount; i++) {
+            NoiseSettings n;
+            n.shown = true;
+            n.octaves = 2 + rand() % 5;                                      // 2 to 6
+            n.roughness = 0.5f + (rand() / (float)RAND_MAX) * 4.5f;          // 0.5 to 3.0
+            n.frequency = 0.8f + (rand() / (float)RAND_MAX) * 4.2f;          // 0.8 to 2.2
+            n.amplitude = 1.0f + (rand() / (float)RAND_MAX) * 1.0f;
+            n.persistence = 0.35f + (rand() / (float)RAND_MAX) * 0.65f;      // 0.35 to 0.6
+            n.offset = (rand() / (float)RAND_MAX) * 100.0f;                  // 0.0 to 100.0
+            newNoises.push_back(n);
         }
 
+        params.noise = newNoises;
         params.changed = true;
     }
 

@@ -27,7 +27,7 @@ public:
 
     void updateViewMatrices(const glm::vec3& position);
 
-    // Getters
+    // === GETTERS
     GLuint getCubemap() const { return cubemap; }
     GLuint getFramebuffer() const { return framebuffer; }
     int getResolution() const { return resolution; }

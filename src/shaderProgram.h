@@ -35,6 +35,9 @@ private:
     GLint gTexture;
     GLint blendMap;
 
+    // Terrain
+    GLint usingTerrain;
+
     GLint screenCoordLocation;
 
 public:
@@ -74,6 +77,8 @@ public:
     GLint getRTextureLocation() const { return rTexture; }
     GLint getBTextureLocation() const { return bTexture; }
     GLint getGTextureLocation() const { return gTexture; }
+
+    GLint getUsingTerrain() const { return usingTerrain; };
 };
 
 

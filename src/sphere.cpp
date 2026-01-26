@@ -1,9 +1,7 @@
 #include "sphere.h"
 
-#include <complex>
-
-Sphere::Sphere(glm::vec3 position, float r, int det, const std::vector<NoiseSettings>& sets, ModelTexture* texture, ShaderProgram* shader)
-    : radius(r), detail(det) {
+Sphere::Sphere(glm::vec3 position, float r, int det, const std::vector<NoiseSettings>& sets, bool show, ModelTexture* texture, ShaderProgram* shader)
+    : radius(r), detail(det), showTerrain(show) {
     this->position = position;
     this->texture = texture;
     this->shader = shader;
@@ -157,10 +155,9 @@ MeshGeometry* Sphere::cubeSphere(float radius, int detail){
                 if(height < 1)
                     height = 1.0f;
 
+                std::cout << "[CUBE] color: " << v.color.r << ", " << v.color.g << ", " << v.color.b << std::endl;
                 v.position = radius*spherePos*(height+1);
-                v.normal = glm::normalize(v.position - position);
-
-                std::cout << "[CUBE] normal: " << v.normal.x << ", " << v.normal.y << ", " << v.normal.z << std::endl;
+                v.normal = glm::normalize(v.position);
 
                 vertices.push_back(v);
 

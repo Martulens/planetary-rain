@@ -46,6 +46,9 @@ void ShaderProgram::getAllUniforms(){
 
     // === AMBIENT
     skyColor = glGetUniformLocation(program, "skyColor");
+
+    // === TERRAIN
+    usingTerrain = glGetUniformLocation(program, "usingTerrain");
 }
 
 void ShaderProgram::getSamplerUniforms()

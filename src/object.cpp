@@ -1,6 +1,6 @@
 #include "object.h"
 
-Object::Object(glm::vec3 pos, MeshGeometry* mesh, ShaderProgram* s, ModelTexture* t){
+Object::Object(glm::vec3 pos, std::shared_ptr<MeshGeometry> mesh, std::shared_ptr<ShaderProgram> s, std::shared_ptr<ModelTexture> t){
     position = pos;
     geometry = mesh;
     shader = s;
@@ -19,7 +19,7 @@ void Object::updateModelMatrix() {
 
 void Object::createEnvMap(int resolution) {
     if (!envMap) {
-        envMap = new EnvMap(resolution);
+        envMap = std::make_shared<EnvMap>(resolution);
     }
 }
 
