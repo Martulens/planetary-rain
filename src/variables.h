@@ -6,17 +6,14 @@
 #include "game.h"
 #include "ui.h"
 
-namespace var{
-    std::shared_ptr<Game> mGame;
-    std::shared_ptr<UI> mUi;
+namespace var {
+    // Declare as extern - definition goes in .cpp
+    extern std::shared_ptr<Game> mGame;
+    extern std::shared_ptr<UI> mUi;
 
-    void init(){
-        mGame = std::make_shared<Game>();
-        mUi = std::make_shared<UI>();
-    }
-
-    std::shared_ptr<Game> getGame() { return mGame;};
-    std::shared_ptr<UI> getUI() { return mUi;};
+    void init();
+    std::shared_ptr<Game> getGame();
+    std::shared_ptr<UI> getUI();
 }
 
 #endif // VARIABLES_H

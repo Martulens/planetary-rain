@@ -7,11 +7,15 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include "glm/gtx/string_cast.hpp"
 
-UI::UI(){
+void UI::initUI(){
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+
+    // Set initial display size BEFORE calling Init
+    io.DisplaySize = ImVec2((float)glutGet(GLUT_WINDOW_WIDTH),
+                            (float)glutGet(GLUT_WINDOW_HEIGHT));
 
     ImGui::StyleColorsDark();
 

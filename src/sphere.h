@@ -37,6 +37,8 @@ public:
     float getRadius() const { return mRadius; }
     int getDetail() const { return mDetail; }
     bool getUsingTerrain() const override { return mShowTerrain; }
+    Noise getNoise() const override { return mNoise; };
+
 };
 
 #endif // SPHERE_H

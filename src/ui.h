@@ -48,9 +48,10 @@ private:
     PlanetParams mPlanetParams;
     bool mParamsChanged = false;
 public:
-    UI();
+    UI() = default;
     ~UI();
 
+    void initUI();
     void renderUI();
 
     // === GETTERS

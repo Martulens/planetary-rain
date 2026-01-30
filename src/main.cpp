@@ -14,9 +14,6 @@
 #include "camera.h"
 #include "ui.h"
 
-int lastMouseX = 0;
-int lastMouseY = 0;
-
 // === APP SETUP
 void initApp() {
     srand((unsigned int)time(NULL));
@@ -55,7 +52,8 @@ int main(int argc, char** argv){
     // warning: if you pass [game], the instance is copied. I highly recommend getting familiar with lambdas
     // the lambda body is just as any function you would implement
 
-    glutKeyboardFunc([](unsigned char keyPressed, int mouseX, int mouseY){});
+    Game game = Game();
+    glutKeyboardFunc(keyboardCallback);
     glutKeyboardUpFunc(keyboardUpCallback);
 
     glutSpecialFunc(onSpecialKeyPress);
@@ -71,6 +69,7 @@ int main(int argc, char** argv){
     if (!framework::initialize(framework::OGL_VER_MAJOR, framework::OGL_VER_MINOR))
         framework::dieWithError("Init failed, required OpenGL not supported?");
 
+    var::getUI()->initUI();
     initApp();
 
     glutCloseFunc(finalizeApp);
