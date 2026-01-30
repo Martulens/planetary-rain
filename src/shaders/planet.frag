@@ -7,7 +7,7 @@ in vec3 fragPosition;
 in vec3 fragNormal;
 in vec3 fragColor;
 in float visibility;
-in float vHeight;
+
 
 // === UNIFORMS ===
 uniform vec3 baseColor;
@@ -65,7 +65,7 @@ void main() {
         color = gradientColor(vHeight);
 
     // === AMBIENT ===
-    vec3 ambient = 0.1 * color;
+    vec3 ambient = 0.1 * fragColor;
 
     // === ACCUMULATE LIGHTING ===
     vec3 diffuse = vec3(0.0);

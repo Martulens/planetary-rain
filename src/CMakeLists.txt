@@ -179,10 +179,6 @@ set(HEADERS
 set(SHADERS
         shaders/template.vert
         shaders/template.frag
-        shaders/planet.vert
-        shaders/planet.frag
-        shaders/skybox.vert
-        shaders/skybox.frag
 )
 
 # Create Executable

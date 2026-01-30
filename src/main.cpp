@@ -30,6 +30,7 @@ void finalizeApp() {
 
 int main(int argc, char** argv){
     var::init();
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
