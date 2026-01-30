@@ -109,16 +109,10 @@ std::shared_ptr<MeshGeometry> Sphere::cubeSphere(){
                 float z = projectToSphere(cubePos.z, cubePos.x, cubePos.y);
 
                 glm::vec3 spherePos = glm::vec3(x, y, z);
-                float height = mNoise.computeAll(spherePos);
 
-                //std::cout << "height = " << height << std::endl;
-
-                if(height < 1)
-                    height = 1.0f;
-
-                v.position = mRadius * spherePos * (height + 1);
+                v.position = mRadius * spherePos;
                 v.normal = glm::normalize(v.position);
-                v.texCoord = glm::vec2((float)i / mDetail, (float)j / mDetail);
+                v.color = mTexture->getColor();
 
                 vertices.push_back(v);
 

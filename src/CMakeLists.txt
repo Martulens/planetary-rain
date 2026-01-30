@@ -150,7 +150,7 @@ set(SOURCES
         envMap.cpp
         ui.cpp
         noise.cpp
-        variables.cpp
+        variable.cpp
 )
 
 set(HEADERS

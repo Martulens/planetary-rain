@@ -7,7 +7,7 @@ in vec3 fragPosition;
 in vec3 fragNormal;
 in vec3 fragColor;
 in float visibility;
-in float vHeight;
+
 
 // === UNIFORMS ===
 uniform vec3 baseColor;
@@ -27,6 +27,7 @@ uniform float lightBrightness[LIGHTS_MAX];
 uniform bool isPointLight[LIGHTS_MAX];
 
 out vec4 outColor;
+
 
 vec3 terrainColor(float height) {
     const vec3 colors[6] = vec3[](
@@ -57,12 +58,12 @@ void main() {
     vec3 normal = normalize(fragNormal);
     vec3 viewDir = normalize(cameraPosition - fragPosition);
 
-    //if(usingTerrain)
-    //    fragColor = terrainColor(vHeight);
-    //else
-    //    fragColor = gradientColor(vHeight);
+    vec3 color = vec3(0.0);
+    if(usingTerrain)
+        color = terrainColor(vHeight);
+    else
+        color = gradientColor(vHeight);
 
-    fragColor = baseColor;
     // === AMBIENT ===
     vec3 ambient = 0.1 * fragColor;
 
@@ -74,7 +75,7 @@ void main() {
         vec3 lightDir;
         float attenuation = 1.0;
 
-        if (isPointLight[i]) {z
+        if (isPointLight[i]) {
             // Point light: direction from fragment to light
             vec3 lightVec = lightPositions[i] - fragPosition;
             float dist = length(lightVec);
@@ -100,7 +101,7 @@ void main() {
 
     // no ambient -> vec3 result = ambient + (pd * diffuse * baseColor) + (ps * specular);
 
-    vec3 result = ambient + (pd * diffuse * fragColor) + (ps * specular);
+    vec3 result = ambient + (pd * diffuse * color) + (ps * specular);
 
     // === FOG ===
     result = mix(skyColor, result, visibility);

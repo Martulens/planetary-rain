@@ -52,9 +52,8 @@ public:
     Noise() = default;
     Noise(const std::vector<NoiseSettings>& set): mSettings(set) {};
 
-    float perlin(const glm::vec3& in);
-    float computeNoise(const glm::vec3& in, int i );
-    float computeAll(const glm::vec3& in);
+    // === GETTER
+    std::vector<NoiseSettings> getSettings(){ return mSettings; }
 };
 
 #endif //NOISE_H

@@ -9,6 +9,7 @@
 #include "envMap.h"
 #include "meshGeometry.h"
 #include "modelTexture.h"
+#include "noise.h"
 #include "shaderProgram.h"
 #include "glm/vec3.hpp"
 #include "glm/mat4x4.hpp"
@@ -67,6 +68,8 @@ public:
 
     // -> terrain
     virtual bool getUsingTerrain() const { return false; };
+    virtual Noise getNoise() const { return Noise(); };
+
 
     // -> interaction
     float getRotationY() const { return mRotationY; }

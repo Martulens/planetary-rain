@@ -12,51 +12,11 @@
 #include "debug.h"
 #include <vector>
 
-void Draw::setupUniforms(std::shared_ptr<Object> object, std::shared_ptr<Camera> cam, std::shared_ptr<Scene> scene){
-    // === VIEW SETUP
-    std::shared_ptr<ShaderProgram> shader = object->getShader();
+
+void Draw::setupLights(std::shared_ptr<Scene> scene, std::shared_ptr<ShaderProgram> shader){
+    // === LIGHTS SETUP
     GLint programLocation = shader->getProgram();
 
-    glUniformMatrix4fv( shader->getProjectionMatrixLocation(),
-                        1, GL_FALSE, &cam->getProjectionMatrix()[0][0]);
-    glUniformMatrix4fv( shader->getViewMatrixLocation(),
-                        1, GL_FALSE, &cam->getViewMatrix()[0][0]);
-
-    glUniform1f(shader->getDensityLocation(), FOG_DENSITY);
-    glUniform1f(shader->getGradientLocation(), FOG_GRADIENT);
-
-    // Camera position for specular calculations
-    glm::vec3 camPos = cam->getPosition();
-    GLint camPosLoc = glGetUniformLocation(programLocation, "cameraPosition");
-    glUniform3f(camPosLoc, camPos.x, camPos.y, camPos.z);
-
-    CHECK_GL_ERROR();
-
-    // === TERRAIN SETUP
-    glUniform1i(shader->getUsingTerrain(), object->getUsingTerrain());
-
-    // === MATERIAL SETUP
-    std::shared_ptr<ModelTexture> texture = object->getTexture();
-
-    glUniform1f(shader->getPdLocation(), texture->getPd());
-    glUniform1f(shader->getPsLocation(), texture->getPs());
-    glUniform1f(shader->getNsLocation(), texture->getNs());
-    glUniform1f(shader->getReflectivityLocation(), texture->getReflectivity());
-
-    if (texture->isRefractive()){
-        glUniform1f(shader->getIorLocation(), texture->getIOR());
-        glUniform1f(shader->getTransparencyLocation(), texture->getTransparency());
-    }
-
-    glm::vec3 baseCol = texture->getColor();
-    glUniform3f(shader->getBaseColorLocation(),
-                baseCol.r, baseCol.g, baseCol.b);
-
-    glUniform3f(shader->getSkyColorLocation(),
-                SKY_COLOR.r, SKY_COLOR.g, SKY_COLOR.b);
-    CHECK_GL_ERROR();
-
-    // === LIGHTS SETUP
     std::vector<std::shared_ptr<Light>> lights = scene->getLights();
     size_t lightsLen = lights.size();
 
@@ -84,10 +44,117 @@ void Draw::setupUniforms(std::shared_ptr<Object> object, std::shared_ptr<Camera>
     }
 
     CHECK_GL_ERROR();
+}
 
+void Draw::setupTime(GLint programLocation){
     float currentTime = 0.001f * glutGet(GLUT_ELAPSED_TIME);
     GLint timeLoc = glGetUniformLocation(programLocation, "time");
     glUniform1f(timeLoc, currentTime);
+}
+
+void Draw::setupMaterial(std::shared_ptr<ShaderProgram> shader, std::shared_ptr<ModelTexture> texture){
+    // === MATERIAL SETUP
+    glUniform1f(shader->getPdLocation(), texture->getPd());
+    glUniform1f(shader->getPsLocation(), texture->getPs());
+    glUniform1f(shader->getNsLocation(), texture->getNs());
+    glUniform1f(shader->getReflectivityLocation(), texture->getReflectivity());
+
+    if (texture->isRefractive()){
+        glUniform1f(shader->getIorLocation(), texture->getIOR());
+        glUniform1f(shader->getTransparencyLocation(), texture->getTransparency());
+    }
+
+    glm::vec3 baseCol = texture->getColor();
+    glUniform3f(shader->getBaseColorLocation(),
+                baseCol.r, baseCol.g, baseCol.b);
+
+    glUniform3f(shader->getSkyColorLocation(),
+                SKY_COLOR.r, SKY_COLOR.g, SKY_COLOR.b);
+    CHECK_GL_ERROR();
+}
+
+void Draw::setupObject(std::shared_ptr<Object> object){
+    auto shader = object->getShader();
+    GLint programLocation = shader->getProgram();
+
+    glUniform1i(shader->getUsingTerrain(), object->getUsingTerrain());
+
+    auto noises = object->getNoise().getSettings();
+    size_t numNoises = noises.size();
+
+    glUniform1i(glGetUniformLocation(programLocation, "numNoises"), static_cast<int>(numNoises));
+
+    for (size_t i = 0; i < numNoises; ++i){
+        if (i >= NOISE_MAX)
+            break;
+
+        NoiseSettings settings = noises[i];
+
+        std::string uniformName = "shown[" + std::to_string(i) + "]";
+        glUniform1i(glGetUniformLocation(programLocation, uniformName.c_str()),
+                    settings.shown);
+
+        uniformName = "octaves[" + std::to_string(i) + "]";
+        glUniform1i(glGetUniformLocation(programLocation, uniformName.c_str()),
+                    settings.octaves);
+
+        uniformName = "frequency[" + std::to_string(i) + "]";
+        glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
+                    settings.frequency);
+
+        uniformName = "amplitude[" + std::to_string(i) + "]";
+        glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
+                    settings.amplitude);
+
+        uniformName = "amplitude[" + std::to_string(i) + "]";
+        glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
+                    settings.persistence);
+
+        uniformName = "persistence[" + std::to_string(i) + "]";
+        glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
+                    settings.persistence);
+
+        uniformName = "roughness[" + std::to_string(i) + "]";
+        glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
+                    settings.roughness);
+
+        uniformName = "noiseOffset[" + std::to_string(i) + "]";
+        glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
+                    settings.offset);
+    }
+
+    CHECK_GL_ERROR();
+
+}
+
+void Draw::setupGeneral(std::shared_ptr<Object> object, std::shared_ptr<Camera> cam){
+    // === VIEW SETUP
+    std::shared_ptr<ShaderProgram> shader = object->getShader();
+    GLint programLocation = shader->getProgram();
+
+    glUniformMatrix4fv( shader->getProjectionMatrixLocation(),
+                        1, GL_FALSE, &cam->getProjectionMatrix()[0][0]);
+    glUniformMatrix4fv( shader->getViewMatrixLocation(),
+                        1, GL_FALSE, &cam->getViewMatrix()[0][0]);
+
+    glUniform1f(shader->getDensityLocation(), FOG_DENSITY);
+    glUniform1f(shader->getGradientLocation(), FOG_GRADIENT);
+
+    glm::vec3 camPos = cam->getPosition();
+    GLint camPosLoc = glGetUniformLocation(programLocation, "cameraPosition");
+    glUniform3f(camPosLoc, camPos.x, camPos.y, camPos.z);
+
+    CHECK_GL_ERROR();
+
+}
+
+
+void Draw::setupUniforms(std::shared_ptr<Object> object, std::shared_ptr<Camera> cam, std::shared_ptr<Scene> scene){
+    setupGeneral(object, cam);
+    setupObject(object);
+    setupMaterial(object->getShader(), object->getTexture());
+    setupLights(scene, object->getShader());
+    setupTime(object->getShader()->getProgram());
 }
 
 void Draw::setupTextures(std::shared_ptr<Object> obj, std::shared_ptr<Scene> scene){

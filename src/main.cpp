@@ -14,9 +14,6 @@
 #include "camera.h"
 #include "ui.h"
 
-int lastMouseX = 0;
-int lastMouseY = 0;
-
 // === APP SETUP
 void initApp() {
     srand((unsigned int)time(NULL));
@@ -56,6 +53,7 @@ int main(int argc, char** argv){
     // warning: if you pass [game], the instance is copied. I highly recommend getting familiar with lambdas
     // the lambda body is just as any function you would implement
 
+    Game game = Game();
     glutKeyboardFunc(keyboardCallback);
     glutKeyboardUpFunc(keyboardUpCallback);
 

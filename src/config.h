@@ -34,6 +34,8 @@ constexpr float FOV = 60.0f;
 constexpr float FOV_MAX = 90.0f;
 
 // === SCENE
+// -> planet
+constexpr int NOISE_MAX = 10;
 // -> surrounding
 constexpr glm::vec4 SKY_COLOR = glm::vec4(0.5f, 0.4f, 0.8f, 1.0f);
 constexpr float FOG_DENSITY = .003f;

@@ -7,6 +7,7 @@
 #include "ui.h"
 
 namespace var {
+    // Declare as extern - definition goes in .cpp
     extern std::shared_ptr<Game> mGame;
     extern std::shared_ptr<UI> mUi;
 
