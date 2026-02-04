@@ -179,6 +179,8 @@ set(HEADERS
 set(SHADERS
         shaders/template.vert
         shaders/template.frag
+        shaders/planet.vert
+        shaders/planet.frag
 )
 
 # Create Executable
@@ -236,15 +238,24 @@ if (NOT USE_SYSTEM_GLUT)
     target_compile_definitions(${PROJECT_NAME} PRIVATE FREEGLUT_STATIC)
 endif ()
 
-# Copy Shaders to Build Directory
-add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+# For development: load shaders from source directory
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+        SHADER_SOURCE_DIR="${CMAKE_SOURCE_DIR}/shaders/"
+)
+
+# =============================================================================
+# SHADER AUTO-COPY (runs on every build, not just when source files change)
+# =============================================================================
+add_custom_target(copy_shaders ALL
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         "${CMAKE_SOURCE_DIR}/shaders"
-        "$<TARGET_FILE_DIR:${PROJECT_NAME}>/shaders"
+        "${CMAKE_CURRENT_BINARY_DIR}/shaders"
         COMMENT "Copying shaders to build directory"
 )
 
+# =============================================================================
 # Copy Resources to Build Directory
+# =============================================================================
 if (EXISTS "${CMAKE_SOURCE_DIR}/textures")
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
             COMMAND ${CMAKE_COMMAND} -E copy_directory
@@ -294,6 +305,6 @@ else ()
 endif ()
 message(STATUS "  Assimp:   ${assimp_SOURCE_DIR}")
 message(STATUS "  stb:      ${stb_SOURCE_DIR}")
-message(STATUS "  imgui:      ${imgui_SOURCE_DIR}")
+message(STATUS "  imgui:    ${imgui_SOURCE_DIR}")
 
 message(STATUS "")

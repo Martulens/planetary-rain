@@ -83,6 +83,7 @@ void Draw::setupObject(std::shared_ptr<Object> object){
     size_t numNoises = noises.size();
 
     glUniform1i(glGetUniformLocation(programLocation, "numNoises"), static_cast<int>(numNoises));
+    glUniform1f(glGetUniformLocation(programLocation, "radius"), object->getRadius());
 
     for (size_t i = 0; i < numNoises; ++i){
         if (i >= NOISE_MAX)
@@ -105,10 +106,6 @@ void Draw::setupObject(std::shared_ptr<Object> object){
         uniformName = "amplitude[" + std::to_string(i) + "]";
         glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
                     settings.amplitude);
-
-        uniformName = "amplitude[" + std::to_string(i) + "]";
-        glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
-                    settings.persistence);
 
         uniformName = "persistence[" + std::to_string(i) + "]";
         glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),

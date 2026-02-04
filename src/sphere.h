@@ -34,7 +34,7 @@ public:
     std::shared_ptr<MeshGeometry> cubeSphere();
 
     // === GETTERS
-    float getRadius() const { return mRadius; }
+    float getRadius() const override { return mRadius; }
     int getDetail() const { return mDetail; }
     bool getUsingTerrain() const override { return mShowTerrain; }
     Noise getNoise() const override { return mNoise; };

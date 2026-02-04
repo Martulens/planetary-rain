@@ -21,6 +21,7 @@ uniform float amplitude[NOISE_MAX];
 uniform float persistence[NOISE_MAX];
 uniform float roughness[NOISE_MAX];
 uniform float noiseOffset[NOISE_MAX];
+uniform float radius;
 
 out vec3 fragPosition;
 out vec2 fragTexCoord;
@@ -98,49 +99,53 @@ float normalPerlin(vec3 pos) {
     return 0.5 * (snoise(pos) + 1.0);
 }
 
-float computeNoise(vec3 pos, float a, float f, int oct, float off, float p, float r) {
-    float noise = 0.0;
-    float factor = a;
+float computeNoise(vec3 pos, float amp, float f, int o, float p, float r, float off){
+    float noise = 0;
+    float factor = amp;
     float freq = f;
 
-    for (int i = 0; i < oct; i++) {
-        vec3 point = pos * freq + vec3(float(i) * off);
-        float local = (normalPerlin(point) * factor) / float(i + 1);
+    for (int i = 0; i < o; i++){
+        vec3 point = pos * freq + vec3(i * off);
+        float local = (normalPerlin(point) * factor);
+
         noise += local;
         factor *= p;
         freq *= r;
+
     }
 
     return noise;
 }
 
-float computeAll(vec3 pos) {
-    float finalValue = 0.0;
+float computeAll(vec3 pos){
+    float sum = 0.0f;
+    float power = 0.5f;
 
-    for (int i = 0; i < numNoises && i < NOISE_MAX; i++) {
-        if (shown[i]) {
-            finalValue += computeNoise(pos,
-            amplitude[i],
-            frequency[i],
-            octaves[i],
-            noiseOffset[i],
-            persistence[i],
-            roughness[i]);
+    for(int i = 0; i < numNoises; ++i){
+        if (shown[i]){
+            float curr = computeNoise(pos,
+                                amplitude[i],
+                                frequency[i],
+                                octaves[i],
+                                persistence[i],
+                                roughness[i],
+                                noiseOffset[i]);
+            sum += curr;
         }
     }
 
-    if(finalValue < 1)
-        finalValue = 1.0f;
+    if(sum <= 1.0f)
+        sum = 1.0f;
 
-    return finalValue;
+    return sum;
 }
 
 void main() {
     vHeight = computeAll(position);
 
-    vec3 perlinPosition = position*(vHeight + 1);
+    vec3 perlinPosition = radius * position * (vHeight + 1);
 
-    vec4 worldPosition = modelMatrix * vec4(position, 1.0);
+    vec4 worldPosition = modelMatrix * vec4(perlinPosition, 1.0);
     vec4 cameraPos = viewMatrix * worldPosition;
     float distanceToCamera = length(cameraPos.xyz);
 

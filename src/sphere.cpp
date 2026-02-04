@@ -110,9 +110,10 @@ std::shared_ptr<MeshGeometry> Sphere::cubeSphere(){
 
                 glm::vec3 spherePos = glm::vec3(x, y, z);
 
-                v.position = mRadius * spherePos;
+                v.position = spherePos;
                 v.normal = glm::normalize(v.position);
                 v.color = mTexture->getColor();
+                v.texCoord = glm::vec2((float)i / mDetail, (float)j / mDetail);
 
                 vertices.push_back(v);
 

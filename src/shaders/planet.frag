@@ -7,7 +7,7 @@ in vec3 fragPosition;
 in vec3 fragNormal;
 in vec3 fragColor;
 in float visibility;
-
+in float vHeight;
 
 // === UNIFORMS ===
 uniform vec3 baseColor;
@@ -99,12 +99,14 @@ void main() {
 
     // === COMBINE ===
 
-    // no ambient -> vec3 result = ambient + (pd * diffuse * baseColor) + (ps * specular);
+    // no ambient ->
+    vec3 result = (pd * diffuse * color) + (ps * specular);
 
-    vec3 result = ambient + (pd * diffuse * color) + (ps * specular);
+    // ambient ->
+    //vec3 result = ambient + (pd * diffuse * color) + (ps * specular);
 
     // === FOG ===
-    result = mix(skyColor, result, visibility);
+    // result = mix(skyColor, result, visibility);
 
     outColor = vec4(result, 1.0);
 }

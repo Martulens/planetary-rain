@@ -18,8 +18,6 @@
 class NoiseSettings{
 private:
 public:
-
-    // TODO remake
     bool shown = true;
     int octaves = 2;
     float frequency = 1;

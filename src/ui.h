@@ -31,6 +31,7 @@ struct PlanetParams {
     // Terrain
     bool showTerrain = false;
     int noiseCount = 1;
+    float power = 0.5;
     std::vector<NoiseSettings> noise;
 
     // Rotation

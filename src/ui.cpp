@@ -75,8 +75,7 @@ void UI::renderUI(){
             }
         }
 
-        for (int i = 0; i < mPlanetParams.noiseCount; i++)
-        {
+        for (int i = 0; i < mPlanetParams.noiseCount; i++){
             ImGui::PushID(i); // Ensure unique widget IDs
 
             std::string name = "Noise " + std::to_string(i);
@@ -84,10 +83,10 @@ void UI::renderUI(){
                 mParamsChanged |= ImGui::Checkbox("Show", &mPlanetParams.noise[i].shown);
                 mParamsChanged |= ImGui::SliderInt("Octaves", &mPlanetParams.noise[i].octaves, 0, 10);
                 mParamsChanged |= ImGui::SliderFloat("Roughness", &mPlanetParams.noise[i].roughness, 0.0f, 5.0f);
-                mParamsChanged |= ImGui::SliderFloat("Frequency", &mPlanetParams.noise[i].frequency, 0.0f, 5.0f);
-                mParamsChanged |= ImGui::SliderFloat("Amplitude", &mPlanetParams.noise[i].amplitude, 1.0f, 2.0f);
+                mParamsChanged |= ImGui::SliderFloat("Frequency", &mPlanetParams.noise[i].frequency, 0.0f, 2.0f);
+                mParamsChanged |= ImGui::SliderFloat("Amplitude", &mPlanetParams.noise[i].amplitude, 0.0f, 2.0f);
                 mParamsChanged |= ImGui::SliderFloat("Persistence", &mPlanetParams.noise[i].persistence, 0.0f, 1.0f);
-                mParamsChanged |= ImGui::SliderFloat("Offset", &mPlanetParams.noise[i].offset, 0.0f, 100.0f);
+                mParamsChanged |= ImGui::SliderFloat("Offset", &mPlanetParams.noise[i].offset, 0.0f, 5.0f);
             }
 
             ImGui::PopID();
@@ -142,12 +141,12 @@ void UI::renderUI(){
         for (int i = 0; i < mPlanetParams.noiseCount; i++) {
             NoiseSettings n;
             n.shown = true;
-            n.octaves = 2 + rand() % 5;                                      // 2 to 6
-            n.roughness = 0.5f + (rand() / (float)RAND_MAX) * 4.5f;          // 0.5 to 3.0
-            n.frequency = 0.8f + (rand() / (float)RAND_MAX) * 4.2f;          // 0.8 to 2.2
-            n.amplitude = 1.0f + (rand() / (float)RAND_MAX) * 1.0f;
-            n.persistence = 0.35f + (rand() / (float)RAND_MAX) * 0.65f;      // 0.35 to 0.6
-            n.offset = (rand() / (float)RAND_MAX) * 100.0f;                  // 0.0 to 100.0
+            n.octaves = 2 + rand() % 5;                                      // 2 to 6 (balanced detail)
+            n.roughness = 1.8f + (rand() / (float)RAND_MAX) * 0.7f;          // 1.8 to 2.5 (natural lacunarity)
+            n.frequency = 0.5f + (rand() / (float)RAND_MAX) * 0.9f;          // 0.3 to 1.2 (visible features)
+            n.amplitude = 0.5f + (rand() / (float)RAND_MAX) * 0.7f;          // 0.3 to 1.2 (noticeable but not crazy)
+            n.persistence = 0.5f + (rand() / (float)RAND_MAX) * 0.3f;        // 0.4 to 0.7 (classic fBm range)
+            n.offset = (rand() / (float)RAND_MAX) * 5.0f;                    // 0.0 to 5.0 (just a seed)
             newNoises.push_back(n);
         }
 

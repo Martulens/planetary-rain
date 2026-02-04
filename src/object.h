@@ -69,7 +69,7 @@ public:
     // -> terrain
     virtual bool getUsingTerrain() const { return false; };
     virtual Noise getNoise() const { return Noise(); };
-
+    virtual float getRadius() const { return 1.0f; };
 
     // -> interaction
     float getRotationY() const { return mRotationY; }
