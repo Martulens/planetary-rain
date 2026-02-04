@@ -25,7 +25,6 @@ public:
            std::shared_ptr<ModelTexture> texture,
            std::shared_ptr<ShaderProgram> shader);
 
-    // TODO remake
     glm::vec3 mapColor(float height);
     glm::vec3 mapTerrain(float height);
 

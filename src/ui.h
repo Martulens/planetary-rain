@@ -54,6 +54,7 @@ public:
 
     void initUI();
     void renderUI();
+    void randomize();
 
     // === GETTERS
     PlanetParams getPlanetParams() const { return mPlanetParams; };

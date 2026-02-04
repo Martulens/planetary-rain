@@ -12,16 +12,19 @@ uniform mat4 projectionMatrix;
 
 uniform float density;
 uniform float gradient;
+uniform float radius;
 
 uniform int numNoises;
-uniform bool shown[NOISE_MAX];
 uniform int octaves[NOISE_MAX];
+uniform int type[NOISE_MAX];
+
+uniform bool shown[NOISE_MAX];
+
 uniform float frequency[NOISE_MAX];
 uniform float amplitude[NOISE_MAX];
 uniform float persistence[NOISE_MAX];
 uniform float roughness[NOISE_MAX];
 uniform float noiseOffset[NOISE_MAX];
-uniform float radius;
 
 out vec3 fragPosition;
 out vec2 fragTexCoord;
@@ -29,6 +32,7 @@ out vec3 fragNormal;
 out vec3 fragColor;
 out float visibility;
 out float vHeight;
+
 
 // === Simple hash-based noise ===
 vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -99,14 +103,32 @@ float normalPerlin(vec3 pos) {
     return 0.5 * (snoise(pos) + 1.0);
 }
 
-float computeNoise(vec3 pos, float amp, float f, int o, float p, float r, float off){
+float turbulentPerlin(vec3 pos){
+    return abs(snoise(pos));
+}
+
+float ridgidPerlin(vec3 pos, float off){
+    float n = abs(snoise(pos));
+    n = off - n;
+
+    return n * n;
+}
+
+float computeNoise(vec3 pos, float amp, float f, int o, float p, float r, float off, float t){
     float noise = 0;
     float factor = amp;
     float freq = f;
 
     for (int i = 0; i < o; i++){
         vec3 point = pos * freq + vec3(i * off);
-        float local = (normalPerlin(point) * factor);
+        float local = 0.0f;
+
+        if(t == 0)
+            local = (normalPerlin(point) * factor);
+        else if(t == 1)
+            local = turbulentPerlin(point) * factor;
+        else
+            local = ridgidPerlin(point, off) * factor;
 
         noise += local;
         factor *= p;
@@ -117,27 +139,44 @@ float computeNoise(vec3 pos, float amp, float f, int o, float p, float r, float 
     return noise;
 }
 
-float computeAll(vec3 pos){
-    float sum = 0.0f;
-    float power = 0.5f;
 
-    for(int i = 0; i < numNoises; ++i){
-        if (shown[i]){
-            float curr = computeNoise(pos,
-                                amplitude[i],
-                                frequency[i],
-                                octaves[i],
-                                persistence[i],
-                                roughness[i],
-                                noiseOffset[i]);
-            sum += curr;
+float computeAll(vec3 pos) {
+    float elevation = 0.0;
+
+    // Base terrain
+    if (numNoises > 0 && shown[0]) {
+        float continents = computeNoise(pos,
+        amplitude[0], frequency[0], octaves[0],
+        persistence[0], roughness[0], noiseOffset[0], type[0]);
+
+        elevation += continents;
+    }
+
+    float oceanLevel = 0.97;
+    float landMask = smoothstep(oceanLevel, oceanLevel + 0.05, elevation);
+
+    // Detail layers - each one weaker than the last
+    float detailFalloff = 0.5;  // Each layer is half as strong
+    float currentStrength = 0.08;
+
+    for (int i = 1; i < numNoises && i < NOISE_MAX; ++i) {
+        if (shown[i]) {
+            float detail = computeNoise(pos,
+            amplitude[i], frequency[i], octaves[i],
+            persistence[i], roughness[i], noiseOffset[i], type[i]);
+
+            // Amplitude from UI scales the detail, but with limits
+            float userScale = clamp(amplitude[i], 0.0, 1.0);
+            elevation += detail * landMask * currentStrength * userScale;
+
+            currentStrength *= detailFalloff;
         }
     }
 
-    if(sum <= 1.0f)
-        sum = 1.0f;
+    // Gentle ocean floor
+    elevation = max(elevation, oceanLevel);
 
-    return sum;
+    return clamp(elevation, 0.9, 4.0);
 }
 
 void main() {

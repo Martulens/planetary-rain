@@ -95,6 +95,10 @@ void Draw::setupObject(std::shared_ptr<Object> object){
         glUniform1i(glGetUniformLocation(programLocation, uniformName.c_str()),
                     settings.shown);
 
+        uniformName = "type[" + std::to_string(i) + "]";
+        glUniform1i(glGetUniformLocation(programLocation, uniformName.c_str()),
+                    settings.type);
+
         uniformName = "octaves[" + std::to_string(i) + "]";
         glUniform1i(glGetUniformLocation(programLocation, uniformName.c_str()),
                     settings.octaves);

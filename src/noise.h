@@ -20,6 +20,8 @@ private:
 public:
     bool shown = true;
     int octaves = 2;
+    int type = 0;
+
     float frequency = 1;
     float amplitude = 1;
     float persistence = 1;
