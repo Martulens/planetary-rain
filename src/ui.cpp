@@ -24,8 +24,7 @@ void UI::initUI()
     ImGui_ImplOpenGL3_Init("#version 330");
 }
 
-void UI::randomize()
-{
+void UI::randomize(){
     enum PlanetType { TERRESTRIAL, EARTHLIKE, DESERT, OCEAN };
     int type = rand() % 4;
 
@@ -182,6 +181,47 @@ void UI::renderUI()
 
         if (!mPlanetParams.autoRotate){
             mPlanetParams.changes.animationChanged |= ImGui::SliderFloat("Angle", &mPlanetParams.rotationAngle, 0.0f, 360.0f);
+        }
+    }
+
+    // --- Waves ---
+    if (ImGui::CollapsingHeader("Waves")){
+        mPlanetParams.changes.wavesChanged |= ImGui::Checkbox("Enable Waves", &mPlanetParams.wavesEnabled);
+        if (mPlanetParams.wavesEnabled)
+        {
+            mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat("Ocean Level", &mPlanetParams.oceanLevel, 0.5f, 1.5f);
+
+            if (ImGui::SliderInt("Num Waves", &mPlanetParams.numWaves, 1, 3))
+            {
+                mPlanetParams.changes.wavesChanged = true;
+                while ((int)mPlanetParams.waves.size() < mPlanetParams.numWaves)
+                    mPlanetParams.waves.emplace_back();
+                while ((int)mPlanetParams.waves.size() > mPlanetParams.numWaves)
+                    mPlanetParams.waves.pop_back();
+            }
+
+            for (int i = 0; i < mPlanetParams.numWaves; i++)
+            {
+                ImGui::PushID(100 + i); // offset to avoid noise ID collision
+
+                std::string name = "Wave " + std::to_string(i);
+                if (ImGui::CollapsingHeader(name.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
+                {
+                    mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat("Dir X", &mPlanetParams.waves[i].dirX, -1.0f, 1.0f);
+                    mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat("Dir Z", &mPlanetParams.waves[i].dirZ, -1.0f, 1.0f);
+                    mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat("Steepness", &mPlanetParams.waves[i].steepness, 0.0f, 1.0f);
+                    mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat("Wavelength", &mPlanetParams.waves[i].wavelength, 0.01f, 2.0f);
+                }
+
+                ImGui::PopID();
+            }
+
+            // Show total steepness warning
+            float totalSteepness = 0.0f;
+            for (int i = 0; i < mPlanetParams.numWaves; i++)
+                totalSteepness += mPlanetParams.waves[i].steepness;
+            if (totalSteepness > 1.0f)
+                ImGui::TextColored(ImVec4(1.0f, 0.3f, 0.3f, 1.0f), "Warning: total steepness > 1 (loops!)");
         }
     }
 

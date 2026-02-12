@@ -14,12 +14,10 @@ void ShaderProgram::loadFloat(GLint location, float value){
 void ShaderProgram::init(const std::string& vert, const std::string& frag){
     std::vector<GLuint> shaderList;
 
-    // Try source directory first (for hot-reloading during development)
 #ifdef SHADER_SOURCE_DIR
     std::string vertPath = std::string(SHADER_SOURCE_DIR) + vert.substr(vert.find_last_of("/\\") + 1);
     std::string fragPath = std::string(SHADER_SOURCE_DIR) + frag.substr(frag.find_last_of("/\\") + 1);
 
-    // Check if source files exist, otherwise fall back to original paths
     std::ifstream vTest(vertPath), fTest(fragPath);
     if (vTest.good() && fTest.good()) {
         shaderList.push_back(framework::createShaderFromFile(GL_VERTEX_SHADER, vertPath));

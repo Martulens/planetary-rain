@@ -10,6 +10,10 @@ uniform mat4 modelMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 projectionMatrix;
 
+uniform float deltaTime;
+uniform float epsilon;
+uniform float oceanLevel;
+
 uniform float density;
 uniform float gradient;
 uniform float radius;
@@ -26,13 +30,20 @@ uniform float persistence[NOISE_MAX];
 uniform float roughness[NOISE_MAX];
 uniform float noiseOffset[NOISE_MAX];
 
+
+uniform bool wavesEnabled;
+uniform float waveHeight;
+uniform float waveLength;
+uniform float waveSpeed;
+uniform float waveOffset;
+
 out vec3 fragPosition;
 out vec2 fragTexCoord;
 out vec3 fragNormal;
 out vec3 fragColor;
 out float visibility;
 out float vHeight;
-
+out float isOcean;
 
 // === Simple hash-based noise ===
 vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
@@ -118,27 +129,39 @@ float computeNoise(vec3 pos, float amp, float f, int o, float p, float r, float 
     float noise = 0;
     float factor = amp;
     float freq = f;
+    float oSize = off/o;
 
+    float currOff = off;
     for (int i = 0; i < o; i++){
-        vec3 point = pos * freq + vec3(i * off);
+        vec3 point = pos * freq + vec3(i * currOff);
         float local = 0.0f;
 
         if(t == 0)
-            local = (normalPerlin(point) * factor);
+        local = (normalPerlin(point) * factor);
         else if(t == 1)
-            local = turbulentPerlin(point) * factor;
+        local = turbulentPerlin(point) * factor;
         else
-            local = ridgidPerlin(point, off) * factor;
+        local = ridgidPerlin(point, currOff) * factor;
 
         noise += local;
         factor *= p;
         freq *= r;
-
+        currOff -= oSize;
     }
 
     return noise;
 }
 
+// inspired by https://catlikecoding.com/unity/tutorials/flow/waves/
+vec2 addWavesWithNormal(vec3 pos, float wSize, float wLen, float wSpd, float wOff){
+    float k = 2.0 * 3.14159 / wLen;
+    float phase = k * pos.x - wSpd * deltaTime;
+
+    float height = wSize * sin(phase);
+    float slope = wSize * k * cos(phase);
+
+    return vec2(height, slope);
+}
 
 float computeAll(vec3 pos) {
     float elevation = 0.0;
@@ -152,7 +175,6 @@ float computeAll(vec3 pos) {
         elevation += continents;
     }
 
-    float oceanLevel = 0.97;
     float landMask = smoothstep(oceanLevel, oceanLevel + 0.05, elevation);
 
     // Detail layers - each one weaker than the last
@@ -165,7 +187,6 @@ float computeAll(vec3 pos) {
             amplitude[i], frequency[i], octaves[i],
             persistence[i], roughness[i], noiseOffset[i], type[i]);
 
-            // Amplitude from UI scales the detail, but with limits
             float userScale = clamp(amplitude[i], 0.0, 1.0);
             elevation += detail * landMask * currentStrength * userScale;
 
@@ -175,12 +196,54 @@ float computeAll(vec3 pos) {
 
     // Gentle ocean floor
     elevation = max(elevation, oceanLevel);
+    return elevation;
+}
 
-    return clamp(elevation, 0.9, 4.0);
+vec3 computeNormal(float vHeight, vec3 pos, vec3 outNormal){
+    // fallback for the poles -> cross should not equal 0
+    vec3 up = abs(normal.y) < 0.999 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
+    vec3 tangent = cross(up, outNormal);
+    vec3 bitangent = cross(outNormal, tangent);
+
+    // can be adjustable
+    float hCenter = vHeight;
+    float hTangent = computeAll(pos + epsilon * tangent);
+    float hBitangent = computeAll(pos + epsilon * bitangent);
+
+    // (tangets - center) are partial derivatives -> how steep the surface is in each direction
+    vec3 dTangent = tangent * epsilon + outNormal * (hTangent - hCenter);
+    vec3 dBitangent = bitangent * epsilon + outNormal * (hBitangent - hCenter);
+
+    vec3 dNormal = normalize(cross(dTangent, dBitangent));
+
+    return dNormal;
 }
 
 void main() {
     vHeight = computeAll(position);
+
+    // TODO
+    // can possibly lower the size of noises to optimize -> depending on detail
+    vec3 outNormal = computeNormal(vHeight, position, normal);
+
+    if(wavesEnabled && vHeight == oceanLevel){
+        isOcean = 1;
+        vec2 waveResult = addWavesWithNormal(position,
+        waveHeight, waveLength, waveSpeed, waveOffset);
+
+        vHeight += waveResult.x;
+
+        // The slope gives us how much the surface tilts along X
+        // Build tangent frame on the sphere surface
+        vec3 up = abs(normal.y) < 0.999 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
+        vec3 tangent = normalize(cross(up, normal));
+        vec3 bitangent = normalize(cross(normal, tangent));
+
+        // Perturb normal by the wave slope along the tangent direction
+        outNormal = normalize(outNormal - tangent * waveResult.y);
+    }
+    else
+    isOcean = 0;
 
     vec3 perlinPosition = radius * position * (vHeight + 1);
 
@@ -196,7 +259,7 @@ void main() {
     fragColor = color;
 
     mat3 normalMatrix = mat3(transpose(inverse(modelMatrix)));
-    fragNormal = normalize(normalMatrix * normal);
+    fragNormal = normalize(normalMatrix * outNormal);
 
     gl_Position = projectionMatrix * viewMatrix * worldPosition;
 }

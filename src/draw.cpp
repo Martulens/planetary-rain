@@ -12,6 +12,8 @@
 #include "debug.h"
 #include <vector>
 
+#include "variables.h"
+
 
 void Draw::setupLights(std::shared_ptr<Scene> scene, std::shared_ptr<ShaderProgram> shader){
     // === LIGHTS SETUP
@@ -48,7 +50,7 @@ void Draw::setupLights(std::shared_ptr<Scene> scene, std::shared_ptr<ShaderProgr
 
 void Draw::setupTime(GLint programLocation){
     float currentTime = 0.001f * glutGet(GLUT_ELAPSED_TIME);
-    GLint timeLoc = glGetUniformLocation(programLocation, "time");
+    GLint timeLoc = glGetUniformLocation(programLocation, "deltaTime");
     glUniform1f(timeLoc, currentTime);
 }
 
@@ -123,7 +125,27 @@ void Draw::setupObject(std::shared_ptr<Object> object){
         glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
                     settings.offset);
     }
+    CHECK_GL_ERROR();
 
+    glUniform1i(glGetUniformLocation(programLocation, "wavesEnabled"),
+        object->getWavesEnabled() ? 1 : 0);
+    glUniform1f(glGetUniformLocation(programLocation, "oceanLevel"),
+        object->getOceanLevel());
+
+    int numWaves = object->getNumWaves();
+    glUniform1i(glGetUniformLocation(programLocation, "numWaves"), numWaves);
+
+    auto& waves = object->getWaves();
+    for (int i = 0; i < numWaves && i < 3; ++i) {
+        std::string name = "waves[" + std::to_string(i) + "]";
+        glUniform4f(glGetUniformLocation(programLocation, name.c_str()),
+            waves[i].dirX, waves[i].dirZ,
+            waves[i].steepness, waves[i].wavelength);
+    }
+
+    float detail = static_cast<float>(object->getDetail());
+    float eps = glm::pi<float>() / detail;
+    glUniform1f(glGetUniformLocation(programLocation, "epsilon"), eps);
     CHECK_GL_ERROR();
 
 }

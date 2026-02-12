@@ -9,6 +9,13 @@
 #include "glm/vec3.hpp"
 #include "noise.h"
 
+struct WaveSettings {
+    float dirX = 1.0f;
+    float dirZ = 0.0f;
+    float steepness = 0.3f;
+    float wavelength = 0.5f;
+};
+
 struct PlanetChangeFlags {
     bool meshChanged = false;
     bool materialChanged = false;
@@ -16,10 +23,11 @@ struct PlanetChangeFlags {
     bool positionChanged = false;
     bool radiusChanged = false;
     bool animationChanged = false;
+    bool wavesChanged = false;
 
     bool any() const {
         return meshChanged || materialChanged || noiseChanged
-            || positionChanged || radiusChanged || animationChanged;
+            || positionChanged || radiusChanged || animationChanged || wavesChanged;
     }
     void reset() {
         meshChanged = false;
@@ -28,6 +36,7 @@ struct PlanetChangeFlags {
         positionChanged = false;
         radiusChanged = false;
         animationChanged = false;
+        wavesChanged = false;
     }
 };
 
@@ -37,7 +46,7 @@ struct PlanetParams {
     float z = 20.0f;
 
     float radius = 10.0f;
-    int detail = 30;
+    int detail = 200;
     // Color
     glm::vec3 color = glm::vec3(0.2f, 0.4f, 1.0f);
 
@@ -56,8 +65,14 @@ struct PlanetParams {
     float power = 0.5;
     std::vector<NoiseSettings> noise;
 
+    // Waves
+    bool wavesEnabled = false;
+    float oceanLevel = 0.97f;
+    int numWaves = 1;
+    std::vector<WaveSettings> waves = { WaveSettings() };
+
     // Rotation
-    float rotationSpeed = 30.0f;
+    float rotationSpeed = 10.0f;
     bool autoRotate = true;
     float rotationAngle = 0.0f;
 

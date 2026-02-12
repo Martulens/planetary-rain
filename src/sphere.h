@@ -11,6 +11,7 @@ private:
     Noise mNoise;
 
     float mRadius = 1.0f;
+    float mOceanLevel = 0.97f;
     int mDetail = 2;
     int mRepeat = 0;
     bool mShowTerrain = false;
@@ -50,11 +51,27 @@ public:
     void updateRadius(float radius);
     void rebuildMesh(int detail);
 
-    // === GETTERS
+    // === GETTERS & SETTERS
     float getRadius() const override { return mRadius; }
-    int getDetail() const { return mDetail; }
+    int getDetail() const override { return mDetail; }
     bool getUsingTerrain() const override { return mShowTerrain; }
     Noise getNoise() const override { return mNoise; };
+
+    // -> waves
+    bool mWavesEnabled = false;
+    int mNumWaves = 0;
+    std::vector<WaveSettings> mWaves;
+
+    void setWavesEnabled(bool e) { mWavesEnabled = e; }
+    void setNumWaves(int n) { mNumWaves = n; }
+    void setWaves(const std::vector<WaveSettings>& w) { mWaves = w; }
+    void setOceanLevel(float level){ mOceanLevel = level; };
+
+    float getOceanLevel() const override {  return mOceanLevel; };
+    bool getWavesEnabled() const override { return mWavesEnabled; }
+    int getNumWaves() const override { return mNumWaves; }
+    const std::vector<WaveSettings>& getWaves() const override { return mWaves; }
+
 };
 
 #endif // SPHERE_H

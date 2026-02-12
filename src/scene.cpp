@@ -6,6 +6,8 @@
 #include <iostream>
 #include <algorithm>
 
+#include "variables.h"
+
 void Scene::updatePlanet(PlanetParams& params){
     if (!mPlanet) return;
 
@@ -35,6 +37,13 @@ void Scene::updatePlanet(PlanetParams& params){
 
         if (!params.autoRotate)
             mPlanet->setRotationY(params.rotationAngle);
+    }
+
+    if(flags.wavesChanged){
+        mPlanet->setWavesEnabled(params.wavesEnabled);
+        mPlanet->setOceanLevel(params.oceanLevel);
+        mPlanet->setNumWaves(params.numWaves);
+        mPlanet->setWaves(params.waves);
     }
 
     params.rotationAngle = mPlanet->getRotationY();
@@ -144,6 +153,7 @@ void Scene::constructObjects(){
 
     auto shader = (defaults.ior > 1.0f) ? mRefractiveShader : mDefaultShader;
 
+    var::getUI()->randomize();
     mPlanet = std::make_shared<Sphere>(
         glm::vec3(defaults.x, defaults.y, defaults.z),
         defaults.radius,
@@ -155,6 +165,7 @@ void Scene::constructObjects(){
     );
 
     mPlanet->setNeedsEnvMap(true);
+    updatePlanet(var::getUI()->getPlanetParams());
     addObject(mPlanet);
 }
 

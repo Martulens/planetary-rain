@@ -11,6 +11,7 @@
 #include "modelTexture.h"
 #include "noise.h"
 #include "shaderProgram.h"
+#include "ui.h"
 #include "glm/vec3.hpp"
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
@@ -53,12 +54,14 @@ public:
     void setRotationY(float rot) { mRotationY = rot; updateModelMatrix(); }
     void setSize(float s) { mSize = s; updateModelMatrix(); }
     void setNeedsEnvMap(bool needs) { mNeedsEnvMap = needs; }
+    virtual void setOceanLevel(){};
 
     // === GETTERS
     // -> model properties
     const glm::mat4& getModelMatrix() const { return mModelMatrix; }
     glm::vec3 getPosition() const { return mPosition; }
     glm::vec3 getDirection() const { return mDirection; }
+    virtual int getDetail() const { return 100; }
 
     std::shared_ptr<ShaderProgram> getShader() const { return mShader; }
     std::shared_ptr<MeshGeometry> getGeometry() const { return mGeometry; }
@@ -70,6 +73,16 @@ public:
     virtual bool getUsingTerrain() const { return false; };
     virtual Noise getNoise() const { return Noise(); };
     virtual float getRadius() const { return 1.0f; };
+
+    // -> waves
+    virtual bool getWavesEnabled() const { return false; }
+    virtual int getNumWaves() const { return 0; }
+    virtual const std::vector<WaveSettings>& getWaves() const{
+        static std::vector<WaveSettings> empty;
+        return empty;
+    }
+    virtual float getOceanLevel() const {  return 0.97; };
+
 
     // -> interaction
     float getRotationY() const { return mRotationY; }
