@@ -6,43 +6,38 @@
 #include <iostream>
 #include <algorithm>
 
-void Scene::updatePlanet(const PlanetParams& params){
+void Scene::updatePlanet(PlanetParams& params){
     if (!mPlanet) return;
 
-    auto it = std::find(mObjects.begin(), mObjects.end(), mPlanet);
-    if (it != mObjects.end()) {
-        mObjects.erase(it);
+    const auto& flags = params.changes;
+
+    if (flags.positionChanged)
+        mPlanet->setPosition(glm::vec3(params.x, params.y, params.z));
+
+    if (flags.radiusChanged)
+        mPlanet->updateRadius(params.radius);
+
+    if (flags.materialChanged)
+        mPlanet->updateMaterial(
+            params.color, params.pd, params.ps, params.ns,
+            params.reflectivity, params.ior, params.transparency,
+            mDefaultShader, mRefractiveShader);
+
+    if (flags.noiseChanged)
+        mPlanet->updateNoise(params.noise, params.showTerrain);
+
+    if (flags.meshChanged)
+        mPlanet->rebuildMesh(params.detail);
+
+    if (flags.animationChanged) {
+        mPlanet->setAutoRotate(params.autoRotate);
+        mPlanet->setRotationSpeed(params.rotationSpeed);
+
+        if (!params.autoRotate)
+            mPlanet->setRotationY(params.rotationAngle);
     }
 
-    bool needsEnv = mPlanet->getNeedsEnvMap();
-    mPlanet = nullptr;
-
-    auto newMaterial = std::make_shared<ModelTexture>(
-        params.color,
-        params.pd,
-        params.ps,
-        params.ns,
-        params.reflectivity,
-        params.ior,
-        params.transparency
-    );
-
-    auto shader = mDefaultShader;
-    if (params.ior > 1.0f) {
-        shader = mRefractiveShader;
-    }
-
-    glm::vec3 newPos(params.x, params.y, params.z);
-    mPlanet = std::make_shared<Sphere>(  newPos,
-                                        params.radius,
-                                        params.detail,
-                                        params.noise,
-                                        params.showTerrain,
-                                        newMaterial,
-                                        shader);
-    mPlanet->setNeedsEnvMap(needsEnv);
-
-    addObject(mPlanet);
+    params.rotationAngle = mPlanet->getRotationY();
 }
 
 void Scene::renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& projection, std::shared_ptr<Object> excludeObject){
@@ -234,11 +229,15 @@ void Scene::addLight(std::shared_ptr<Light> light){
 }
 
 void Scene::update(float deltaTime){
-    static float angle = 0.0f;
-    angle += deltaTime * 0.5f;
+    if (mPlanet && mPlanet->getAutoRotate()) {
+        float currentRot = mPlanet->getRotationY();
+        currentRot += deltaTime * mPlanet->getRotationSpeed();
 
-    for (auto obj : mObjects)
-        obj->setRotationY(angle * 30.0f);
+        if (currentRot >= 360.0f) currentRot -= 360.0f;
+        if (currentRot < 0.0f) currentRot += 360.0f;
+
+        mPlanet->setRotationY(currentRot);
+    }
 }
 
 Scene::~Scene() {

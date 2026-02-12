@@ -20,7 +20,6 @@ private:
     std::vector<std::shared_ptr<Light>> mLights;
     std::shared_ptr<Sphere> mPlanet;
 
-    // Shared resources
     std::shared_ptr<ShaderProgram> mDefaultShader = nullptr;
     std::shared_ptr<ShaderProgram> mRefractiveShader = nullptr;
     std::shared_ptr<Skybox> mSkybox = nullptr;
@@ -32,21 +31,21 @@ public:
     void init();
     void cleanup();
 
-    // === Render surroundings
+    // === Render
     void renderEnvironmentMaps(std::shared_ptr<Camera> camera);
     void renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& projection, std::shared_ptr<Object> excludeObject);
 
-    // === Contructing scene
+    // === Constructing scene
     void constructLights();
     void constructDebugLights();
     void constructObjects();
     void constructDebugObjects();
 
-    // === Update cycle
+    // === Update
     void update(float deltaTime);
-    void updatePlanet(const PlanetParams& params);
+    void updatePlanet(PlanetParams& params);
 
-    // === Addition functions
+    // === Addition
     void addObject(std::shared_ptr<Object> obj);
     void addLight(std::shared_ptr<Light> light);
 

@@ -30,7 +30,8 @@ void keyboardCallback(unsigned char keyPressed, int mouseX, int mouseY) {
     case 'r':
         var::getGame()->restartGame();
         break;
-    case '\t':
+    case 'Q':
+    case 'q':
         gameState->uiMode = !gameState->uiMode;
         if (gameState->uiMode) {
             glutSetCursor(GLUT_CURSOR_LEFT_ARROW);

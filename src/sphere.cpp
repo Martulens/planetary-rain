@@ -64,6 +64,37 @@ std::shared_ptr<MeshGeometry> Sphere::uvSphere() {
     return std::make_shared<MeshGeometry>(vertices, indices);
 }
 
+// === PARTIAL UPDATES ===
+void Sphere::updateMaterial(const glm::vec3& color, float pd, float ps, float ns,
+                            float reflectivity, float ior, float transparency,
+                            std::shared_ptr<ShaderProgram> defaultShader,
+                            std::shared_ptr<ShaderProgram> refractiveShader){
+    mTexture = std::make_shared<ModelTexture>(color, pd, ps, ns, reflectivity, ior, transparency);
+
+    // Swap shader if crossing the refractive boundary
+    if (ior > 1.0f && mShader != refractiveShader)
+        mShader = refractiveShader;
+    else if (ior <= 1.0f && mShader != defaultShader)
+        mShader = defaultShader;
+}
+
+void Sphere::updateNoise(const std::vector<NoiseSettings>& settings, bool showTerrain){
+    mNoise = Noise(settings);
+    mShowTerrain = showTerrain;
+    // No mesh rebuild — noise is evaluated in vertex shader via uniforms
+}
+
+void Sphere::updateRadius(float radius){
+    mRadius = radius;
+    // No mesh rebuild — radius is sent as a uniform
+}
+
+void Sphere::rebuildMesh(int detail){
+    mDetail = detail;
+    mGeometry = cubeSphere();
+}
+
+
 // contributions taken from:
 // -> https://mathproofs.blogspot.com/2005/07/mapping-cube-to-sphere.html?lr=1
 float projectToSphere(float in, float a, float b){

@@ -9,6 +9,28 @@
 #include "glm/vec3.hpp"
 #include "noise.h"
 
+struct PlanetChangeFlags {
+    bool meshChanged = false;
+    bool materialChanged = false;
+    bool noiseChanged = false;
+    bool positionChanged = false;
+    bool radiusChanged = false;
+    bool animationChanged = false;
+
+    bool any() const {
+        return meshChanged || materialChanged || noiseChanged
+            || positionChanged || radiusChanged || animationChanged;
+    }
+    void reset() {
+        meshChanged = false;
+        materialChanged = false;
+        noiseChanged = false;
+        positionChanged = false;
+        radiusChanged = false;
+        animationChanged = false;
+    }
+};
+
 struct PlanetParams {
     float x = 100.0f;
     float y = 0.0f;
@@ -16,7 +38,7 @@ struct PlanetParams {
 
     float radius = 10.0f;
     int detail = 30;
-    // Colour
+    // Color
     glm::vec3 color = glm::vec3(0.2f, 0.4f, 1.0f);
 
     // Material
@@ -37,7 +59,10 @@ struct PlanetParams {
     // Rotation
     float rotationSpeed = 30.0f;
     bool autoRotate = true;
-    bool changed = false;
+    float rotationAngle = 0.0f;
+
+    // Change tracking
+    PlanetChangeFlags changes;
 
     PlanetParams(){
         noise.emplace_back();
@@ -47,7 +72,6 @@ struct PlanetParams {
 class UI{
 private:
     PlanetParams mPlanetParams;
-    bool mParamsChanged = false;
 public:
     UI() = default;
     ~UI();
@@ -57,8 +81,8 @@ public:
     void randomize();
 
     // === GETTERS
-    PlanetParams getPlanetParams() const { return mPlanetParams; };
-    bool getParamsChanged() const { return mParamsChanged; };
-
+    PlanetParams& getPlanetParams() { return mPlanetParams; };
+    const PlanetChangeFlags& getChangeFlags() const { return mPlanetParams.changes; };
+    bool getParamsChanged() const { return mPlanetParams.changes.any(); };
 };
 #endif
