@@ -128,20 +128,17 @@ void Draw::setupObject(std::shared_ptr<Object> object){
     CHECK_GL_ERROR();
 
     glUniform1i(glGetUniformLocation(programLocation, "wavesEnabled"),
-        object->getWavesEnabled() ? 1 : 0);
+    object->getWavesEnabled() ? 1 : 0);
     glUniform1f(glGetUniformLocation(programLocation, "oceanLevel"),
         object->getOceanLevel());
-
-    int numWaves = object->getNumWaves();
-    glUniform1i(glGetUniformLocation(programLocation, "numWaves"), numWaves);
-
-    auto& waves = object->getWaves();
-    for (int i = 0; i < numWaves && i < 3; ++i) {
-        std::string name = "waves[" + std::to_string(i) + "]";
-        glUniform4f(glGetUniformLocation(programLocation, name.c_str()),
-            waves[i].dirX, waves[i].dirZ,
-            waves[i].steepness, waves[i].wavelength);
-    }
+    glUniform1f(glGetUniformLocation(programLocation, "waveHeight"),
+        object->getWaveHeight());
+    glUniform1f(glGetUniformLocation(programLocation, "waveLength"),
+        object->getWaveLength());
+    glUniform1f(glGetUniformLocation(programLocation, "waveSpeed"),
+        object->getWaveSpeed());
+    glUniform1f(glGetUniformLocation(programLocation, "waveOffset"),
+        object->getWaveOffset());
 
     float detail = static_cast<float>(object->getDetail());
     float eps = glm::pi<float>() / detail;

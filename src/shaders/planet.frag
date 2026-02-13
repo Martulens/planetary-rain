@@ -61,20 +61,15 @@ vec3 terrainColor(float height) {
     vec3(1.0, 1.0, 1.0)
     );
 
-    float t;
-
-    if (height < oceanLevel) {
-        // [0.9, 0.97] -> [0.0, 0.2] (deep ocean to shoreline)
-        t = clamp((height - 0.9) / (oceanLevel - 0.9), 0.0, 1.0) * 0.2;
-    } else {
-        // [0.97, ~1.5] -> [0.2, 1.0] (land colors)
-        t = 0.2 + clamp((height - oceanLevel) / 0.5, 0.0, 1.0) * 0.8;
+    if (isOcean > 0.5) {
+        return mix(colors[0], colors[1], 0.5);
     }
 
-    float scaled = t * 5.0;
-    int i = min(int(scaled), 4);
+    float t = clamp((height - oceanLevel) / 0.5, 0.0, 1.0);
+    float scaled = t * 3.0;
+    int i = min(int(scaled), 2);
 
-    return mix(colors[i], colors[i + 1], scaled - float(i));
+    return mix(colors[i + 2], colors[i + 3], scaled - float(i));
 }
 
 vec3 gradientColor(float height) {
@@ -156,8 +151,11 @@ void main() {
 
     // Blend in reflections for water
     if(waterSurface){
+        vec3 waterBase = vec3(0.02, 0.12, 0.22);
         float fresnelFactor = (fresnel.r + fresnel.g + fresnel.b) / 3.0;
-        lighting = mix(lighting, envReflection, clamp(fresnelFactor, 0.0, 1.0));
+
+        vec3 waterLit = ambient + (totalDiffuse * waterBase) + totalSpecular;
+        lighting = waterLit;
     }
 
     // Apply fog

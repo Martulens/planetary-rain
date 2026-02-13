@@ -11,13 +11,20 @@ private:
     Noise mNoise;
 
     float mRadius = 1.0f;
-    float mOceanLevel = 0.97f;
     int mDetail = 2;
     int mRepeat = 0;
     bool mShowTerrain = false;
 
-    bool mAutoRotate = true;
-    float mRotationSpeed = 30.0f;
+    bool mAutoRotate = false;
+    float mRotationSpeed = 10.0f;
+
+    bool mWavesEnabled = false;
+    float mOceanLevel = 1.5f;
+    float mWaveHeight = 0.005f;
+    float mWaveLength = 0.5f;
+    float mWaveSpeed = 1.0f;
+    float mWaveOffset = 0.0f;
+
 public:
     Sphere() = default;
     Sphere(glm::vec3 position,
@@ -58,20 +65,19 @@ public:
     Noise getNoise() const override { return mNoise; };
 
     // -> waves
-    bool mWavesEnabled = false;
-    int mNumWaves = 0;
-    std::vector<WaveSettings> mWaves;
+    void setOceanLevel(float l) override{ mOceanLevel = l;}
+    void setWavesEnabled(bool e) { mWavesEnabled = e;}
+    void setWaveHeight(float v) { mWaveHeight = v; }
+    void setWaveLength(float v) { mWaveLength = v; }
+    void setWaveSpeed(float v) { mWaveSpeed = v; }
+    void setWaveOffset(float v) { mWaveOffset = v; }
 
-    void setWavesEnabled(bool e) { mWavesEnabled = e; }
-    void setNumWaves(int n) { mNumWaves = n; }
-    void setWaves(const std::vector<WaveSettings>& w) { mWaves = w; }
-    void setOceanLevel(float level){ mOceanLevel = level; };
-
+    virtual bool getWavesEnabled() const { return mWavesEnabled;}
+    float getWaveHeight() const override { return mWaveHeight; }
+    float getWaveLength() const override { return mWaveLength; }
+    float getWaveSpeed() const override { return mWaveSpeed; }
+    float getWaveOffset() const override { return mWaveOffset; }
     float getOceanLevel() const override {  return mOceanLevel; };
-    bool getWavesEnabled() const override { return mWavesEnabled; }
-    int getNumWaves() const override { return mNumWaves; }
-    const std::vector<WaveSettings>& getWaves() const override { return mWaves; }
-
 };
 
 #endif // SPHERE_H

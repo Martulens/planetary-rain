@@ -75,13 +75,14 @@ public:
     virtual float getRadius() const { return 1.0f; };
 
     // -> waves
-    virtual bool getWavesEnabled() const { return false; }
-    virtual int getNumWaves() const { return 0; }
-    virtual const std::vector<WaveSettings>& getWaves() const{
-        static std::vector<WaveSettings> empty;
-        return empty;
-    }
+    virtual bool getWavesEnabled() const { return false;}
+    virtual float getWaveHeight() const { return 0.0f; }
+    virtual float getWaveLength() const { return 0.0f; }
+    virtual float getWaveSpeed() const { return 0.0f; }
+    virtual float getWaveOffset() const { return 0.0f; }
     virtual float getOceanLevel() const {  return 0.97; };
+
+    virtual void setOceanLevel(float l){ return;};
 
 
     // -> interaction

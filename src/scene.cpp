@@ -42,8 +42,10 @@ void Scene::updatePlanet(PlanetParams& params){
     if(flags.wavesChanged){
         mPlanet->setWavesEnabled(params.wavesEnabled);
         mPlanet->setOceanLevel(params.oceanLevel);
-        mPlanet->setNumWaves(params.numWaves);
-        mPlanet->setWaves(params.waves);
+        mPlanet->setWaveHeight(params.waveHeight);
+        mPlanet->setWaveLength(params.waveLength);
+        mPlanet->setWaveSpeed(params.waveSpeed);
+        mPlanet->setWaveOffset(params.waveOffset);
     }
 
     params.rotationAngle = mPlanet->getRotationY();

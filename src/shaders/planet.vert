@@ -152,17 +152,6 @@ float computeNoise(vec3 pos, float amp, float f, int o, float p, float r, float 
     return noise;
 }
 
-// inspired by https://catlikecoding.com/unity/tutorials/flow/waves/
-vec2 addWavesWithNormal(vec3 pos, float wSize, float wLen, float wSpd, float wOff){
-    float k = 2.0 * 3.14159 / wLen;
-    float phase = k * pos.x - wSpd * deltaTime;
-
-    float height = wSize * sin(phase);
-    float slope = wSize * k * cos(phase);
-
-    return vec2(height, slope);
-}
-
 float computeAll(vec3 pos) {
     float elevation = 0.0;
 
@@ -199,22 +188,81 @@ float computeAll(vec3 pos) {
     return elevation;
 }
 
-vec3 computeNormal(float vHeight, vec3 pos, vec3 outNormal){
+vec3 waveNormal(vec3 pos){
+    vec3 dir = normalize(pos);
+    vec2 waveDir = normalize(dir.xz);
+
+    float time = waveSpeed * deltaTime;
+    float steepness = 1.0;
+
+    float phase = waveLength * dot(waveDir, pos.xz) + time;
+    float cosFactor = cos(phase);
+    float sinFactor = sin(phase);
+
+    float nx = -waveDir.x * waveLength * waveHeight * cosFactor;
+    float nz = -waveDir.y * waveLength * waveHeight * cosFactor;
+    float ny = 1.0 - steepness * waveHeight * sinFactor;
+
+
+    return normalize(vec3(nx, ny, nz));
+}
+
+// inspired by https://catlikecoding.com/unity/tutorials/flow/waves/
+// https://gameidea.org/2023/12/01/3d-ocean-shader-using-gerstner-waves/
+vec3 computeWave(vec3 pos){
+    vec3 vertex = pos;
+    vec3 dir = normalize(pos);
+
+    float time = waveSpeed * deltaTime;
+    float steepness = 1.0;
+    float waveChar = steepness / waveLength;
+
+    // Use two components of direction for the wave propagation
+    vec2 waveDir = normalize(dir.xz);
+    float phase = waveLength * dot(waveDir, vertex.xz) + time;
+
+    float x = sin(vertex.x + waveChar * waveDir.x * cos(phase));
+    float z = sin(vertex.z + waveChar * waveDir.y * cos(phase));
+    float y = sin(vertex.y + waveHeight * sin(phase));
+
+    vec3 wavePos = waveHeight * vec3(x, y, z);
+
+    return wavePos;
+}
+
+float checkOcean(vec3 pos, float height){
+    float outValue = 0;
+
+    if(height == oceanLevel && wavesEnabled){
+        vec3 wave = computeWave(pos);
+        outValue = distance(wave, pos);
+    }
+
+    return outValue;
+}
+
+vec3 computeNormal(float vHeight, vec3 pos, vec3 normal){
     // fallback for the poles -> cross should not equal 0
     vec3 up = abs(normal.y) < 0.999 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
-    vec3 tangent = cross(up, outNormal);
-    vec3 bitangent = cross(outNormal, tangent);
+    vec3 T = cross(up, normal);
+    vec3 B = cross(normal, T);
 
-    // can be adjustable
     float hCenter = vHeight;
-    float hTangent = computeAll(pos + epsilon * tangent);
-    float hBitangent = computeAll(pos + epsilon * bitangent);
+    hCenter += checkOcean(pos, vHeight);
 
-    // (tangets - center) are partial derivatives -> how steep the surface is in each direction
-    vec3 dTangent = tangent * epsilon + outNormal * (hTangent - hCenter);
-    vec3 dBitangent = bitangent * epsilon + outNormal * (hBitangent - hCenter);
+    vec3 posT = pos + epsilon * T;
+    float hTangent   = computeAll(posT);
+    hTangent += checkOcean(posT, hTangent);
 
-    vec3 dNormal = normalize(cross(dTangent, dBitangent));
+    vec3 posB = pos + epsilon * B;
+    float hBitangent = computeAll(posB);
+    hBitangent += checkOcean(posB, hBitangent);
+
+    // (tangets - center) are partial derivatives -> how steep the surface is in each dir
+    vec3 dT = T * epsilon + normal * (hTangent - hCenter);
+    vec3 dB = B * epsilon + normal * (hBitangent - hCenter);
+
+    vec3 dNormal = normalize(cross(dT, dB));
 
     return dNormal;
 }
@@ -222,30 +270,24 @@ vec3 computeNormal(float vHeight, vec3 pos, vec3 outNormal){
 void main() {
     vHeight = computeAll(position);
 
+    vec3 perlinPosition = radius * position * (vHeight + 1);
+
+    if(vHeight <= oceanLevel + epsilon){
+        if (wavesEnabled){
+            float value = 0.0;
+            vec3 displace = computeWave(perlinPosition);
+            perlinPosition += displace;
+        }
+    }
+
+    if(vHeight == oceanLevel)
+        isOcean = 1.0;
+    else
+        isOcean = 0.0;
+
     // TODO
     // can possibly lower the size of noises to optimize -> depending on detail
     vec3 outNormal = computeNormal(vHeight, position, normal);
-
-    if(wavesEnabled && vHeight == oceanLevel){
-        isOcean = 1;
-        vec2 waveResult = addWavesWithNormal(position,
-        waveHeight, waveLength, waveSpeed, waveOffset);
-
-        vHeight += waveResult.x;
-
-        // The slope gives us how much the surface tilts along X
-        // Build tangent frame on the sphere surface
-        vec3 up = abs(normal.y) < 0.999 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
-        vec3 tangent = normalize(cross(up, normal));
-        vec3 bitangent = normalize(cross(normal, tangent));
-
-        // Perturb normal by the wave slope along the tangent direction
-        outNormal = normalize(outNormal - tangent * waveResult.y);
-    }
-    else
-    isOcean = 0;
-
-    vec3 perlinPosition = radius * position * (vHeight + 1);
 
     vec4 worldPosition = modelMatrix * vec4(perlinPosition, 1.0);
     vec4 cameraPos = viewMatrix * worldPosition;
