@@ -36,15 +36,20 @@ constexpr float FOV_MAX = 90.0f;
 // === SCENE
 // -> planet
 constexpr int NOISE_MAX = 10;
+constexpr int WAVES_MAX = 10;
+
 // -> surrounding
 constexpr glm::vec4 SKY_COLOR = glm::vec4(0.5f, 0.4f, 0.8f, 1.0f);
 constexpr float FOG_DENSITY = .003f;
 constexpr float FOG_GRADIENT = 1.5f;
+
 // -> objects
 constexpr glm::vec3 SPHERE_POS = glm::vec3(100.0f, 0.0f, 20.0f);
+
 // -> light
 constexpr int LIGHTS_MAX = 20;
 constexpr int ENV_MAP_RESOLUTION = 256;
+
 //-> skybox
 const std::string SKYBOX_CUBE_TEXTURE_FILE_PREFIX = "textures/skybox/";
 

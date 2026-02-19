@@ -1,5 +1,7 @@
 #version 330 core
 #define NOISE_MAX 20
+#define WAVE_MAX 10
+#define PI 3.14159265359
 
 layout(location = 0) in vec3 position;
 layout(location = 1) in vec2 texCoord;
@@ -30,12 +32,19 @@ uniform float persistence[NOISE_MAX];
 uniform float roughness[NOISE_MAX];
 uniform float noiseOffset[NOISE_MAX];
 
-
+uniform int numWaves;
 uniform bool wavesEnabled;
-uniform float waveHeight;
-uniform float waveLength;
-uniform float waveSpeed;
-uniform float waveOffset;
+
+// Per-wave parameters
+uniform float waveAmplitude[WAVE_MAX];    // A_i
+uniform float waveFrequency[WAVE_MAX];    // omega_i
+uniform float waveSpeed[WAVE_MAX];        // phi_i (phase speed)
+uniform float waveSteepness[WAVE_MAX];    // Q_i (0 to 1)
+uniform vec3  waveOrigin[WAVE_MAX];       // o_i - unit vector pointing to wave origin on sphere
+
+// Smoothstep fade parameters to prevent loops at origin/antipode
+uniform float waveFadeE0;
+uniform float waveFadeE1;
 
 out vec3 fragPosition;
 out vec2 fragTexCoord;
@@ -45,7 +54,9 @@ out float visibility;
 out float vHeight;
 out float isOcean;
 
-// === Simple hash-based noise ===
+// ============================================================
+// Simplex Noise (unchanged)
+// ============================================================
 vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec4 permute(vec4 x) { return mod289(((x * 34.0) + 1.0) * x); }
@@ -114,31 +125,30 @@ float normalPerlin(vec3 pos) {
     return 0.5 * (snoise(pos) + 1.0);
 }
 
-float turbulentPerlin(vec3 pos){
+float turbulentPerlin(vec3 pos) {
     return abs(snoise(pos));
 }
 
-float ridgidPerlin(vec3 pos, float off){
+float ridgidPerlin(vec3 pos, float off) {
     float n = abs(snoise(pos));
     n = off - n;
-
     return n * n;
 }
 
-float computeNoise(vec3 pos, float amp, float f, int o, float p, float r, float off, float t){
-    float noise = 0;
+float computeNoise(vec3 pos, float amp, float f, int o, float p, float r, float off, float t) {
+    float noise = 0.0;
     float factor = amp;
     float freq = f;
-    float oSize = off/o;
-
+    float oSize = off / o;
     float currOff = off;
-    for (int i = 0; i < o; i++){
-        vec3 point = pos * freq + vec3(i * currOff);
-        float local = 0.0f;
 
-        if(t == 0)
-        local = (normalPerlin(point) * factor);
-        else if(t == 1)
+    for (int i = 0; i < o; i++) {
+        vec3 point = pos * freq + vec3(i * currOff);
+        float local = 0.0;
+
+        if (t == 0)
+        local = normalPerlin(point) * factor;
+        else if (t == 1)
         local = turbulentPerlin(point) * factor;
         else
         local = ridgidPerlin(point, currOff) * factor;
@@ -152,7 +162,99 @@ float computeNoise(vec3 pos, float amp, float f, int o, float p, float r, float 
     return noise;
 }
 
-float computeAll(vec3 pos) {
+// Spherical Gerstner Waves (Paper Equations 7, 8, 10, 11)
+// https://cescg.org/wp-content/uploads/2018/04/Michelic-Real-Time-Rendering-of-Procedurally-Generated-Planets-2.pdf
+
+// Equation 7: compute tangent direction and geodesic distance for wave i
+// di = direction on tangent plane pointing toward -oi (away from wave origin)
+// li = arc-length distance from wave origin to vertex
+void waveParams(vec3 v, vec3 oi, out vec3 di, out float li) {
+    // Geodesic distance: arc length = acos(v . oi) * r
+    // We use r = 1 here (unit sphere), actual radius applied later
+    float cosAngle = clamp(dot(v, oi), -1.0, 1.0);
+    li = acos(cosAngle);
+
+    // Direction on tangent plane: double cross product
+    // di = v x ((v - oi) x v)
+    vec3 diff = v - oi;
+    vec3 inner = cross(diff, v);
+    di = cross(v, inner);
+
+    float len = length(di);
+    if (len > 1e-6) {
+        di = di / len;
+    } else {
+        // At the origin or antipode -> wrongly displaced -> direction is degenerate
+        // Pick an arbitrary tangent
+        vec3 up = abs(v.y) < 0.999 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
+        di = normalize(cross(v, up));
+    }
+}
+
+// Equation 11: smoothstep fade Q near origin and antipode to prevent loops
+float fadeSteepness(float Qi, vec3 v, vec3 oi, float e0, float e1) {
+    float alignment = 1.0 - abs(dot(v, oi));
+    return Qi * smoothstep(e0, e1, alignment);
+}
+
+// Equation 8: spherical Gerstner wave displacement
+// Equation 10: analytical normal
+// Returns the displaced position and computes the analytical normal
+vec3 computeSphericalWaves(vec3 pos, float seaRadius, out vec3 waveNormal) {
+    vec3 v = normalize(pos);
+
+    // Accumulate displacement components
+
+    // along v
+    vec3 radialDisp = vec3(0.0);
+    // along di
+    vec3 tangentDisp = vec3(0.0);
+
+    // Accumulate normal components (Eq. 10)
+    float normalRadialSum = 0.0;
+    vec3  normalTangentSum = vec3(0.0);
+
+    for (int i = 0; i < numWaves && i < WAVE_MAX; ++i) {
+        vec3 di;
+        float li;
+        waveParams(v, waveOrigin[i], di, li);
+
+        // Scale li by sea-level radius for proper wavelength
+        li *= seaRadius;
+
+        float Ai = waveAmplitude[i];
+        float wi = waveFrequency[i];
+        float phi_i = waveSpeed[i];
+        float Qi = waveSteepness[i];
+
+        // Fade steepness near origin/antipode (Eq. 11)
+        Qi = fadeSteepness(Qi, v, waveOrigin[i], waveFadeE0, waveFadeE1);
+
+        float phase = wi * li + phi_i * deltaTime;
+        float sinPhase = sin(phase);
+        float cosPhase = cos(phase);
+
+        // Equation 8: displacement
+        radialDisp  += v * (Ai * sinPhase);
+        tangentDisp += di * (Qi * Ai * cosPhase);
+
+        // Equation 10: normal components
+        normalRadialSum  += Qi * Ai * wi * sinPhase;
+        normalTangentSum += di * Ai * wi * cosPhase;
+    }
+
+    // Final displaced position (Eq. 8):
+    // P_s = v*r + v*sum(Ai*sin(...)) + sum(Qi*Ai*cos(...)*di)
+    vec3 displaced = v * seaRadius + radialDisp + tangentDisp;
+
+    // Analytical normal (Eq. 10):
+    // n_s = v - v*sum(Qi*Ai*wi*sin(...)) - sum(di*Ai*wi*cos(...))
+    waveNormal = normalize(v * (1.0 - normalRadialSum) - normalTangentSum);
+
+    return displaced;
+}
+
+float computeTerrainElevation(vec3 pos) {
     float elevation = 0.0;
 
     // Base terrain
@@ -160,15 +262,14 @@ float computeAll(vec3 pos) {
         float continents = computeNoise(pos,
         amplitude[0], frequency[0], octaves[0],
         persistence[0], roughness[0], noiseOffset[0], type[0]);
-
         elevation += continents;
     }
 
     float landMask = smoothstep(oceanLevel, oceanLevel + 0.05, elevation);
 
-    // Detail layers - each one weaker than the last
-    float detailFalloff = 0.5;  // Each layer is half as strong
+    // Detail layers
     float currentStrength = 0.08;
+    float detailFalloff = 0.5;
 
     for (int i = 1; i < numNoises && i < NOISE_MAX; ++i) {
         if (shown[i]) {
@@ -178,118 +279,69 @@ float computeAll(vec3 pos) {
 
             float userScale = clamp(amplitude[i], 0.0, 1.0);
             elevation += detail * landMask * currentStrength * userScale;
-
             currentStrength *= detailFalloff;
         }
     }
 
-    // Gentle ocean floor
-    elevation = max(elevation, oceanLevel);
     return elevation;
 }
 
-vec3 waveNormal(vec3 pos){
-    vec3 dir = normalize(pos);
-    vec2 waveDir = normalize(dir.xz);
+// Terrain normal via finite differences -> only for land
+vec3 computeTerrainNormal(float hCenter, vec3 pos, vec3 nrm) {
+    vec3 up = abs(nrm.y) < 0.999 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
+    vec3 T = normalize(cross(up, nrm));
+    vec3 B = cross(nrm, T);
 
-    float time = waveSpeed * deltaTime;
-    float steepness = 1.0;
+    vec3 posT = pos + epsilon * T;
+    float hT = computeTerrainElevation(posT);
 
-    float phase = waveLength * dot(waveDir, pos.xz) + time;
-    float cosFactor = cos(phase);
-    float sinFactor = sin(phase);
+    vec3 posB = pos + epsilon * B;
+    float hB = computeTerrainElevation(posB);
 
-    float nx = -waveDir.x * waveLength * waveHeight * cosFactor;
-    float nz = -waveDir.y * waveLength * waveHeight * cosFactor;
-    float ny = 1.0 - steepness * waveHeight * sinFactor;
+    vec3 dT = T * epsilon + nrm * (hT - hCenter);
+    vec3 dB = B * epsilon + nrm * (hB - hCenter);
 
-
-    return normalize(vec3(nx, ny, nz));
+    return normalize(cross(dT, dB));
 }
 
 // inspired by https://catlikecoding.com/unity/tutorials/flow/waves/
 // https://gameidea.org/2023/12/01/3d-ocean-shader-using-gerstner-waves/
-vec3 computeWave(vec3 pos){
-    vec3 vertex = pos;
-    vec3 dir = normalize(pos);
-
-    float time = waveSpeed * deltaTime;
-    float steepness = 1.0;
-    float waveChar = steepness / waveLength;
-
-    // Use two components of direction for the wave propagation
-    vec2 waveDir = normalize(dir.xz);
-    float phase = waveLength * dot(waveDir, vertex.xz) + time;
-
-    float x = sin(vertex.x + waveChar * waveDir.x * cos(phase));
-    float z = sin(vertex.z + waveChar * waveDir.y * cos(phase));
-    float y = sin(vertex.y + waveHeight * sin(phase));
-
-    vec3 wavePos = waveHeight * vec3(x, y, z);
-
-    return wavePos;
-}
-
-float checkOcean(vec3 pos, float height){
-    float outValue = 0;
-
-    if(height == oceanLevel && wavesEnabled){
-        vec3 wave = computeWave(pos);
-        outValue = distance(wave, pos);
-    }
-
-    return outValue;
-}
-
-vec3 computeNormal(float vHeight, vec3 pos, vec3 normal){
-    // fallback for the poles -> cross should not equal 0
-    vec3 up = abs(normal.y) < 0.999 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
-    vec3 T = cross(up, normal);
-    vec3 B = cross(normal, T);
-
-    float hCenter = vHeight;
-    hCenter += checkOcean(pos, vHeight);
-
-    vec3 posT = pos + epsilon * T;
-    float hTangent   = computeAll(posT);
-    hTangent += checkOcean(posT, hTangent);
-
-    vec3 posB = pos + epsilon * B;
-    float hBitangent = computeAll(posB);
-    hBitangent += checkOcean(posB, hBitangent);
-
-    // (tangets - center) are partial derivatives -> how steep the surface is in each dir
-    vec3 dT = T * epsilon + normal * (hTangent - hCenter);
-    vec3 dB = B * epsilon + normal * (hBitangent - hCenter);
-
-    vec3 dNormal = normalize(cross(dT, dB));
-
-    return dNormal;
-}
-
+// https://www.desmos.com/calculator/o8fgriyavw
+// https://claude.ai/chat/7f14301e-d3f7-4f11-b5ea-9956b95899a3
 void main() {
-    vHeight = computeAll(position);
+    vec3 pos = position;
+    vec3 unitPos = normalize(pos);
 
-    vec3 perlinPosition = radius * position * (vHeight + 1);
+    // Compute terrain elevation on unit sphere
+    float elevation = computeTerrainElevation(pos);
 
-    if(vHeight <= oceanLevel + epsilon){
-        if (wavesEnabled){
-            float value = 0.0;
-            vec3 displace = computeWave(perlinPosition);
-            perlinPosition += displace;
-        }
+    vec3 outNormal;
+    vec3 displacedPos;
+
+    if (elevation <= oceanLevel) {
+        // Ocean using spherical Gerstner waves
+        isOcean = 1.0;
+        vHeight = oceanLevel;
+
+        float seaRadius = radius * (oceanLevel + 1.0);
+
+        vec3 waveNormal;
+        displacedPos = computeSphericalWaves(pos, seaRadius, waveNormal);
+
+        // Wave normal is already analytical —> no finite differences needed
+        outNormal = waveNormal;
+
+    } else {
+        // Land is displaced by elevation -> compute normal via finite differences
+        isOcean = 0.0;
+        vHeight = elevation;
+
+        displacedPos = unitPos * radius * (elevation + 1.0);
+
+        outNormal = computeTerrainNormal(elevation, pos, normal);
     }
 
-    if(vHeight == oceanLevel)
-        isOcean = 1.0;
-    else
-        isOcean = 0.0;
-
-    // TODO
-    // can possibly lower the size of noises to optimize -> depending on detail
-    vec3 outNormal = computeNormal(vHeight, position, normal);
-
-    vec4 worldPosition = modelMatrix * vec4(perlinPosition, 1.0);
+    vec4 worldPosition = modelMatrix * vec4(displacedPos, 1.0);
     vec4 cameraPos = viewMatrix * worldPosition;
     float distanceToCamera = length(cameraPos.xyz);
 

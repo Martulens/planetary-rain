@@ -131,14 +131,44 @@ void Draw::setupObject(std::shared_ptr<Object> object){
     object->getWavesEnabled() ? 1 : 0);
     glUniform1f(glGetUniformLocation(programLocation, "oceanLevel"),
         object->getOceanLevel());
-    glUniform1f(glGetUniformLocation(programLocation, "waveHeight"),
-        object->getWaveHeight());
-    glUniform1f(glGetUniformLocation(programLocation, "waveLength"),
-        object->getWaveLength());
-    glUniform1f(glGetUniformLocation(programLocation, "waveSpeed"),
-        object->getWaveSpeed());
-    glUniform1f(glGetUniformLocation(programLocation, "waveOffset"),
-        object->getWaveOffset());
+
+    glUniform1f(glGetUniformLocation(programLocation, "waveFadeE0"),
+        object->getFades().x);
+    glUniform1f(glGetUniformLocation(programLocation, "waveFadeE1"),
+        object->getFades().y);
+
+
+    auto waves = object->getWaves();
+    size_t numWaves = waves.size();
+
+    glUniform1i(glGetUniformLocation(programLocation, "numWaves"),
+    numWaves);
+
+    for (size_t i = 0; i < numWaves; ++i){
+        if (i >= WAVES_MAX)
+            break;
+
+        std::string uniformName = "waveAmplitude[" + std::to_string(i) + "]";
+        glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
+                    waves[i].amplitude);
+
+        uniformName = "waveFrequency[" + std::to_string(i) + "]";
+        glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
+                    waves[i].frequency);
+
+        uniformName = "waveSpeed[" + std::to_string(i) + "]";
+        glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
+                    waves[i].speed);
+
+        uniformName = "waveSteepness[" + std::to_string(i) + "]";
+        glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
+                    waves[i].steepness);
+
+        uniformName = "waveOrigin[" + std::to_string(i) + "]";
+        glUniform3f(glGetUniformLocation(programLocation, uniformName.c_str()),
+                    waves[i].origin.x, waves[i].origin.y, waves[i].origin.z);
+    }
+    CHECK_GL_ERROR();
 
     float detail = static_cast<float>(object->getDetail());
     float eps = glm::pi<float>() / detail;

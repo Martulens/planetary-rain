@@ -8,6 +8,15 @@
 #include "noise.h"
 #include "glm/vec3.hpp"
 #include "noise.h"
+#include "glm/vec2.hpp"
+
+struct WaveSettings{
+    float amplitude;
+    float frequency;
+    float speed;
+    float steepness;
+    glm::vec3 origin;
+};
 
 struct PlanetChangeFlags {
     bool meshChanged = false;
@@ -60,11 +69,12 @@ struct PlanetParams {
 
     // Waves
     bool wavesEnabled = false;
-    float oceanLevel = 1.5f;
-    float waveHeight = 0.05f;
-    float waveLength = 0.05f;
-    float waveSpeed = 0.2f;
-    float waveOffset = 0.0f;
+    float waveFadeE0 = 0.01f;
+    float waveFadeE1 = 0.1f;
+    float oceanLevel = 0.97f;
+
+    int waveCount = 1;
+    std::vector<WaveSettings> waves;
 
     // Rotation
     float rotationSpeed = 10.0f;

@@ -4,10 +4,8 @@
 #define OBJECT_H
 
 #include <memory>
-#include <string>
-
 #include "envMap.h"
-#include "meshGeometry.h"
+#include "meshGeometry.h"z
 #include "modelTexture.h"
 #include "noise.h"
 #include "shaderProgram.h"
@@ -70,19 +68,16 @@ public:
     bool getNeedsEnvMap() const { return mNeedsEnvMap; }
 
     // -> terrain
-    virtual bool getUsingTerrain() const { return false; };
-    virtual Noise getNoise() const { return Noise(); };
-    virtual float getRadius() const { return 1.0f; };
+    virtual bool getUsingTerrain() const  = 0;
+    virtual Noise getNoise() const = 0;
+    virtual float getRadius() const  = 0;
 
     // -> waves
-    virtual bool getWavesEnabled() const { return false;}
-    virtual float getWaveHeight() const { return 0.0f; }
-    virtual float getWaveLength() const { return 0.0f; }
-    virtual float getWaveSpeed() const { return 0.0f; }
-    virtual float getWaveOffset() const { return 0.0f; }
-    virtual float getOceanLevel() const {  return 0.97; };
-
-    virtual void setOceanLevel(float l){ return;};
+    virtual bool getWavesEnabled() const = 0;
+    virtual float getWaveHeight() const = 0;
+    virtual float getOceanLevel() const = 0;
+    virtual glm::vec2 getFades() const = 0;
+    virtual std::vector<WaveSettings> getWaves() const { return std::vector<WaveSettings>(); }
 
 
     // -> interaction
