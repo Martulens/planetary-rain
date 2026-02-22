@@ -90,10 +90,9 @@ void main() {
     else
     color = gradientColor(vHeight);
 
-    // Detect water: either from vertex flag or height-based in fragment
     bool waterSurface = isOcean > 0.5;
 
-    // === REFLECTION (water only) ===
+    // === REFLECTION
     vec3 envReflection = vec3(0.0);
     vec3 fresnel = vec3(0.0);
 
@@ -108,7 +107,7 @@ void main() {
 
         float cosTheta = max(dot(normal, viewDir), 0.0);
         // -> water has low base reflectance
-        vec3 F0 = vec3(0.02);
+        vec3 F0 = vec3(0.2);
         fresnel = fresnelSchlick(cosTheta, F0);
     }
 

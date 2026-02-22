@@ -45,7 +45,6 @@ void Scene::updatePlanet(PlanetParams& params){
         mPlanet->setOceanLevel(params.oceanLevel);
         mPlanet->setFades(params.waveFadeE0, params.waveFadeE1);
 
-
         mPlanet->setWaves(params.waves);
     }
 

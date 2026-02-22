@@ -11,8 +11,7 @@
 
 #include "glm/gtx/string_cast.hpp"
 
-void UI::initUI()
-{
+void UI::initUI(){
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
@@ -162,53 +161,53 @@ void randomizeWaves(PlanetParams& params, int count = 5)
     params.waveCount = count;
     params.waveFadeE0 = 0.01f;
     params.waveFadeE1 = 0.1f;
-    params.waves.resize(count);
+    params.waves.clear();
 
-    // Distribution helpers
+    //Distribution helpers
     std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * 3.14159265f);
     std::uniform_real_distribution<float> cosThetaDist(-1.0f, 1.0f);
 
-    // Each successive wave: smaller amplitude, higher frequency (detail cascades)
-    for (int i = 0; i < count; i++)
-    {
-        auto& w = params.waves[i];
+    //Each successive wave : smaller amplitude, higher frequency(detail cascades)
+    for (int i = 0; i < count; i++){
+        WaveSettings set;
 
-        // Amplitude decreases with each wave layer
+        //Amplitude decreases with each wave layer
         // Primary swell is biggest, secondary chop is smaller
         float baseAmp = 3.0f * std::pow(0.55f, static_cast<float>(i));
         std::uniform_real_distribution<float> ampJitter(0.8f, 1.2f);
-        w.amplitude = std::clamp(baseAmp * ampJitter(rng), 1.0f, 10.0f);
+        float val = baseAmp * ampJitter(rng);
+        set.amplitude = glm::clamp(val, 0.01f, 0.5f);
 
-        // Frequency increases with each layer (shorter wavelengths for detail)
-        // On a sphere, frequency is angular frequency: omega_i
-        // Low values = long rolling swells, higher = choppy detail
+        // Frequency increases with each layer(shorter wavelengthsfor detail)
         float baseFreq = 0.05f * std::pow(1.8f, static_cast<float>(i));
-        std::uniform_real_distribution<float> freqJitter(0.85f, 1.15f);
-        w.frequency = std::clamp(baseFreq * freqJitter(rng), 0.01f, 1.0f);
+        std::uniform_real_distribution<float> freqJitter(0.85f, 7.5f);
+        set.frequency = glm::clamp(baseFreq * freqJitter(rng), 0.5f, 3.5f);
 
-        // Speed (phase velocity) - bigger waves travel faster
-        // Positive = propagating outward from origin
+        // Speed(phase velocity) - bigger
         float baseSpeed = 0.15f * std::pow(0.7f, static_cast<float>(i));
-        std::uniform_real_distribution<float> speedJitter(0.7f, 1.3f);
-        w.speed = std::clamp(baseSpeed * speedJitter(rng), 0.02f, 0.5f);
+        std::uniform_real_distribution<float> speedJitter(1.8f, 5.0f);
+        set.speed = glm::clamp(baseSpeed * speedJitter(rng), 1.8f, 5.0f);
 
-        // Steepness Q: 0 = pure sine, 1 = sharp Gerstner peaks
+        //Steepness Q :
+        // 0 = pure sine, 1 = sharp Gerstner peaks
         // Keep well below 1.0 to avoid looping artifacts
-        // Primary swell: gentler; chop waves: steeper
         float baseSteep = 0.3f + 0.15f * i;
         std::uniform_real_distribution<float> steepJitter(0.9f, 1.1f);
-        w.steepness = std::clamp(baseSteep * steepJitter(rng), 0.1f, 0.75f);
+        set.steepness = glm::clamp(baseSteep * steepJitter(rng), 0.1f, 0.75f);
 
-        // Origin: random point on unit sphere (the shader expects a direction)
+        // Origin:
+        // random point on unit sphere(the shader expects a direction)
         // Using uniform sphere sampling
         float cosTheta = cosThetaDist(rng);
         float sinTheta = std::sqrt(1.0f - cosTheta * cosTheta);
         float phi = angleDist(rng);
-        w.origin = glm::vec3(
+        set.origin = glm::vec3(
             sinTheta * std::cos(phi),
             sinTheta * std::sin(phi),
             cosTheta
         );
+
+        params.waves.emplace_back(set);
     }
 }
 
@@ -260,10 +259,9 @@ void UI::renderUI()
 
         if (mPlanetParams.wavesEnabled)
         {
-            if (ImGui::Button("Randomize Waves"))
-            {
-                randomizeWaves(mPlanetParams);
-                mPlanetParams.changes.wavesChanged = true;
+            if (ImGui::Button("Randomize Waves")){
+                 randomizeWaves(mPlanetParams);
+                 mPlanetParams.changes.wavesChanged = true;
             }
 
             mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat("Wave FadeE0", &mPlanetParams.waveFadeE0, 0.001f,
@@ -271,15 +269,12 @@ void UI::renderUI()
             mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat("Wave FadeE1", &mPlanetParams.waveFadeE1, 0.01f,
                                                                      0.5f);
 
-            if (ImGui::SliderInt("Number of Waves", &mPlanetParams.waveCount, 0, 10))
-            {
-                mPlanetParams.changes.wavesChanged = true;
+            mPlanetParams.changes.wavesChanged |= ImGui::SliderInt("Number of Waves", &mPlanetParams.waveCount, 0, 10);
 
-                while ((int)mPlanetParams.waves.size() < mPlanetParams.waveCount)
-                    mPlanetParams.waves.emplace_back();
-                while ((int)mPlanetParams.waves.size() > mPlanetParams.waveCount)
-                    mPlanetParams.waves.pop_back();
-            }
+            while ((int)mPlanetParams.waves.size() < mPlanetParams.waveCount)
+                mPlanetParams.waves.emplace_back();
+            while ((int)mPlanetParams.waves.size() > mPlanetParams.waveCount)
+                mPlanetParams.waves.pop_back();
 
             for (int i = 0; i < mPlanetParams.waveCount; i++)
             {
@@ -289,11 +284,11 @@ void UI::renderUI()
                 if (ImGui::CollapsingHeader(name.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
                 {
                     mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat(
-                        "Amplitude", &mPlanetParams.waves[i].amplitude, 1.0f, 10.0f);
+                        "Amplitude", &mPlanetParams.waves[i].amplitude, 0.01f, 1.0f);
                     mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat(
-                        "Frequency", &mPlanetParams.waves[i].frequency, 0.01f, 1.0f);
+                        "Frequency", &mPlanetParams.waves[i].frequency, 0.01f, 3.5f);
                     mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat(
-                        "Speed", &mPlanetParams.waves[i].speed, 0.01f, 0.5f);
+                        "Speed", &mPlanetParams.waves[i].speed, 0.0f, 5.0f);
                     mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat(
                         "Steepness", &mPlanetParams.waves[i].steepness, 0.0f, 0.85f);
 
@@ -304,7 +299,6 @@ void UI::renderUI()
                     mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat(
                         "Origin Z", &mPlanetParams.waves[i].origin.z, -1.0f, 1.0f);
 
-                    // Normalize origin so the shader gets a unit direction
                     glm::vec3& o = mPlanetParams.waves[i].origin;
                     float len = glm::length(o);
                     if (len > 1e-6f) o /= len;

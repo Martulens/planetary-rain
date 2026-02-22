@@ -1,7 +1,4 @@
 #include <iostream>
-#include <list>
-#include <set>
-#include <utility>
 #include <algorithm>
 #define GLM_ENABLE_EXPERIMENTAL
 
@@ -11,12 +8,11 @@
 #include "config.h"
 #include "callbacks.h"
 #include "game.h"
-#include "camera.h"
 #include "ui.h"
 
 // === APP SETUP
 void initApp() {
-    srand((unsigned int)time(NULL));
+    srand((unsigned int)time(nullptr));
     glClearColor(SKY_COLOR.r, SKY_COLOR.g, SKY_COLOR.b, SKY_COLOR.w);
     glEnable(GL_DEPTH_TEST);
 

@@ -11,11 +11,11 @@
 #include "glm/vec2.hpp"
 
 struct WaveSettings{
-    float amplitude;
-    float frequency;
-    float speed;
-    float steepness;
-    glm::vec3 origin;
+    float amplitude = 0.5f;
+    float frequency = 2.0f;
+    float speed = 3.5f;
+    float steepness = 0.5f;
+    glm::vec3 origin = glm::vec3(0.0f);
 };
 
 struct PlanetChangeFlags {

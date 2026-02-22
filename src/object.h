@@ -5,7 +5,7 @@
 
 #include <memory>
 #include "envMap.h"
-#include "meshGeometry.h"z
+#include "meshGeometry.h"
 #include "modelTexture.h"
 #include "noise.h"
 #include "shaderProgram.h"
@@ -52,7 +52,6 @@ public:
     void setRotationY(float rot) { mRotationY = rot; updateModelMatrix(); }
     void setSize(float s) { mSize = s; updateModelMatrix(); }
     void setNeedsEnvMap(bool needs) { mNeedsEnvMap = needs; }
-    virtual void setOceanLevel(){};
 
     // === GETTERS
     // -> model properties
@@ -74,7 +73,6 @@ public:
 
     // -> waves
     virtual bool getWavesEnabled() const = 0;
-    virtual float getWaveHeight() const = 0;
     virtual float getOceanLevel() const = 0;
     virtual glm::vec2 getFades() const = 0;
     virtual std::vector<WaveSettings> getWaves() const { return std::vector<WaveSettings>(); }

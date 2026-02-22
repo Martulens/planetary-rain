@@ -67,10 +67,11 @@ public:
     void setOceanLevel(float l) { mOceanLevel = l;}
     void setWavesEnabled(bool e) { mWavesEnabled = e;}
     void setFades(float e0, float e1){ mFadeE0 = e0; mFadeE1 = e1; };
+    void setWaves(const std::vector<WaveSettings>& waves) { mWaves = waves; }
 
 
     bool getWavesEnabled() const override { return mWavesEnabled;}
-    float getOceanLevel() const override {return mOceanLevel};
+    float getOceanLevel() const override {return mOceanLevel; };
     glm::vec2 getFades() const override {return glm::vec2(mFadeE0, mFadeE1);};
     std::vector<WaveSettings> getWaves() const override { return mWaves; }
 };
