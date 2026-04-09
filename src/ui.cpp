@@ -7,7 +7,6 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <iostream>
 #include <random>
-#include <bits/algorithmfwd.h>
 
 #include "glm/gtx/string_cast.hpp"
 

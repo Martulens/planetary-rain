@@ -37,18 +37,6 @@ int main(int argc, char** argv){
     glutDisplayFunc(onDisplay);
     glutReshapeFunc(onReshape);
 
-    // TODO -> does not work -\_(T.T)_/-
-    // \todo Review: Use lambda's instead of callbacks. The lambda needs to have the same function signature as the callback requires
-    // like this:
-    // [](unsigned char keyPressed, int mouseX, int mouseY){}
-    //
-    // if you want to pass additional information it should passed via capture brackets.
-    // lets say you implemented the game class as I have suggested and you have Game game; instance
-    //
-    // [&game](unsigned char keyPressed, int mouseX, int mouseY){...}
-    // warning: if you pass [game], the instance is copied. I highly recommend getting familiar with lambdas
-    // the lambda body is just as any function you would implement
-
     Game game = Game();
     glutKeyboardFunc(keyboardCallback);
     glutKeyboardUpFunc(keyboardUpCallback);

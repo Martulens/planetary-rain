@@ -36,7 +36,6 @@ public:
     void renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& projection, std::shared_ptr<Object> excludeObject);
 
     // === Constructing scene
-    void constructLights();
     void constructDebugLights();
     void constructObjects();
     void constructDebugObjects();

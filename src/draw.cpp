@@ -340,9 +340,5 @@ void Draw::drawWindow(std::shared_ptr<Scene> scene, std::shared_ptr<Camera> came
     else
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-    // Draw the scene
-    if (scene)
-        scene->update(deltaTime);
-
     drawScene(scene, camera, gameState);
 }
