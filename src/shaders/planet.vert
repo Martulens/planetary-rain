@@ -21,26 +21,25 @@ uniform float gradient;
 uniform float radius;
 
 uniform int numNoises;
-uniform int octaves[NOISE_MAX];
-uniform int type[NOISE_MAX];
+uniform int noiseOctaves[NOISE_MAX];
+uniform int noiseType[NOISE_MAX];
 
-uniform bool shown[NOISE_MAX];
+uniform bool noiseShown[NOISE_MAX];
 
-uniform float frequency[NOISE_MAX];
-uniform float amplitude[NOISE_MAX];
-uniform float persistence[NOISE_MAX];
-uniform float roughness[NOISE_MAX];
+uniform float noiseFrequency[NOISE_MAX];
+uniform float noiseAmplitude[NOISE_MAX];
+uniform float noisePersistence[NOISE_MAX];
+uniform float noiseRoughness[NOISE_MAX];
 uniform float noiseOffset[NOISE_MAX];
 
 uniform int numWaves;
 uniform bool wavesEnabled;
 
 // Per-wave parameters
-uniform float waveAmplitude[WAVE_MAX];    // A_i
-uniform float waveFrequency[WAVE_MAX];    // omega_i
-uniform float waveSpeed[WAVE_MAX];        // phi_i (phase speed)
-uniform float waveSteepness[WAVE_MAX];    // Q_i (0 to 1)
-uniform vec3  waveOrigin[WAVE_MAX];       // o_i - unit vector pointing to wave origin on sphere
+uniform float waveFrequency[WAVE_MAX];
+uniform float waveSpeed[WAVE_MAX];
+uniform float waveSteepness[WAVE_MAX];
+uniform vec3  waveOrigin[WAVE_MAX];
 
 // Smoothstep fade parameters to prevent loops at origin/antipode
 uniform float waveFadeE0;
@@ -54,9 +53,6 @@ out float visibility;
 out float vHeight;
 out float isOcean;
 
-// ============================================================
-// Simplex Noise (unchanged)
-// ============================================================
 vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
 vec4 permute(vec4 x) { return mod289(((x * 34.0) + 1.0) * x); }
@@ -185,7 +181,6 @@ void waveParams(vec3 v, vec3 oi, out vec3 di, out float li) {
         di = di / len;
     } else {
         // At the origin or antipode -> wrongly displaced -> direction is degenerate
-        // Pick an arbitrary tangent
         vec3 up = abs(v.y) < 0.999 ? vec3(0.0, 1.0, 0.0) : vec3(1.0, 0.0, 0.0);
         di = normalize(cross(v, up));
     }
@@ -204,7 +199,6 @@ vec3 computeSphericalWaves(vec3 pos, float seaRadius, out vec3 waveNormal) {
     vec3 v = normalize(pos);
 
     // Accumulate displacement components
-
     // along v
     vec3 radialDisp = vec3(0.0);
     // along di
@@ -222,7 +216,7 @@ vec3 computeSphericalWaves(vec3 pos, float seaRadius, out vec3 waveNormal) {
         // Scale li by sea-level radius for proper wavelength
         li *= seaRadius;
 
-        float Ai = waveAmplitude[i];
+        float Ai = 0.5;
         float wi = waveFrequency[i];
         float phi_i = waveSpeed[i];
         float Qi = waveSteepness[i];
@@ -244,11 +238,9 @@ vec3 computeSphericalWaves(vec3 pos, float seaRadius, out vec3 waveNormal) {
     }
 
     // Final displaced position (Eq. 8):
-    // P_s = v*r + v*sum(Ai*sin(...)) + sum(Qi*Ai*cos(...)*di)
     vec3 displaced = v * seaRadius + radialDisp + tangentDisp;
 
     // Analytical normal (Eq. 10):
-    // n_s = v - v*sum(Qi*Ai*wi*sin(...)) - sum(di*Ai*wi*cos(...))
     waveNormal = normalize(v * (1.0 - normalRadialSum) - normalTangentSum);
 
     return displaced;
@@ -258,10 +250,10 @@ float computeTerrainElevation(vec3 pos) {
     float elevation = 0.0;
 
     // Base terrain
-    if (numNoises > 0 && shown[0]) {
+    if (numNoises > 0 && noiseShown[0]) {
         float continents = computeNoise(pos,
-        amplitude[0], frequency[0], octaves[0],
-        persistence[0], roughness[0], noiseOffset[0], type[0]);
+        noiseAmplitude[0], noiseFrequency[0], noiseOctaves[0],
+        noisePersistence[0], noiseRoughness[0], noiseOffset[0], noiseType[0]);
         elevation += continents;
     }
 
@@ -272,17 +264,15 @@ float computeTerrainElevation(vec3 pos) {
     float detailFalloff = 0.5;
 
     for (int i = 1; i < numNoises && i < NOISE_MAX; ++i) {
-        if (shown[i]) {
+        if (noiseShown[i]) {
             float detail = computeNoise(pos,
-            amplitude[i], frequency[i], octaves[i],
-            persistence[i], roughness[i], noiseOffset[i], type[i]);
+            noiseAmplitude[i], noiseFrequency[i], noiseOctaves[i],
+            noisePersistence[i], noiseRoughness[i], noiseOffset[i], noiseType[i]);
 
-            float userScale = clamp(amplitude[i], 0.0, 1.0);
-            elevation += detail * landMask * currentStrength * userScale;
+            elevation += detail * landMask * currentStrength;
             currentStrength *= detailFalloff;
         }
     }
-
     return elevation;
 }
 
@@ -307,7 +297,6 @@ vec3 computeTerrainNormal(float hCenter, vec3 pos, vec3 nrm) {
 // inspired by https://catlikecoding.com/unity/tutorials/flow/waves/
 // https://gameidea.org/2023/12/01/3d-ocean-shader-using-gerstner-waves/
 // https://www.desmos.com/calculator/o8fgriyavw
-// https://claude.ai/chat/7f14301e-d3f7-4f11-b5ea-9956b95899a3
 void main() {
     vec3 pos = position;
     vec3 unitPos = normalize(pos);

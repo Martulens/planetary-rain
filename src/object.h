@@ -75,7 +75,7 @@ public:
     virtual bool getWavesEnabled() const = 0;
     virtual float getOceanLevel() const = 0;
     virtual glm::vec2 getFades() const = 0;
-    virtual std::vector<WaveSettings> getWaves() const { return std::vector<WaveSettings>(); }
+    virtual std::vector<WaveSettings> getWaves() const = 0;
 
 
     // -> interaction

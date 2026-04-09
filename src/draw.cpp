@@ -93,31 +93,31 @@ void Draw::setupObject(std::shared_ptr<Object> object){
 
         NoiseSettings settings = noises[i];
 
-        std::string uniformName = "shown[" + std::to_string(i) + "]";
+        std::string uniformName = "noiseShown[" + std::to_string(i) + "]";
         glUniform1i(glGetUniformLocation(programLocation, uniformName.c_str()),
                     settings.shown);
 
-        uniformName = "type[" + std::to_string(i) + "]";
+        uniformName = "noiseType[" + std::to_string(i) + "]";
         glUniform1i(glGetUniformLocation(programLocation, uniformName.c_str()),
                     settings.type);
 
-        uniformName = "octaves[" + std::to_string(i) + "]";
+        uniformName = "noiseOctaves[" + std::to_string(i) + "]";
         glUniform1i(glGetUniformLocation(programLocation, uniformName.c_str()),
                     settings.octaves);
 
-        uniformName = "frequency[" + std::to_string(i) + "]";
+        uniformName = "noiseFrequency[" + std::to_string(i) + "]";
         glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
                     settings.frequency);
 
-        uniformName = "amplitude[" + std::to_string(i) + "]";
+        uniformName = "noiseAmplitude[" + std::to_string(i) + "]";
         glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
                     settings.amplitude);
 
-        uniformName = "persistence[" + std::to_string(i) + "]";
+        uniformName = "noisePersistence[" + std::to_string(i) + "]";
         glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
                     settings.persistence);
 
-        uniformName = "roughness[" + std::to_string(i) + "]";
+        uniformName = "noiseRoughness[" + std::to_string(i) + "]";
         glUniform1f(glGetUniformLocation(programLocation, uniformName.c_str()),
                     settings.roughness);
 

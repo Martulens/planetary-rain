@@ -167,12 +167,10 @@ void randomizeWaves(PlanetParams& params, int count = 5)
     std::uniform_real_distribution<float> angleDist(0.0f, 2.0f * 3.14159265f);
     std::uniform_real_distribution<float> cosThetaDist(-1.0f, 1.0f);
 
-    //Each successive wave : smaller amplitude, higher frequency(detail cascades)
     for (int i = 0; i < count; i++){
         WaveSettings set;
 
         //Amplitude decreases with each wave layer
-        // Primary swell is biggest, secondary chop is smaller
         float baseAmp = 3.0f * std::pow(0.55f, static_cast<float>(i));
         std::uniform_real_distribution<float> ampJitter(0.8f, 1.2f);
         float val = baseAmp * ampJitter(rng);
@@ -189,8 +187,6 @@ void randomizeWaves(PlanetParams& params, int count = 5)
         set.speed = glm::clamp(baseSpeed * speedJitter(rng), 1.8f, 5.0f);
 
         //Steepness Q :
-        // 0 = pure sine, 1 = sharp Gerstner peaks
-        // Keep well below 1.0 to avoid looping artifacts
         float baseSteep = 0.3f + 0.15f * i;
         std::uniform_real_distribution<float> steepJitter(0.9f, 1.1f);
         set.steepness = glm::clamp(baseSteep * steepJitter(rng), 0.1f, 0.75f);
@@ -284,8 +280,6 @@ void UI::renderUI()
                 if (ImGui::CollapsingHeader(name.c_str(), ImGuiTreeNodeFlags_DefaultOpen))
                 {
                     mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat(
-                        "Amplitude", &mPlanetParams.waves[i].amplitude, 0.01f, 1.0f);
-                    mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat(
                         "Frequency", &mPlanetParams.waves[i].frequency, 0.01f, 3.5f);
                     mPlanetParams.changes.wavesChanged |= ImGui::SliderFloat(
                         "Speed", &mPlanetParams.waves[i].speed, 0.0f, 5.0f);
@@ -371,217 +365,10 @@ void UI::renderUI()
     }
 
     // --- Presets ---
-    if (ImGui::CollapsingHeader("Presets"))
-    {
-        auto setPresetFlags = [this]()
-        {
-            mPlanetParams.changes.materialChanged = true;
-            mPlanetParams.changes.noiseChanged = true;
-        };
-
-        if (ImGui::Button("Earth-like"))
-        {
-            mPlanetParams.color = glm::vec3(0.2f, 0.5f, 0.3f);
-            mPlanetParams.pd = 0.8f;
-            mPlanetParams.ps = 0.2f;
-            mPlanetParams.ns = 16.0f;
-            mPlanetParams.reflectivity = 0.1f;
-            mPlanetParams.ior = 1.0f;
-            mPlanetParams.transparency = 0.0f;
-            mPlanetParams.noiseCount = 2;
-            mPlanetParams.noise.clear();
-            {
-                NoiseSettings n;
-                n.shown = true;
-                n.octaves = 4;
-                n.frequency = 1.0f;
-                n.amplitude = 0.15f;
-                n.persistence = 0.5f;
-                n.roughness = 2.0f;
-                n.offset = 0.0f;
-                mPlanetParams.noise.push_back(n);
-            }
-            {
-                NoiseSettings n;
-                n.shown = true;
-                n.octaves = 6;
-                n.frequency = 2.5f;
-                n.amplitude = 0.08f;
-                n.persistence = 0.4f;
-                n.roughness = 2.2f;
-                n.offset = 42.0f;
-                mPlanetParams.noise.push_back(n);
-            }
-            setPresetFlags();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Gas Giant"))
-        {
-            mPlanetParams.color = glm::vec3(0.8f, 0.6f, 0.4f);
-            mPlanetParams.pd = 0.9f;
-            mPlanetParams.ps = 0.1f;
-            mPlanetParams.ns = 8.0f;
-            mPlanetParams.reflectivity = 0.05f;
-            mPlanetParams.ior = 1.0f;
-            mPlanetParams.transparency = 0.0f;
-            mPlanetParams.noiseCount = 1;
-            mPlanetParams.noise.clear();
-            {
-                NoiseSettings n;
-                n.shown = true;
-                n.octaves = 2;
-                n.frequency = 0.5f;
-                n.amplitude = 0.02f;
-                n.persistence = 0.6f;
-                n.roughness = 1.5f;
-                n.offset = 0.0f;
-                mPlanetParams.noise.push_back(n);
-            }
-            setPresetFlags();
-        }
-        if (ImGui::Button("Ice World"))
-        {
-            mPlanetParams.color = glm::vec3(0.7f, 0.85f, 0.95f);
-            mPlanetParams.pd = 0.5f;
-            mPlanetParams.ps = 0.8f;
-            mPlanetParams.ns = 64.0f;
-            mPlanetParams.reflectivity = 0.4f;
-            mPlanetParams.ior = 1.0f;
-            mPlanetParams.transparency = 0.0f;
-            mPlanetParams.noiseCount = 2;
-            mPlanetParams.noise.clear();
-            {
-                NoiseSettings n;
-                n.shown = true;
-                n.octaves = 3;
-                n.frequency = 1.5f;
-                n.amplitude = 0.05f;
-                n.persistence = 0.5f;
-                n.roughness = 2.0f;
-                n.offset = 10.0f;
-                mPlanetParams.noise.push_back(n);
-            }
-            {
-                NoiseSettings n;
-                n.shown = true;
-                n.octaves = 5;
-                n.frequency = 3.0f;
-                n.amplitude = 0.02f;
-                n.persistence = 0.4f;
-                n.roughness = 2.5f;
-                n.offset = 77.0f;
-                mPlanetParams.noise.push_back(n);
-            }
-            setPresetFlags();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Molten"))
-        {
-            mPlanetParams.color = glm::vec3(0.9f, 0.3f, 0.1f);
-            mPlanetParams.pd = 0.7f;
-            mPlanetParams.ps = 0.6f;
-            mPlanetParams.ns = 32.0f;
-            mPlanetParams.reflectivity = 0.2f;
-            mPlanetParams.ior = 1.0f;
-            mPlanetParams.transparency = 0.0f;
-            mPlanetParams.noiseCount = 2;
-            mPlanetParams.noise.clear();
-            {
-                NoiseSettings n;
-                n.shown = true;
-                n.octaves = 4;
-                n.frequency = 1.2f;
-                n.amplitude = 0.2f;
-                n.persistence = 0.5f;
-                n.roughness = 2.0f;
-                n.offset = 33.0f;
-                mPlanetParams.noise.push_back(n);
-            }
-            {
-                NoiseSettings n;
-                n.shown = true;
-                n.octaves = 6;
-                n.frequency = 2.8f;
-                n.amplitude = 0.1f;
-                n.persistence = 0.35f;
-                n.roughness = 2.3f;
-                n.offset = 99.0f;
-                mPlanetParams.noise.push_back(n);
-            }
-            setPresetFlags();
-        }
-        if (ImGui::Button("Rocky"))
-        {
-            mPlanetParams.color = glm::vec3(0.5f, 0.45f, 0.4f);
-            mPlanetParams.pd = 0.9f;
-            mPlanetParams.ps = 0.1f;
-            mPlanetParams.ns = 8.0f;
-            mPlanetParams.reflectivity = 0.0f;
-            mPlanetParams.ior = 1.0f;
-            mPlanetParams.transparency = 0.0f;
-            mPlanetParams.noiseCount = 3;
-            mPlanetParams.noise.clear();
-            {
-                NoiseSettings n;
-                n.shown = true;
-                n.octaves = 3;
-                n.frequency = 0.8f;
-                n.amplitude = 0.12f;
-                n.persistence = 0.5f;
-                n.roughness = 2.0f;
-                n.offset = 5.0f;
-                mPlanetParams.noise.push_back(n);
-            }
-            {
-                NoiseSettings n;
-                n.shown = true;
-                n.octaves = 5;
-                n.frequency = 2.0f;
-                n.amplitude = 0.08f;
-                n.persistence = 0.45f;
-                n.roughness = 2.1f;
-                n.offset = 20.0f;
-                mPlanetParams.noise.push_back(n);
-            }
-            {
-                NoiseSettings n;
-                n.shown = true;
-                n.octaves = 7;
-                n.frequency = 3.5f;
-                n.amplitude = 0.03f;
-                n.persistence = 0.4f;
-                n.roughness = 2.4f;
-                n.offset = 50.0f;
-                mPlanetParams.noise.push_back(n);
-            }
-            setPresetFlags();
-        }
-        ImGui::SameLine();
-        if (ImGui::Button("Smooth"))
-        {
-            mPlanetParams.color = glm::vec3(0.6f, 0.55f, 0.7f);
-            mPlanetParams.pd = 0.6f;
-            mPlanetParams.ps = 0.4f;
-            mPlanetParams.ns = 32.0f;
-            mPlanetParams.reflectivity = 0.15f;
-            mPlanetParams.ior = 1.0f;
-            mPlanetParams.transparency = 0.0f;
-            mPlanetParams.noiseCount = 1;
-            mPlanetParams.noise.clear();
-            {
-                NoiseSettings n;
-                n.shown = true;
-                n.octaves = 2;
-                n.frequency = 0.6f;
-                n.amplitude = 0.03f;
-                n.persistence = 0.5f;
-                n.roughness = 1.8f;
-                n.offset = 0.0f;
-                mPlanetParams.noise.push_back(n);
-            }
-            setPresetFlags();
-        }
-    }
+    // if (ImGui::CollapsingHeader("Presets"))
+    // {
+    //
+    // }
 
     ImGui::End();
 
