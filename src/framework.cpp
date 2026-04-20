@@ -94,8 +94,6 @@ namespace framework{  // Debug Callback (for OpenGL debug output)
             }
         }
 
-        // Note: stb_image doesn't need initialization like DevIL's ilInit()
-
         std::cout << "framework: initialized, using OpenGL " << glVerMajor << "." << glVerMinor
             << " debug " << (debugEnabled ? "enabled" : "disabled") << std::endl;
 

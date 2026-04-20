@@ -114,7 +114,6 @@ void onMouseMove(int x, int y) {
         return;
     }
 
-    // FPS mode: your existing camera code
     static bool warping = false;
     if (warping) {
         warping = false;

@@ -1,0 +1,12 @@
+# This is a generated file and its contents are an internal implementation detail.
+# The download step will be re-executed if anything in this file changes.
+# No other meaning or use of this file is supported.
+
+method=url
+command=/usr/bin/cmake;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;/home/martul3ns/projects/planetary-rain/src/build/_deps/glew-subbuild/glew-populate-prefix/src/glew-populate-stamp/download-glew-populate.cmake;COMMAND;/usr/bin/cmake;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;/home/martul3ns/projects/planetary-rain/src/build/_deps/glew-subbuild/glew-populate-prefix/src/glew-populate-stamp/verify-glew-populate.cmake;COMMAND;/usr/bin/cmake;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;/home/martul3ns/projects/planetary-rain/src/build/_deps/glew-subbuild/glew-populate-prefix/src/glew-populate-stamp/extract-glew-populate.cmake
+source_dir=/home/martul3ns/projects/planetary-rain/src/build/_deps/glew-src
+work_dir=/home/martul3ns/projects/planetary-rain/src/build/_deps
+url(s)=https://github.com/nigels-com/glew/releases/download/glew-2.2.0/glew-2.2.0.tgz
+hash=
+      no_extract=
+

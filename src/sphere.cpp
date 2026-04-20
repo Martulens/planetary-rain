@@ -81,12 +81,12 @@ void Sphere::updateMaterial(const glm::vec3& color, float pd, float ps, float ns
 void Sphere::updateNoise(const std::vector<NoiseSettings>& settings, bool showTerrain){
     mNoise = Noise(settings);
     mShowTerrain = showTerrain;
-    // No mesh rebuild — noise is evaluated in vertex shader via uniforms
+    // no mesh rebuild, noise is evaluated in the vertex shader via uniforms
 }
 
 void Sphere::updateRadius(float radius){
     mRadius = radius;
-    // No mesh rebuild — radius is sent as a uniform
+    // no mesh rebuild, radius is sent as a uniform
 }
 
 void Sphere::rebuildMesh(int detail){

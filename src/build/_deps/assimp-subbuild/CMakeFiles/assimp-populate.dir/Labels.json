@@ -1,0 +1,46 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "/home/martul3ns/projects/planetary-rain/src/build/_deps/assimp-subbuild/CMakeFiles/assimp-populate"
+		},
+		{
+			"file" : "/home/martul3ns/projects/planetary-rain/src/build/_deps/assimp-subbuild/CMakeFiles/assimp-populate.rule"
+		},
+		{
+			"file" : "/home/martul3ns/projects/planetary-rain/src/build/_deps/assimp-subbuild/CMakeFiles/assimp-populate-complete.rule"
+		},
+		{
+			"file" : "/home/martul3ns/projects/planetary-rain/src/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-build.rule"
+		},
+		{
+			"file" : "/home/martul3ns/projects/planetary-rain/src/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-configure.rule"
+		},
+		{
+			"file" : "/home/martul3ns/projects/planetary-rain/src/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-download.rule"
+		},
+		{
+			"file" : "/home/martul3ns/projects/planetary-rain/src/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-install.rule"
+		},
+		{
+			"file" : "/home/martul3ns/projects/planetary-rain/src/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-mkdir.rule"
+		},
+		{
+			"file" : "/home/martul3ns/projects/planetary-rain/src/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-patch.rule"
+		},
+		{
+			"file" : "/home/martul3ns/projects/planetary-rain/src/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-test.rule"
+		},
+		{
+			"file" : "/home/martul3ns/projects/planetary-rain/src/build/_deps/assimp-subbuild/assimp-populate-prefix/src/assimp-populate-stamp/assimp-populate-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"assimp-populate"
+		],
+		"name" : "assimp-populate"
+	}
+}

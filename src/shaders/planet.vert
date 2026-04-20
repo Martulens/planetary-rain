@@ -317,7 +317,7 @@ void main() {
         vec3 waveNormal;
         displacedPos = computeSphericalWaves(pos, seaRadius, waveNormal);
 
-        // Wave normal is already analytical —> no finite differences needed
+        // wave normal is already analytical, no finite differences needed
         outNormal = waveNormal;
 
     } else {
