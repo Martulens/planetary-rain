@@ -182,24 +182,6 @@ void Scene::constructDebugLights()
         false
     );
     addLight(sunLight);
-
-    /*
-    Light* pointLight1 = new Light(
-        glm::vec3(0.0f, 3.0f, 5.0f),
-        glm::vec3(1.0f, 0.8f, 0.6f),
-        1.5f,
-        true
-    );
-    addLight(pointLight1);
-
-    Light* fillLight = new Light(
-        glm::vec3(-5.0f, 2.0f, 2.0f),
-        glm::vec3(0.6f, 0.7f, 1.0f),
-        0.5f,
-        true
-    );
-    addLight(fillLight);
-    */
 }
 
 void Scene::init(){

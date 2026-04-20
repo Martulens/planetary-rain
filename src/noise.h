@@ -2,58 +2,36 @@
 
 #ifndef NOISE_H
 #define NOISE_H
+
 #include <vector>
 
-#include "glm/vec3.hpp"
-
-// TODO:
-// Move all into vertex shader
-
-// sources:
-//  -> https://www.cs.cmu.edu/~112-s23/notes/student-tp-guides/Terrain.pdf
-//  -> https://adrianb.io/2014/08/09/perlinnoise.html
-//  -> https://en.wikipedia.org/wiki/Simplex_noise
-// preferable due to lower time complexity
-//  -> https://en.wikipedia.org/wiki/Perlin_noise
-class NoiseSettings{
-private:
-public:
-    bool shown = true;
-    int octaves = 2;
-    int type = 0;
-
-    float frequency = 1;
-    float amplitude = 1;
-    float persistence = 1;
-    float roughness = 1;
-    float offset = 0.72354;
+struct NoiseSettings {
+    bool  shown       = true;
+    int   type        = 0;     // 0: fBm, 1: turbulent, 2: ridged
+    int   octaves     = 2;
+    float frequency   = 1.0f;
+    float amplitude   = 1.0f;
+    float persistence = 1.0f;
+    float roughness   = 1.0f;
+    float offset      = 0.72354f;
 
     NoiseSettings() = default;
-    NoiseSettings(int o, float f, float a, float p ): octaves(o), frequency(f), amplitude(a), persistence(p){};
+    NoiseSettings(int o, float f, float a, float p)
+        : octaves(o), frequency(f), amplitude(a), persistence(p) {}
     NoiseSettings(bool s, int o, float f, float a, float p, float r, float off)
-    : shown(s), octaves(o), frequency(f), amplitude(a), persistence(p), roughness(r), offset(off){};
-
-    float perlin(const glm::vec3& in);
-    float computeNoise(const glm::vec3& in);
-    float rigidPerlin(const glm::vec3& in);
-
-    // === GETTERS
-    int getOctaves(){ return octaves; }
-    float getFrequency(){ return frequency; }
-    float getAmplitude(){ return amplitude; }
-    float getPersistence(){ return persistence; }
+        : shown(s), type(0), octaves(o), frequency(f), amplitude(a),
+          persistence(p), roughness(r), offset(off) {}
 };
 
 class Noise {
-private:
-    std::vector<NoiseSettings> mSettings;
-
 public:
     Noise() = default;
-    Noise(const std::vector<NoiseSettings>& set): mSettings(set) {};
+    explicit Noise(std::vector<NoiseSettings> set) : mSettings(std::move(set)) {}
 
-    // === GETTER
-    std::vector<NoiseSettings> getSettings(){ return mSettings; }
+    const std::vector<NoiseSettings>& getSettings() const { return mSettings; }
+
+private:
+    std::vector<NoiseSettings> mSettings;
 };
 
-#endif //NOISE_H
+#endif // NOISE_H

@@ -91,17 +91,15 @@ FetchContent_Declare(
 FetchContent_MakeAvailable(assimp)
 message(STATUS "Assimp fetched")
 
-# --- stb_image (header-only) ---
+# --- stb_image (header-only, pinned commit for reproducibility) ---
 FetchContent_Declare(
         stb
         GIT_REPOSITORY https://github.com/nothings/stb.git
-        GIT_TAG master
-        GIT_SHALLOW TRUE
+        GIT_TAG        31c1ad37456438565541f4919958214b6e762fb4 # stb_image v2.30
 )
-FetchContent_GetProperties(stb)
-if (NOT stb_POPULATED)
-    FetchContent_Populate(stb)
-endif ()
+FetchContent_MakeAvailable(stb)
+add_library(stb_image INTERFACE)
+target_include_directories(stb_image INTERFACE ${stb_SOURCE_DIR})
 message(STATUS "stb_image fetched")
 
 # --- imgui ---
@@ -149,8 +147,7 @@ set(SOURCES
         skybox.cpp
         envMap.cpp
         ui.cpp
-        noise.cpp
-        variable.cpp
+        variables.cpp
 )
 
 set(HEADERS

@@ -171,35 +171,27 @@ namespace framework{  // Debug Callback (for OpenGL debug output)
         glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
         if (status == GL_FALSE)
         {
-            GLint infoLogLength;
+            GLint infoLogLength = 0;
             glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-            GLchar* strInfoLog = new GLchar[infoLogLength + 1];
-            glGetShaderInfoLog(shader, infoLogLength, NULL, strInfoLog);
+            std::vector<GLchar> infoLog(static_cast<size_t>(infoLogLength) + 1);
+            glGetShaderInfoLog(shader, infoLogLength, nullptr, infoLog.data());
 
-            const char* strShaderType = nullptr;
+            const char* strShaderType = "unknown";
             switch (eShaderType)
             {
-            case GL_VERTEX_SHADER: strShaderType = "vertex";
-                break;
-            case GL_FRAGMENT_SHADER: strShaderType = "fragment";
-                break;
-            case GL_GEOMETRY_SHADER: strShaderType = "geometry";
-                break;
-            case GL_TESS_CONTROL_SHADER: strShaderType = "tessellation control";
-                break;
-            case GL_TESS_EVALUATION_SHADER: strShaderType = "tessellation evaluation";
-                break;
-            case GL_COMPUTE_SHADER: strShaderType = "compute";
-                break;
-            default: strShaderType = "unknown";
-                break;
+            case GL_VERTEX_SHADER:          strShaderType = "vertex"; break;
+            case GL_FRAGMENT_SHADER:        strShaderType = "fragment"; break;
+            case GL_GEOMETRY_SHADER:        strShaderType = "geometry"; break;
+            case GL_TESS_CONTROL_SHADER:    strShaderType = "tessellation control"; break;
+            case GL_TESS_EVALUATION_SHADER: strShaderType = "tessellation evaluation"; break;
+            case GL_COMPUTE_SHADER:         strShaderType = "compute"; break;
+            default: break;
             }
 
-            std::cerr << "Compile failure in " << strShaderType << " shader:" << std::endl;
-            std::cerr << strInfoLog << std::endl;
+            std::cerr << "Compile failure in " << strShaderType << " shader:\n"
+                      << infoLog.data() << std::endl;
 
-            delete[] strInfoLog;
             glDeleteShader(shader);
             return 0;
         }
@@ -210,8 +202,8 @@ namespace framework{  // Debug Callback (for OpenGL debug output)
 
     GLuint createShaderFromFile(GLenum eShaderType, const std::string& filename)
     {
-        FILE* f = fopen(filename.c_str(), "rb");
-        if (!f)
+        std::ifstream file(filename, std::ios::in | std::ios::binary);
+        if (!file)
         {
             std::cerr << "Unable to open file " << filename << " for reading" << std::endl;
             return 0;
@@ -219,18 +211,9 @@ namespace framework{  // Debug Callback (for OpenGL debug output)
 
         std::cout << "loading shader: " << filename << std::endl;
 
-        fseek(f, 0, SEEK_END);
-        long length = ftell(f);
-        fseek(f, 0, SEEK_SET);
-
-        char* buffer = new char[length + 1];
-        size_t bytesRead = fread(buffer, 1, length, f);
-        fclose(f);
-        buffer[bytesRead] = '\0';
-
-        GLuint sh = createShaderFromSource(eShaderType, buffer);
-        delete[] buffer;
-        return sh;
+        std::stringstream ss;
+        ss << file.rdbuf();
+        return createShaderFromSource(eShaderType, ss.str());
     }
 
     static bool linkProgram(GLuint program)
@@ -243,13 +226,12 @@ namespace framework{  // Debug Callback (for OpenGL debug output)
 
         if (status == GL_FALSE)
         {
-            GLint infoLogLength;
+            GLint infoLogLength = 0;
             glGetProgramiv(program, GL_INFO_LOG_LENGTH, &infoLogLength);
 
-            GLchar* strInfoLog = new GLchar[infoLogLength + 1];
-            glGetProgramInfoLog(program, infoLogLength, NULL, strInfoLog);
-            std::cerr << "Linker failure: " << strInfoLog << std::endl;
-            delete[] strInfoLog;
+            std::vector<GLchar> infoLog(static_cast<size_t>(infoLogLength) + 1);
+            glGetProgramInfoLog(program, infoLogLength, nullptr, infoLog.data());
+            std::cerr << "Linker failure: " << infoLog.data() << std::endl;
             return false;
         }
 
