@@ -170,10 +170,24 @@ CMakeFiles/PlanetaryRain.dir/draw.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/PlanetaryRain.dir/draw.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/martul3ns/projects/planetary-rain/src/draw.cpp -o CMakeFiles/PlanetaryRain.dir/draw.cpp.s
 
+CMakeFiles/PlanetaryRain.dir/debug.cpp.o: CMakeFiles/PlanetaryRain.dir/flags.make
+CMakeFiles/PlanetaryRain.dir/debug.cpp.o: /home/martul3ns/projects/planetary-rain/src/debug.cpp
+CMakeFiles/PlanetaryRain.dir/debug.cpp.o: CMakeFiles/PlanetaryRain.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/PlanetaryRain.dir/debug.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PlanetaryRain.dir/debug.cpp.o -MF CMakeFiles/PlanetaryRain.dir/debug.cpp.o.d -o CMakeFiles/PlanetaryRain.dir/debug.cpp.o -c /home/martul3ns/projects/planetary-rain/src/debug.cpp
+
+CMakeFiles/PlanetaryRain.dir/debug.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/PlanetaryRain.dir/debug.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/martul3ns/projects/planetary-rain/src/debug.cpp > CMakeFiles/PlanetaryRain.dir/debug.cpp.i
+
+CMakeFiles/PlanetaryRain.dir/debug.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/PlanetaryRain.dir/debug.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/martul3ns/projects/planetary-rain/src/debug.cpp -o CMakeFiles/PlanetaryRain.dir/debug.cpp.s
+
 CMakeFiles/PlanetaryRain.dir/object.cpp.o: CMakeFiles/PlanetaryRain.dir/flags.make
 CMakeFiles/PlanetaryRain.dir/object.cpp.o: /home/martul3ns/projects/planetary-rain/src/object.cpp
 CMakeFiles/PlanetaryRain.dir/object.cpp.o: CMakeFiles/PlanetaryRain.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/PlanetaryRain.dir/object.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/PlanetaryRain.dir/object.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PlanetaryRain.dir/object.cpp.o -MF CMakeFiles/PlanetaryRain.dir/object.cpp.o.d -o CMakeFiles/PlanetaryRain.dir/object.cpp.o -c /home/martul3ns/projects/planetary-rain/src/object.cpp
 
 CMakeFiles/PlanetaryRain.dir/object.cpp.i: cmake_force
@@ -187,7 +201,7 @@ CMakeFiles/PlanetaryRain.dir/object.cpp.s: cmake_force
 CMakeFiles/PlanetaryRain.dir/shaderProgram.cpp.o: CMakeFiles/PlanetaryRain.dir/flags.make
 CMakeFiles/PlanetaryRain.dir/shaderProgram.cpp.o: /home/martul3ns/projects/planetary-rain/src/shaderProgram.cpp
 CMakeFiles/PlanetaryRain.dir/shaderProgram.cpp.o: CMakeFiles/PlanetaryRain.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/PlanetaryRain.dir/shaderProgram.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/PlanetaryRain.dir/shaderProgram.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PlanetaryRain.dir/shaderProgram.cpp.o -MF CMakeFiles/PlanetaryRain.dir/shaderProgram.cpp.o.d -o CMakeFiles/PlanetaryRain.dir/shaderProgram.cpp.o -c /home/martul3ns/projects/planetary-rain/src/shaderProgram.cpp
 
 CMakeFiles/PlanetaryRain.dir/shaderProgram.cpp.i: cmake_force
@@ -201,7 +215,7 @@ CMakeFiles/PlanetaryRain.dir/shaderProgram.cpp.s: cmake_force
 CMakeFiles/PlanetaryRain.dir/meshGeometry.cpp.o: CMakeFiles/PlanetaryRain.dir/flags.make
 CMakeFiles/PlanetaryRain.dir/meshGeometry.cpp.o: /home/martul3ns/projects/planetary-rain/src/meshGeometry.cpp
 CMakeFiles/PlanetaryRain.dir/meshGeometry.cpp.o: CMakeFiles/PlanetaryRain.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/PlanetaryRain.dir/meshGeometry.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/PlanetaryRain.dir/meshGeometry.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PlanetaryRain.dir/meshGeometry.cpp.o -MF CMakeFiles/PlanetaryRain.dir/meshGeometry.cpp.o.d -o CMakeFiles/PlanetaryRain.dir/meshGeometry.cpp.o -c /home/martul3ns/projects/planetary-rain/src/meshGeometry.cpp
 
 CMakeFiles/PlanetaryRain.dir/meshGeometry.cpp.i: cmake_force
@@ -215,7 +229,7 @@ CMakeFiles/PlanetaryRain.dir/meshGeometry.cpp.s: cmake_force
 CMakeFiles/PlanetaryRain.dir/modelTexture.cpp.o: CMakeFiles/PlanetaryRain.dir/flags.make
 CMakeFiles/PlanetaryRain.dir/modelTexture.cpp.o: /home/martul3ns/projects/planetary-rain/src/modelTexture.cpp
 CMakeFiles/PlanetaryRain.dir/modelTexture.cpp.o: CMakeFiles/PlanetaryRain.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/PlanetaryRain.dir/modelTexture.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/PlanetaryRain.dir/modelTexture.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PlanetaryRain.dir/modelTexture.cpp.o -MF CMakeFiles/PlanetaryRain.dir/modelTexture.cpp.o.d -o CMakeFiles/PlanetaryRain.dir/modelTexture.cpp.o -c /home/martul3ns/projects/planetary-rain/src/modelTexture.cpp
 
 CMakeFiles/PlanetaryRain.dir/modelTexture.cpp.i: cmake_force
@@ -229,7 +243,7 @@ CMakeFiles/PlanetaryRain.dir/modelTexture.cpp.s: cmake_force
 CMakeFiles/PlanetaryRain.dir/sphere.cpp.o: CMakeFiles/PlanetaryRain.dir/flags.make
 CMakeFiles/PlanetaryRain.dir/sphere.cpp.o: /home/martul3ns/projects/planetary-rain/src/sphere.cpp
 CMakeFiles/PlanetaryRain.dir/sphere.cpp.o: CMakeFiles/PlanetaryRain.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/PlanetaryRain.dir/sphere.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/PlanetaryRain.dir/sphere.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PlanetaryRain.dir/sphere.cpp.o -MF CMakeFiles/PlanetaryRain.dir/sphere.cpp.o.d -o CMakeFiles/PlanetaryRain.dir/sphere.cpp.o -c /home/martul3ns/projects/planetary-rain/src/sphere.cpp
 
 CMakeFiles/PlanetaryRain.dir/sphere.cpp.i: cmake_force
@@ -243,7 +257,7 @@ CMakeFiles/PlanetaryRain.dir/sphere.cpp.s: cmake_force
 CMakeFiles/PlanetaryRain.dir/light.cpp.o: CMakeFiles/PlanetaryRain.dir/flags.make
 CMakeFiles/PlanetaryRain.dir/light.cpp.o: /home/martul3ns/projects/planetary-rain/src/light.cpp
 CMakeFiles/PlanetaryRain.dir/light.cpp.o: CMakeFiles/PlanetaryRain.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/PlanetaryRain.dir/light.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/PlanetaryRain.dir/light.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PlanetaryRain.dir/light.cpp.o -MF CMakeFiles/PlanetaryRain.dir/light.cpp.o.d -o CMakeFiles/PlanetaryRain.dir/light.cpp.o -c /home/martul3ns/projects/planetary-rain/src/light.cpp
 
 CMakeFiles/PlanetaryRain.dir/light.cpp.i: cmake_force
@@ -257,7 +271,7 @@ CMakeFiles/PlanetaryRain.dir/light.cpp.s: cmake_force
 CMakeFiles/PlanetaryRain.dir/scene.cpp.o: CMakeFiles/PlanetaryRain.dir/flags.make
 CMakeFiles/PlanetaryRain.dir/scene.cpp.o: /home/martul3ns/projects/planetary-rain/src/scene.cpp
 CMakeFiles/PlanetaryRain.dir/scene.cpp.o: CMakeFiles/PlanetaryRain.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/PlanetaryRain.dir/scene.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/PlanetaryRain.dir/scene.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PlanetaryRain.dir/scene.cpp.o -MF CMakeFiles/PlanetaryRain.dir/scene.cpp.o.d -o CMakeFiles/PlanetaryRain.dir/scene.cpp.o -c /home/martul3ns/projects/planetary-rain/src/scene.cpp
 
 CMakeFiles/PlanetaryRain.dir/scene.cpp.i: cmake_force
@@ -271,7 +285,7 @@ CMakeFiles/PlanetaryRain.dir/scene.cpp.s: cmake_force
 CMakeFiles/PlanetaryRain.dir/skybox.cpp.o: CMakeFiles/PlanetaryRain.dir/flags.make
 CMakeFiles/PlanetaryRain.dir/skybox.cpp.o: /home/martul3ns/projects/planetary-rain/src/skybox.cpp
 CMakeFiles/PlanetaryRain.dir/skybox.cpp.o: CMakeFiles/PlanetaryRain.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/PlanetaryRain.dir/skybox.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/PlanetaryRain.dir/skybox.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PlanetaryRain.dir/skybox.cpp.o -MF CMakeFiles/PlanetaryRain.dir/skybox.cpp.o.d -o CMakeFiles/PlanetaryRain.dir/skybox.cpp.o -c /home/martul3ns/projects/planetary-rain/src/skybox.cpp
 
 CMakeFiles/PlanetaryRain.dir/skybox.cpp.i: cmake_force
@@ -285,7 +299,7 @@ CMakeFiles/PlanetaryRain.dir/skybox.cpp.s: cmake_force
 CMakeFiles/PlanetaryRain.dir/envMap.cpp.o: CMakeFiles/PlanetaryRain.dir/flags.make
 CMakeFiles/PlanetaryRain.dir/envMap.cpp.o: /home/martul3ns/projects/planetary-rain/src/envMap.cpp
 CMakeFiles/PlanetaryRain.dir/envMap.cpp.o: CMakeFiles/PlanetaryRain.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Building CXX object CMakeFiles/PlanetaryRain.dir/envMap.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/PlanetaryRain.dir/envMap.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PlanetaryRain.dir/envMap.cpp.o -MF CMakeFiles/PlanetaryRain.dir/envMap.cpp.o.d -o CMakeFiles/PlanetaryRain.dir/envMap.cpp.o -c /home/martul3ns/projects/planetary-rain/src/envMap.cpp
 
 CMakeFiles/PlanetaryRain.dir/envMap.cpp.i: cmake_force
@@ -299,7 +313,7 @@ CMakeFiles/PlanetaryRain.dir/envMap.cpp.s: cmake_force
 CMakeFiles/PlanetaryRain.dir/ui.cpp.o: CMakeFiles/PlanetaryRain.dir/flags.make
 CMakeFiles/PlanetaryRain.dir/ui.cpp.o: /home/martul3ns/projects/planetary-rain/src/ui.cpp
 CMakeFiles/PlanetaryRain.dir/ui.cpp.o: CMakeFiles/PlanetaryRain.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_17) "Building CXX object CMakeFiles/PlanetaryRain.dir/ui.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/PlanetaryRain.dir/ui.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PlanetaryRain.dir/ui.cpp.o -MF CMakeFiles/PlanetaryRain.dir/ui.cpp.o.d -o CMakeFiles/PlanetaryRain.dir/ui.cpp.o -c /home/martul3ns/projects/planetary-rain/src/ui.cpp
 
 CMakeFiles/PlanetaryRain.dir/ui.cpp.i: cmake_force
@@ -313,7 +327,7 @@ CMakeFiles/PlanetaryRain.dir/ui.cpp.s: cmake_force
 CMakeFiles/PlanetaryRain.dir/variables.cpp.o: CMakeFiles/PlanetaryRain.dir/flags.make
 CMakeFiles/PlanetaryRain.dir/variables.cpp.o: /home/martul3ns/projects/planetary-rain/src/variables.cpp
 CMakeFiles/PlanetaryRain.dir/variables.cpp.o: CMakeFiles/PlanetaryRain.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_18) "Building CXX object CMakeFiles/PlanetaryRain.dir/variables.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Building CXX object CMakeFiles/PlanetaryRain.dir/variables.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/PlanetaryRain.dir/variables.cpp.o -MF CMakeFiles/PlanetaryRain.dir/variables.cpp.o.d -o CMakeFiles/PlanetaryRain.dir/variables.cpp.o -c /home/martul3ns/projects/planetary-rain/src/variables.cpp
 
 CMakeFiles/PlanetaryRain.dir/variables.cpp.i: cmake_force
@@ -333,6 +347,7 @@ PlanetaryRain_OBJECTS = \
 "CMakeFiles/PlanetaryRain.dir/utilities.cpp.o" \
 "CMakeFiles/PlanetaryRain.dir/camera.cpp.o" \
 "CMakeFiles/PlanetaryRain.dir/draw.cpp.o" \
+"CMakeFiles/PlanetaryRain.dir/debug.cpp.o" \
 "CMakeFiles/PlanetaryRain.dir/object.cpp.o" \
 "CMakeFiles/PlanetaryRain.dir/shaderProgram.cpp.o" \
 "CMakeFiles/PlanetaryRain.dir/meshGeometry.cpp.o" \
@@ -355,6 +370,7 @@ PlanetaryRain: CMakeFiles/PlanetaryRain.dir/game.cpp.o
 PlanetaryRain: CMakeFiles/PlanetaryRain.dir/utilities.cpp.o
 PlanetaryRain: CMakeFiles/PlanetaryRain.dir/camera.cpp.o
 PlanetaryRain: CMakeFiles/PlanetaryRain.dir/draw.cpp.o
+PlanetaryRain: CMakeFiles/PlanetaryRain.dir/debug.cpp.o
 PlanetaryRain: CMakeFiles/PlanetaryRain.dir/object.cpp.o
 PlanetaryRain: CMakeFiles/PlanetaryRain.dir/shaderProgram.cpp.o
 PlanetaryRain: CMakeFiles/PlanetaryRain.dir/meshGeometry.cpp.o
@@ -368,26 +384,24 @@ PlanetaryRain: CMakeFiles/PlanetaryRain.dir/ui.cpp.o
 PlanetaryRain: CMakeFiles/PlanetaryRain.dir/variables.cpp.o
 PlanetaryRain: CMakeFiles/PlanetaryRain.dir/build.make
 PlanetaryRain: CMakeFiles/PlanetaryRain.dir/compiler_depend.ts
-PlanetaryRain: libglew.a
-PlanetaryRain: _deps/glfw-build/src/libglfw3.a
-PlanetaryRain: _deps/glm-build/glm/libglm.a
-PlanetaryRain: _deps/assimp-build/lib/libassimp.a
-PlanetaryRain: libimgui.a
 PlanetaryRain: /usr/lib64/libOpenGL.so
 PlanetaryRain: /usr/lib64/libGLX.so
 PlanetaryRain: /usr/lib64/libGLU.so
+PlanetaryRain: libglew.a
+PlanetaryRain: _deps/glm-build/glm/libglm.a
+PlanetaryRain: _deps/assimp-build/lib/libassimp.a
+PlanetaryRain: libimgui.a
+PlanetaryRain: /usr/lib64/libglut.so
+PlanetaryRain: /usr/lib64/libXi.so
 PlanetaryRain: _deps/assimp-build/contrib/zlib/libzlibstatic.a
 PlanetaryRain: libglew.a
-PlanetaryRain: _deps/glfw-build/src/libglfw3.a
-PlanetaryRain: /usr/lib64/librt.a
-PlanetaryRain: /usr/lib64/libm.so
 PlanetaryRain: /usr/lib64/libOpenGL.so
 PlanetaryRain: /usr/lib64/libGLX.so
 PlanetaryRain: /usr/lib64/libGLU.so
 PlanetaryRain: CMakeFiles/PlanetaryRain.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_19) "Linking CXX executable PlanetaryRain"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --bold --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_20) "Linking CXX executable PlanetaryRain"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/PlanetaryRain.dir/link.txt --verbose=$(VERBOSE)
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold "Copying textures"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold "Copying textures to build directory"
 	/usr/bin/cmake -E copy_directory /home/martul3ns/projects/planetary-rain/src/textures /home/martul3ns/projects/planetary-rain/src/build/textures
 
 # Rule to build all files generated by this target.

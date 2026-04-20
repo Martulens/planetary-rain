@@ -37,6 +37,9 @@ public:
                         std::shared_ptr<Camera> camera,
                         std::shared_ptr<Scene> scene);
 
+    void drawClouds( std::shared_ptr<Scene> scene,
+                     std::shared_ptr<Camera> camera);
+
     // === Uniform setups
     void setupUniforms( std::shared_ptr<Object> object,
                     std::shared_ptr<Camera> cam,

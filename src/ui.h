@@ -26,10 +26,12 @@ struct PlanetChangeFlags {
     bool radiusChanged = false;
     bool animationChanged = false;
     bool wavesChanged = false;
+    bool cloudsChanged = false;
 
     bool any() const {
         return meshChanged || materialChanged || noiseChanged
-            || positionChanged || radiusChanged || animationChanged || wavesChanged;
+            || positionChanged || radiusChanged || animationChanged
+            || wavesChanged || cloudsChanged;
     }
     void reset() {
         meshChanged = false;
@@ -39,6 +41,7 @@ struct PlanetChangeFlags {
         radiusChanged = false;
         animationChanged = false;
         wavesChanged = false;
+        cloudsChanged = false;
     }
 };
 
@@ -49,8 +52,10 @@ struct PlanetParams {
 
     float radius = 10.0f;
     int detail = 200;
-    // Color
-    glm::vec3 color = glm::vec3(0.2f, 0.4f, 1.0f);
+    // Terrain colors (low / mid / high elevation)
+    glm::vec3 color     = glm::vec3(0.20f, 0.40f, 1.00f); // mid
+    glm::vec3 colorLow  = glm::vec3(0.12f, 0.25f, 0.55f);
+    glm::vec3 colorHigh = glm::vec3(0.90f, 0.92f, 0.98f);
 
     // Material
     float pd = 1.0f;             // diffuse
@@ -81,6 +86,19 @@ struct PlanetParams {
     bool autoRotate = false;
     float rotationAngle = 10.0f;
 
+    // Clouds (volumetric shell above the planet)
+    bool cloudsEnabled = false;
+    float cloudAltitude = 1.0f;   // distance above the surface where the shell begins
+    float cloudThickness = 0.6f;  // how tall the shell is (keep tight for speed)
+    float cloudCoverage = 0.5f;   // 0 = clear, 1 = fully overcast
+    float cloudDensity = 3.0f;    // extinction coefficient; higher = more opaque
+    float cloudSpeed = 0.02f;     // drift speed of the noise field
+    float cloudNoiseScale = 0.12f; // how "big" the cloud puffs are
+    float cloudAlpha = 1.0f;      // final opacity multiplier
+    float cloudBandStrength = 0.0f; // 0 = puffy, 1 = fully latitudinal bands
+    float cloudBandFreq = 0.6f;   // number of bands along the y axis
+    glm::vec3 cloudColor = glm::vec3(1.0f);
+
     // Change tracking
     PlanetChangeFlags changes;
 
@@ -99,6 +117,7 @@ public:
     void initUI();
     void renderUI();
     void randomize();
+    void applyPreset(int type);
 
     // === GETTERS
     PlanetParams& getPlanetParams() { return mPlanetParams; };

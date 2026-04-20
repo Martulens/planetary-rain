@@ -43,7 +43,7 @@
 
 // \todo for functional macros, define static utility functions.
 //  The compiler would use inline optimization if it considers necessary, which would result in the same effect as using macros.
-// Overall using makros can lead to non descriptive compiler errors and its more of a C-style way. Try to addapt to modern C++ practices
+// Overall using macros can lead to non-descriptive compiler errors and is more of a C-style way. Prefer modern C++ practices.
 #ifndef DEGTORAD
 /// Degrees to radians conversion macro
 #define DEGTORAD(a) ((a) * M_PI / 180.0)

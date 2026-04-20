@@ -49,10 +49,10 @@ public:
     std::shared_ptr<MeshGeometry> cubeSphere();
 
     // === UPDATES
-    void updateMaterial(const glm::vec3& color, float pd, float ps, float ns,
-                                float reflectivity, float ior, float transparency,
-                                std::shared_ptr<ShaderProgram> defaultShader,
-                                std::shared_ptr<ShaderProgram> refractiveShader);
+    void updateMaterial(const glm::vec3& color,
+                                const glm::vec3& colorLow, const glm::vec3& colorHigh,
+                                float pd, float ps, float ns,
+                                float reflectivity, float ior, float transparency);
     void updateNoise(const std::vector<NoiseSettings>& settings, bool showTerrain);
     void updateRadius(float radius);
     void rebuildMesh(int detail);

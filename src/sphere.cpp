@@ -65,17 +65,13 @@ std::shared_ptr<MeshGeometry> Sphere::uvSphere() {
 }
 
 // === PARTIAL UPDATES ===
-void Sphere::updateMaterial(const glm::vec3& color, float pd, float ps, float ns,
-                            float reflectivity, float ior, float transparency,
-                            std::shared_ptr<ShaderProgram> defaultShader,
-                            std::shared_ptr<ShaderProgram> refractiveShader){
+void Sphere::updateMaterial(const glm::vec3& color,
+                            const glm::vec3& colorLow, const glm::vec3& colorHigh,
+                            float pd, float ps, float ns,
+                            float reflectivity, float ior, float transparency){
     mTexture = std::make_shared<ModelTexture>(color, pd, ps, ns, reflectivity, ior, transparency);
-
-    // Swap shader if crossing the refractive boundary
-    if (ior > 1.0f && mShader != refractiveShader)
-        mShader = refractiveShader;
-    else if (ior <= 1.0f && mShader != defaultShader)
-        mShader = defaultShader;
+    mTexture->setColorLow(colorLow);
+    mTexture->setColorHigh(colorHigh);
 }
 
 void Sphere::updateNoise(const std::vector<NoiseSettings>& settings, bool showTerrain){

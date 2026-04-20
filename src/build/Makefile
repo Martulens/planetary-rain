@@ -227,32 +227,6 @@ glm/fast:
 .PHONY : glm/fast
 
 #=============================================================================
-# Target rules for targets named glfw
-
-# Build rule for target.
-glfw: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 glfw
-.PHONY : glfw
-
-# fast build rule for target.
-glfw/fast:
-	$(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/glfw.dir/build.make _deps/glfw-build/src/CMakeFiles/glfw.dir/build
-.PHONY : glfw/fast
-
-#=============================================================================
-# Target rules for targets named update_mappings
-
-# Build rule for target.
-update_mappings: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 update_mappings
-.PHONY : update_mappings
-
-# fast build rule for target.
-update_mappings/fast:
-	$(MAKE) $(MAKESILENT) -f _deps/glfw-build/src/CMakeFiles/update_mappings.dir/build.make _deps/glfw-build/src/CMakeFiles/update_mappings.dir/build
-.PHONY : update_mappings/fast
-
-#=============================================================================
 # Target rules for targets named zlibstatic
 
 # Build rule for target.
@@ -302,29 +276,29 @@ _deps/glew-src/src/glew.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/glew.dir/build.make CMakeFiles/glew.dir/_deps/glew-src/src/glew.c.s
 .PHONY : _deps/glew-src/src/glew.c.s
 
-_deps/imgui-src/backends/imgui_impl_glfw.o: _deps/imgui-src/backends/imgui_impl_glfw.cpp.o
-.PHONY : _deps/imgui-src/backends/imgui_impl_glfw.o
+_deps/imgui-src/backends/imgui_impl_glut.o: _deps/imgui-src/backends/imgui_impl_glut.cpp.o
+.PHONY : _deps/imgui-src/backends/imgui_impl_glut.o
 
 # target to build an object file
-_deps/imgui-src/backends/imgui_impl_glfw.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/imgui.dir/build.make CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.o
-.PHONY : _deps/imgui-src/backends/imgui_impl_glfw.cpp.o
+_deps/imgui-src/backends/imgui_impl_glut.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/imgui.dir/build.make CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.o
+.PHONY : _deps/imgui-src/backends/imgui_impl_glut.cpp.o
 
-_deps/imgui-src/backends/imgui_impl_glfw.i: _deps/imgui-src/backends/imgui_impl_glfw.cpp.i
-.PHONY : _deps/imgui-src/backends/imgui_impl_glfw.i
+_deps/imgui-src/backends/imgui_impl_glut.i: _deps/imgui-src/backends/imgui_impl_glut.cpp.i
+.PHONY : _deps/imgui-src/backends/imgui_impl_glut.i
 
 # target to preprocess a source file
-_deps/imgui-src/backends/imgui_impl_glfw.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/imgui.dir/build.make CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.i
-.PHONY : _deps/imgui-src/backends/imgui_impl_glfw.cpp.i
+_deps/imgui-src/backends/imgui_impl_glut.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/imgui.dir/build.make CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.i
+.PHONY : _deps/imgui-src/backends/imgui_impl_glut.cpp.i
 
-_deps/imgui-src/backends/imgui_impl_glfw.s: _deps/imgui-src/backends/imgui_impl_glfw.cpp.s
-.PHONY : _deps/imgui-src/backends/imgui_impl_glfw.s
+_deps/imgui-src/backends/imgui_impl_glut.s: _deps/imgui-src/backends/imgui_impl_glut.cpp.s
+.PHONY : _deps/imgui-src/backends/imgui_impl_glut.s
 
 # target to generate assembly for a file
-_deps/imgui-src/backends/imgui_impl_glfw.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/imgui.dir/build.make CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.s
-.PHONY : _deps/imgui-src/backends/imgui_impl_glfw.cpp.s
+_deps/imgui-src/backends/imgui_impl_glut.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/imgui.dir/build.make CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.s
+.PHONY : _deps/imgui-src/backends/imgui_impl_glut.cpp.s
 
 _deps/imgui-src/backends/imgui_impl_opengl3.o: _deps/imgui-src/backends/imgui_impl_opengl3.cpp.o
 .PHONY : _deps/imgui-src/backends/imgui_impl_opengl3.o
@@ -517,6 +491,30 @@ camera.s: camera.cpp.s
 camera.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/PlanetaryRain.dir/build.make CMakeFiles/PlanetaryRain.dir/camera.cpp.s
 .PHONY : camera.cpp.s
+
+debug.o: debug.cpp.o
+.PHONY : debug.o
+
+# target to build an object file
+debug.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PlanetaryRain.dir/build.make CMakeFiles/PlanetaryRain.dir/debug.cpp.o
+.PHONY : debug.cpp.o
+
+debug.i: debug.cpp.i
+.PHONY : debug.i
+
+# target to preprocess a source file
+debug.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PlanetaryRain.dir/build.make CMakeFiles/PlanetaryRain.dir/debug.cpp.i
+.PHONY : debug.cpp.i
+
+debug.s: debug.cpp.s
+.PHONY : debug.s
+
+# target to generate assembly for a file
+debug.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/PlanetaryRain.dir/build.make CMakeFiles/PlanetaryRain.dir/debug.cpp.s
+.PHONY : debug.cpp.s
 
 draw.o: draw.cpp.o
 .PHONY : draw.o
@@ -915,20 +913,18 @@ help:
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
 	@echo "... copy_shaders"
-	@echo "... update_mappings"
 	@echo "... PlanetaryRain"
 	@echo "... assimp"
 	@echo "... glew"
-	@echo "... glfw"
 	@echo "... glm"
 	@echo "... imgui"
 	@echo "... zlibstatic"
 	@echo "... _deps/glew-src/src/glew.o"
 	@echo "... _deps/glew-src/src/glew.i"
 	@echo "... _deps/glew-src/src/glew.s"
-	@echo "... _deps/imgui-src/backends/imgui_impl_glfw.o"
-	@echo "... _deps/imgui-src/backends/imgui_impl_glfw.i"
-	@echo "... _deps/imgui-src/backends/imgui_impl_glfw.s"
+	@echo "... _deps/imgui-src/backends/imgui_impl_glut.o"
+	@echo "... _deps/imgui-src/backends/imgui_impl_glut.i"
+	@echo "... _deps/imgui-src/backends/imgui_impl_glut.s"
 	@echo "... _deps/imgui-src/backends/imgui_impl_opengl3.o"
 	@echo "... _deps/imgui-src/backends/imgui_impl_opengl3.i"
 	@echo "... _deps/imgui-src/backends/imgui_impl_opengl3.s"
@@ -953,6 +949,9 @@ help:
 	@echo "... camera.o"
 	@echo "... camera.i"
 	@echo "... camera.s"
+	@echo "... debug.o"
+	@echo "... debug.i"
+	@echo "... debug.s"
 	@echo "... draw.o"
 	@echo "... draw.i"
 	@echo "... draw.s"

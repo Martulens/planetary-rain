@@ -142,19 +142,19 @@ CMakeFiles/imgui.dir/_deps/imgui-src/imgui_demo.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/imgui.dir/_deps/imgui-src/imgui_demo.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/martul3ns/projects/planetary-rain/src/build/_deps/imgui-src/imgui_demo.cpp -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui_demo.cpp.s
 
-CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.o: CMakeFiles/imgui.dir/flags.make
-CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.o: _deps/imgui-src/backends/imgui_impl_glfw.cpp
-CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.o: CMakeFiles/imgui.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.o -MF CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.o.d -o CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.o -c /home/martul3ns/projects/planetary-rain/src/build/_deps/imgui-src/backends/imgui_impl_glfw.cpp
+CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.o: CMakeFiles/imgui.dir/flags.make
+CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.o: _deps/imgui-src/backends/imgui_impl_glut.cpp
+CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.o: CMakeFiles/imgui.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green --progress-dir=/home/martul3ns/projects/planetary-rain/src/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.o -MF CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.o.d -o CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.o -c /home/martul3ns/projects/planetary-rain/src/build/_deps/imgui-src/backends/imgui_impl_glut.cpp
 
-CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/martul3ns/projects/planetary-rain/src/build/_deps/imgui-src/backends/imgui_impl_glfw.cpp > CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.i
+CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Preprocessing CXX source to CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/martul3ns/projects/planetary-rain/src/build/_deps/imgui-src/backends/imgui_impl_glut.cpp > CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.i
 
-CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/martul3ns/projects/planetary-rain/src/build/_deps/imgui-src/backends/imgui_impl_glfw.cpp -o CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.s
+CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --green "Compiling CXX source to assembly CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/martul3ns/projects/planetary-rain/src/build/_deps/imgui-src/backends/imgui_impl_glut.cpp -o CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.s
 
 CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_opengl3.cpp.o: CMakeFiles/imgui.dir/flags.make
 CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_opengl3.cpp.o: _deps/imgui-src/backends/imgui_impl_opengl3.cpp
@@ -177,7 +177,7 @@ imgui_OBJECTS = \
 "CMakeFiles/imgui.dir/_deps/imgui-src/imgui_tables.cpp.o" \
 "CMakeFiles/imgui.dir/_deps/imgui-src/imgui_widgets.cpp.o" \
 "CMakeFiles/imgui.dir/_deps/imgui-src/imgui_demo.cpp.o" \
-"CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.o" \
+"CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.o" \
 "CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_opengl3.cpp.o"
 
 # External object files for target imgui
@@ -188,7 +188,7 @@ libimgui.a: CMakeFiles/imgui.dir/_deps/imgui-src/imgui_draw.cpp.o
 libimgui.a: CMakeFiles/imgui.dir/_deps/imgui-src/imgui_tables.cpp.o
 libimgui.a: CMakeFiles/imgui.dir/_deps/imgui-src/imgui_widgets.cpp.o
 libimgui.a: CMakeFiles/imgui.dir/_deps/imgui-src/imgui_demo.cpp.o
-libimgui.a: CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glfw.cpp.o
+libimgui.a: CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_glut.cpp.o
 libimgui.a: CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_opengl3.cpp.o
 libimgui.a: CMakeFiles/imgui.dir/build.make
 libimgui.a: CMakeFiles/imgui.dir/link.txt

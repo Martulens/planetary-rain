@@ -21,7 +21,7 @@ private:
     std::shared_ptr<Sphere> mPlanet;
 
     std::shared_ptr<ShaderProgram> mDefaultShader = nullptr;
-    std::shared_ptr<ShaderProgram> mRefractiveShader = nullptr;
+    std::shared_ptr<ShaderProgram> mCloudShader = nullptr;
     std::shared_ptr<Skybox> mSkybox = nullptr;
 
 public:
@@ -52,6 +52,8 @@ public:
     std::vector<std::shared_ptr<Object>> getObjects() const { return mObjects; }
     std::vector<std::shared_ptr<Light>> getLights() const { return mLights; }
     std::shared_ptr<ShaderProgram> getDefaultShader() const { return mDefaultShader; }
+    std::shared_ptr<ShaderProgram> getCloudShader() const { return mCloudShader; }
+    std::shared_ptr<Sphere> getPlanet() const { return mPlanet; }
     std::shared_ptr<Skybox> getSkybox() const { return mSkybox; }
 };
 

@@ -11,7 +11,9 @@
 class ModelTexture {
 private:
     GLuint mTextureID = 0;
-    glm::vec3 mColor = glm::vec3(1.0f);
+    glm::vec3 mColor     = glm::vec3(1.0f);
+    glm::vec3 mColorLow  = glm::vec3(0.4f);
+    glm::vec3 mColorHigh = glm::vec3(1.0f);
 
     int mWidth = 0;
     int mHeight = 0;
@@ -35,7 +37,13 @@ public:
 
     // === GETTERS
     glm::vec3 getColor() const{ return mColor; }
+    glm::vec3 getColorLow() const{ return mColorLow; }
+    glm::vec3 getColorHigh() const{ return mColorHigh; }
     GLuint getTextureID() const { return mTextureID; }
+
+    // === SETTERS
+    void setColorLow(const glm::vec3& c){ mColorLow = c; }
+    void setColorHigh(const glm::vec3& c){ mColorHigh = c; }
 
     // -> light model
     float getPd() const{ return mPd; }

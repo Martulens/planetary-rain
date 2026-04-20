@@ -21,9 +21,9 @@ void Scene::updatePlanet(PlanetParams& params){
 
     if (flags.materialChanged)
         mPlanet->updateMaterial(
-            params.color, params.pd, params.ps, params.ns,
-            params.reflectivity, params.ior, params.transparency,
-            mDefaultShader, mRefractiveShader);
+            params.color, params.colorLow, params.colorHigh,
+            params.pd, params.ps, params.ns,
+            params.reflectivity, params.ior, params.transparency);
 
     if (flags.noiseChanged)
         mPlanet->updateNoise(params.noise, params.showTerrain);
@@ -71,6 +71,8 @@ void Scene::renderSceneForEnvMap(const glm::mat4& view, const glm::mat4& project
         // Simplified uniforms for env map rendering
         auto texture = obj->getTexture();
         glUniform3fv(shader->getBaseColorLocation(), 1, glm::value_ptr(texture->getColor()));
+        glUniform3fv(glGetUniformLocation(shader->getProgram(), "colorLow"),  1, glm::value_ptr(texture->getColorLow()));
+        glUniform3fv(glGetUniformLocation(shader->getProgram(), "colorHigh"), 1, glm::value_ptr(texture->getColorHigh()));
         glUniform1f(shader->getPdLocation(), texture->getPd());
         glUniform1f(shader->getPsLocation(), texture->getPs());
         glUniform1f(shader->getNsLocation(), texture->getNs());
@@ -152,8 +154,10 @@ void Scene::constructObjects(){
         defaults.ior,
         defaults.transparency
     );
+    material->setColorLow(defaults.colorLow);
+    material->setColorHigh(defaults.colorHigh);
 
-    auto shader = (defaults.ior > 1.0f) ? mRefractiveShader : mDefaultShader;
+    auto shader = mDefaultShader;
 
     var::getUI()->randomize();
     mPlanet = std::make_shared<Sphere>(
@@ -187,9 +191,9 @@ void Scene::constructDebugLights()
 void Scene::init(){
     std::cout << "[Scene] Initializing scene..." << std::endl;
 
-    // Create the default shader
+    // Create the default shader (handles both opaque and refractive materials)
     mDefaultShader = std::make_shared<ShaderProgram>("shaders/planet.vert", "shaders/planet.frag");
-    mRefractiveShader = std::make_shared<ShaderProgram>("shaders/planet.vert", "shaders/refractive.frag");
+    mCloudShader   = std::make_shared<ShaderProgram>("shaders/clouds.vert", "shaders/clouds.frag");
 
     if (!mDefaultShader || mDefaultShader->getProgram() == 0){
         std::cerr << "[Scene] ERROR: Failed to create default shader!" << std::endl;
@@ -244,6 +248,6 @@ void Scene::cleanup() {
     mLights.clear();
     mPlanet = nullptr;
     mDefaultShader = nullptr;
-    mRefractiveShader = nullptr;
+    mCloudShader = nullptr;
     mSkybox = nullptr;
 }

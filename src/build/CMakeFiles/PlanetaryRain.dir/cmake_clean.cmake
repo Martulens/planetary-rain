@@ -4,6 +4,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/PlanetaryRain.dir/callbacks.cpp.o.d"
   "CMakeFiles/PlanetaryRain.dir/camera.cpp.o"
   "CMakeFiles/PlanetaryRain.dir/camera.cpp.o.d"
+  "CMakeFiles/PlanetaryRain.dir/debug.cpp.o"
+  "CMakeFiles/PlanetaryRain.dir/debug.cpp.o.d"
   "CMakeFiles/PlanetaryRain.dir/draw.cpp.o"
   "CMakeFiles/PlanetaryRain.dir/draw.cpp.o.d"
   "CMakeFiles/PlanetaryRain.dir/envMap.cpp.o"

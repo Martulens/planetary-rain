@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/martul3ns/projects/planetary-rain/src/callbacks.cpp" "CMakeFiles/PlanetaryRain.dir/callbacks.cpp.o" "gcc" "CMakeFiles/PlanetaryRain.dir/callbacks.cpp.o.d"
   "/home/martul3ns/projects/planetary-rain/src/camera.cpp" "CMakeFiles/PlanetaryRain.dir/camera.cpp.o" "gcc" "CMakeFiles/PlanetaryRain.dir/camera.cpp.o.d"
+  "/home/martul3ns/projects/planetary-rain/src/debug.cpp" "CMakeFiles/PlanetaryRain.dir/debug.cpp.o" "gcc" "CMakeFiles/PlanetaryRain.dir/debug.cpp.o.d"
   "/home/martul3ns/projects/planetary-rain/src/draw.cpp" "CMakeFiles/PlanetaryRain.dir/draw.cpp.o" "gcc" "CMakeFiles/PlanetaryRain.dir/draw.cpp.o.d"
   "/home/martul3ns/projects/planetary-rain/src/envMap.cpp" "CMakeFiles/PlanetaryRain.dir/envMap.cpp.o" "gcc" "CMakeFiles/PlanetaryRain.dir/envMap.cpp.o.d"
   "/home/martul3ns/projects/planetary-rain/src/framework.cpp" "CMakeFiles/PlanetaryRain.dir/framework.cpp.o" "gcc" "CMakeFiles/PlanetaryRain.dir/framework.cpp.o.d"

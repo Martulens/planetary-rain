@@ -4,7 +4,7 @@
 # compile CXX with /usr/bin/c++
 CXX_DEFINES = -DGLEW_STATIC
 
-CXX_INCLUDES = -I/home/martul3ns/projects/planetary-rain/src/build/_deps/imgui-src -I/home/martul3ns/projects/planetary-rain/src/build/_deps/imgui-src/backends -I/home/martul3ns/projects/planetary-rain/src/build/_deps/glfw-src/include -I/home/martul3ns/projects/planetary-rain/src/build/_deps/glew-src/include
+CXX_INCLUDES = -I/home/martul3ns/projects/planetary-rain/src/build/_deps/imgui-src -I/home/martul3ns/projects/planetary-rain/src/build/_deps/imgui-src/backends -I/home/martul3ns/projects/planetary-rain/src/build/_deps/glew-src/include
 
-CXX_FLAGS = -O3 -DNDEBUG -std=c++17
+CXX_FLAGS = -O3 -DNDEBUG -std=gnu++17
 

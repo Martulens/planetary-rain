@@ -178,6 +178,8 @@ set(SHADERS
         shaders/template.frag
         shaders/planet.vert
         shaders/planet.frag
+        shaders/clouds.vert
+        shaders/clouds.frag
 )
 
 # Create Executable
